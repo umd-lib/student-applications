@@ -1,0 +1,11 @@
+<h2>Availability</h2>
+
+<%= form.fields_for :available_times do |avail| %>
+  <%= avail.collection_select :days, AvailableDay.days, :first, :first, { selected: avail.object.days },
+      { multiple: true, selected: [ "sunday" ] }
+    %> 
+  <%= avail.time_select :start %>
+  <%= avail.time_select :end %>
+  <%= avail.check_box :all_day %>
+<% end %>
+<p><%= form.link_to_add "Add Availability", :available_times %></p>
