@@ -1,0 +1,7 @@
+<h2>Work Experience</h2>
+
+
+<%= form.fields_for :work_experiences do |we| %>
+  <%= we.text_field :name %>
+<% end %>
+<p><%= form.link_to_add "Add Work Experience", :work_experiences %></p>

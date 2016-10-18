@@ -1,0 +1,4 @@
+<h2>Skills</h2>
+
+<%= form.collection_select :skill_ids, Skill.all, :id, :name, {},
+  { multiple: true, class: 'select2' } %>
