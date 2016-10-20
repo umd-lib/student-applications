@@ -60,6 +60,7 @@ group :development do
   gem "rb-fsevent", :require => false
   gem "terminal-notifier-guard", :require => false
 
+  gem 'rubocop'
 end
 
 group :test do
