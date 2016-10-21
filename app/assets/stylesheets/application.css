@@ -16,8 +16,23 @@
  *= require_self
  */
 
+#home-jumbo { margin-top: 50px }
 
 label.required:after {
   content:" *";
   color: red;
 }
+
+
+
+.panel-heading { min-height: 53px }
+.panel-heading span { font-size: 22px  }
+.fields {
+  border-bottom: 1px solid transparent;
+  border-color: #ddd;
+  margin: 15px 0px;
+}
+
+
+.form-horizontal  .radio-inline { padding-top: 0px  }
+.radio-question { padding-right: 20px; vertical-align: middle; }

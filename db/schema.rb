@@ -11,7 +11,20 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20161006154531) do
+ActiveRecord::Schema.define(version: 20161019183151) do
+
+  create_table "addresses", force: :cascade do |t|
+    t.string  "street_address_1"
+    t.string  "street_address_2"
+    t.string  "city"
+    t.string  "state"
+    t.string  "postal_code"
+    t.string  "country"
+    t.integer "address_type",     default: 0, null: false
+    t.integer "prospect_id"
+  end
+
+  add_index "addresses", ["prospect_id"], name: "index_addresses_on_prospect_id"
 
   create_table "available_days", force: :cascade do |t|
     t.integer "day",               default: 0, null: false
@@ -41,16 +54,20 @@ ActiveRecord::Schema.define(version: 20161006154531) do
   add_index "library_preferences", ["library_id"], name: "index_library_preferences_on_library_id"
   add_index "library_preferences", ["prospect_id"], name: "index_library_preferences_on_prospect_id"
 
+  create_table "phone_numbers", force: :cascade do |t|
+    t.string  "number"
+    t.string  "type"
+    t.integer "prospect_id"
+  end
+
+  add_index "phone_numbers", ["prospect_id"], name: "index_phone_numbers_on_prospect_id"
+
   create_table "prospects", force: :cascade do |t|
     t.string   "directory_id"
     t.string   "first_name"
     t.string   "last_name"
     t.string   "source_from"
-    t.boolean  "in_federal_study"
-    t.string   "local_address"
-    t.string   "local_phone"
-    t.string   "perm_address"
-    t.string   "perm_phone"
+    t.boolean  "in_federal_study",    default: false
     t.string   "email"
     t.string   "family_member"
     t.integer  "class_status",        default: 0,     null: false

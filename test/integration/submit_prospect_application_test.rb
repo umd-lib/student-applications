@@ -32,10 +32,13 @@ class SubmitProspectApplicationTest < ActionDispatch::IntegrationTest
       fill_in("Directory",with: "myIdentifier")
       fill_in("prospect_first_name", with:  "Polly") 
       fill_in("prospect_last_name", with: "Jane")
-      fill_in("prospect_local_address", with:  "555 Fake St")
-      fill_in("prospect_local_phone", with: "111") 
+      
+      fill_in("prospect_addresses_attributes_0_street_address_1", with:  "555 Fake St")
+      fill_in("prospect_addresses_attributes_0_city", with:  "Springfield")
+      fill_in("prospect_addresses_attributes_0_state", with:  "HI")
+      fill_in("prospect_addresses_attributes_0_postal_code", with:  "12345")
+      
       fill_in("prospect_email", with: "pj@umd.edu") 
-     
 
       click_button "Continue"
       assert page.has_content?("Work Experience")
@@ -51,8 +54,12 @@ class SubmitProspectApplicationTest < ActionDispatch::IntegrationTest
       fill_in("Directory",with: "myIdentifier")
       fill_in("prospect_first_name", with:  "Polly") 
       fill_in("prospect_last_name", with: "Jane")
-      fill_in("prospect_local_address", with:  "555 Fake St")
-      fill_in("prospect_local_phone", with: "111") 
+      
+      fill_in("prospect_addresses_attributes_0_street_address_1", with:  "555 Fake St")
+      fill_in("prospect_addresses_attributes_0_city", with:  "Springfield")
+      fill_in("prospect_addresses_attributes_0_state", with:  "HI")
+      fill_in("prospect_addresses_attributes_0_postal_code", with:  "12345")
+      
       fill_in("prospect_email", with: "pj@umd.edu") 
       
       click_button "Continue"
@@ -62,10 +69,13 @@ class SubmitProspectApplicationTest < ActionDispatch::IntegrationTest
       assert page.has_field?("Directory", with: "myIdentifier")
       assert page.has_field?("prospect_first_name", with: "Polly")
       assert page.has_field?("prospect_last_name", with: "Jane")
-      assert page.has_field?("prospect_local_address", with: "555 Fake St")
-      assert page.has_field?("prospect_local_phone", with: "111")
-      assert page.has_field?("prospect_email", with: "pj@umd.edu")
       
+      assert page.has_field?("prospect_addresses_attributes_0_street_address_1", with:  "555 Fake St")
+      assert page.has_field?("prospect_addresses_attributes_0_city", with:  "Springfield")
+      assert page.has_field?("prospect_addresses_attributes_0_state", with:  "HI")
+      assert page.has_field?("prospect_addresses_attributes_0_postal_code", with:  "12345")
+      
+      assert page.has_field?("prospect_email", with: "pj@umd.edu")
       assert_equal Prospect.steps.first,  page.get_rack_session_key("prospect_step")
       
     end

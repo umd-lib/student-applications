@@ -1,0 +1,14 @@
+contact_info_gotham:
+  prospect: contact_info 
+  street_address_1: 555 Fake. St
+  city: Gotham
+  state: NY
+  postal_code: 12345
+  address_type: Local
+all_valid_springfield:
+  prospect: all_valid 
+  street_address_1: 555 Fake. St
+  city: Springfield
+  state: IL
+  postal_code: 12345
+  address_type: Local
