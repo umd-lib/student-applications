@@ -1,0 +1,17 @@
+<h2>Contact Information</h2>
+
+<%= form.select :in_federal_study, [ ["No", 0], [ "Yes", 1 ] ] , selected: 0 %>
+<%= form.text_field :directory_id %>
+<%= form.text_field :first_name %>
+<%= form.text_field :last_name %>
+
+<%= form.text_field :local_address %>
+<%= form.text_field :local_phone %>
+<%= form.text_field :perm_address %>
+<%= form.text_field :perm_phone %>
+<%= form.text_field :email %>
+<%= form.text_field :family_member %>
+
+<%= form.select :class_status, Prospect.class_statuses.map { |cs| [ cs.first.capitalize, cs.first ] } %>
+
+<%= form.select :graduation_year, Prospect.graduation_years.map { |gy| [ gy.first.gsub("_", " ").upcase, gy.first ] } %>

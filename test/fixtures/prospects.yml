@@ -1,0 +1,26 @@
+all_valid:
+  in_federal_study: true
+  directory_id: bstudent
+  first_name: Betty
+  last_name: Student
+  local_address: 556 Fake St, Springfield, HI
+  local_phone: 555-666-5555
+  perm_address:
+  perm_phone:
+  email: bstudent@umd.edu
+  family_member:
+  class_status: Undergraduate
+  graduation_year: 0
+contact_info:
+  in_federal_study: true
+  directory_id: astudent
+  first_name: Alvin
+  last_name: Student
+  local_address: 555 Fake St, Springfield, HI
+  local_phone: 555-555-5555
+  perm_address:
+  perm_phone:
+  email: astudent@umd.edu
+  family_member:
+  class_status: Undergraduate
+  graduation_year: 0
