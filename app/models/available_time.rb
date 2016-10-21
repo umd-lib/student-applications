@@ -8,7 +8,7 @@ class AvailableTime < ActiveRecord::Base
 
   def initialize(attributes = nil, options = {})
     unless attributes.nil? || attributes[:days].blank?
-      days = Array.wrap(attributes[:days]).flatten.reject(&:blank?)
+      Array.wrap(attributes[:days]).flatten.reject(&:blank?)
     end
     super
   end
@@ -16,9 +16,7 @@ class AvailableTime < ActiveRecord::Base
   # This allows us to create available days by passing in the day name to the
   # object
   def days=(names = [])
-    names = Array.wrap(names)
-    names.flatten!
-    names.reject!(&:blank?)
+    names = Array.wrap(names).flatten.reject(&:blank?)
 
     day_attrs = []
     # if there's a day not in out map, we mark it for delete
@@ -29,8 +27,7 @@ class AvailableTime < ActiveRecord::Base
     current_days = available_days.map(&:day)
     day_attrs << names.map { |n| { day: n } unless current_days.include?(n) }
 
-    # now set the attributes. note these changes won't take effect until #save is
-    # called.
+    # now set the attributes. note these changes won't take effect until #save is called.
     day_attrs.flatten!
     day_attrs.reject!(&:blank?)
     self.available_days_attributes = day_attrs

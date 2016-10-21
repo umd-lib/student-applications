@@ -18,12 +18,12 @@ class Prospect < ActiveRecord::Base
 
   # if has_family_member = false but we do have a family_member value, we
   # should return true.
-  def has_family_member?
+  def family_member?
     ActiveRecord::Type::Boolean.new.type_cast_from_user(@has_family_member) || !family_member.blank?
   end
 
   # these are the validations for the contact_information step
-  validates_inclusion_of :in_federal_study, in: [true, false], if: ->(o) { o.current_step == 'contact_info' }
+  validates :in_federal_study, inclusion: { in: [true, false], if: ->(o) { o.current_step == 'contact_info' } }
   %i(directory_id first_name last_name email graduation_year).each do |attr|
     validates attr, presence: true, if: ->(o) { o.current_step == 'contact_info' }
   end
@@ -52,7 +52,7 @@ class Prospect < ActiveRecord::Base
   attr_accessor :skill_ids
 
   attr_accessor :has_family_member
-  validates :family_member, presence: true, if: ->(o) { o.has_family_member? }
+  validates :family_member, presence: true, if: ->(o) { o.family_member? }
 
   enum class_status: %i(Undergraduate Graduate)
   enum graduation_year: (2016..2020).map { |year| ["#{year}_dec".intern, "#{year}_may".intern] }.flatten

@@ -1,5 +1,6 @@
 require 'test_helper'
 
+# rubocop:disable Metrics/BlockLength
 feature 'Enter contact information' do
   scenario 'put some basic information into the first step', js: true do
     # pretty boring test, since it's the exact same as out integration

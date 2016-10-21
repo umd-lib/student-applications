@@ -58,13 +58,13 @@ class ProspectTest < ActiveSupport::TestCase
 
   test "it should also know if there's a family member if a family member name has been provided" do
     prospect = Prospect.new @all_valid.attributes.merge(family_member: 'Jon Stewart')
-    assert prospect.has_family_member?
+    assert prospect.family_member?
     assert prospect.has_family_member
 
     # if the attr is set to false but a name has been provided, thats ok, but
-    # the has_family_member? should still return true for validation.
+    # the family_member? should still return true for validation.
     prospect = Prospect.new @all_valid.attributes.merge(family_member: "Conan O'Brien", has_family_member: false)
-    assert prospect.has_family_member?
+    assert prospect.family_member?
     refute prospect.has_family_member
   end
 
