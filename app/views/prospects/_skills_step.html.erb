@@ -1,4 +1,25 @@
 <h2>Skills</h2>
 
-<%= form.collection_select :skill_ids, Skill.all, :id, :name, {},
-  { multiple: true, class: 'select2' } %>
+<div class='panel panel-default'>
+  <div class="panel-heading"><span>Please Select:</span></div>
+  <div class="panel-body" id="skills-promoted">
+    <%= form.collection_select :skill_ids, Skill.promoted, :id, :name, { label_method: :skills },
+      { multiple: true, class: 'select2', label_method: :skills, label: false  } %>
+  </div>
+</div>
+
+<div class='panel panel-default'>
+  <div class="panel-heading">
+    <span>List Additional Skills:</span>
+    <span class='pull-right'>
+      <%= form.link_to_add(:skills, class: 'btn btn-success', data: { target: "#skills" }) do  %>
+        <i class='glyphicon glyphicon-plus-sign'></i>Add Skill  
+      <% end %> 
+    </span>   
+  </div>
+  <div class="panel-body" id="skills">
+    <%= form.fields_for :skills do |skill| %>
+      <%= skill.text_field :name %>
+    <% end %>
+  </div>
+</div>
