@@ -1,3 +1,12 @@
+homeless:
+  in_federal_study: true
+  directory_id: hobo
+  first_name: Rolling 
+  last_name: Stone
+  email: hobo@umd.edu
+  family_member:
+  class_status: Undergraduate
+  graduation_year: 0
 all_valid:
   in_federal_study: true
   directory_id: bstudent

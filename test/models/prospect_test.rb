@@ -69,5 +69,20 @@ class ProspectTest < ActiveSupport::TestCase
     refute prospect.has_family_member 
   end
 
+  test "it should be invalid if it's on the contact_info step and it has no address" do
+    homeless = prospects(:homeless)
+    # not valid bc no address 
+    refute homeless.valid? 
+    # but if we ae on another step, it should be ok 
+    homeless.next_step
+    assert homeless.valid?
+    
+    homeless.previous_step
+    %i( street_address_1= city= state= postal_code=  ).each do |attr|
+      homeless.local_address.send( attr,  SecureRandom.hex )
+    end
+    assert homeless.valid?
+
+  end
 
 end

@@ -32,8 +32,9 @@ class Prospect < ActiveRecord::Base
   has_many :available_times
   accepts_nested_attributes_for :available_times, allow_destroy: true
 
-  has_many :addresses
+  has_many :addresses, inverse_of: :prospect
   accepts_nested_attributes_for :addresses, allow_destroy: true
+#  validates_associated :addresses, if: ->(o) { o.current_step == "contact_info" }
 
   # by default we want to have one local_address, either a new one we've built
   # or an address that has been provided
