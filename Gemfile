@@ -1,6 +1,5 @@
 source 'https://rubygems.org'
 
-
 # Bundle edge Rails instead: gem 'rails', github: 'rails/rails'
 gem 'rails', '4.2.6'
 # Use sqlite3 as the database for Active Record
@@ -34,17 +33,16 @@ gem 'sdoc', '~> 0.4.0', group: :doc
 # Use Capistrano for deployment
 gem 'capistrano-rails', group: :development
 
-
-gem 'umd_lib_style', github: 'umd-lib/umd_lib_style', branch: 'develop' 
+gem 'umd_lib_style', github: 'umd-lib/umd_lib_style', branch: 'develop'
 gem 'rack-cas'
 
 gem 'bootstrap_form'
-gem "nested_form"
+gem 'nested_form'
 
 group :development, :test do
   # Call 'byebug' anywhere in the code to stop execution and get a debugger console
   gem 'byebug'
-  gem 'pry-rails'  
+  gem 'pry-rails'
 end
 
 group :development do
@@ -55,25 +53,26 @@ group :development do
   gem 'spring'
 
   gem 'ruby_dep', '~> 1.3.1'
-  gem "guard", :require => false
-  gem "guard-minitest", :require => false
-  gem "rb-fsevent", :require => false
-  gem "terminal-notifier-guard", :require => false
+  gem 'guard', require: false
+  gem 'guard-minitest', require: false
+  gem 'rb-fsevent', require: false
+  gem 'terminal-notifier-guard', require: false
 
+  gem 'rubocop'
 end
 
 group :test do
-  gem "minitest-rails-capybara" 
-  gem "connection_pool"
-  gem "launchy"
-  gem "minitest-reporters"
+  gem 'minitest-rails-capybara'
+  gem 'connection_pool'
+  gem 'launchy'
+  gem 'minitest-reporters'
   # use the head to get the callback functionality
-  gem 'capybara-screenshot', git: 'https://github.com/mattheworiordan/capybara-screenshot' 
-  gem "rack_session_access"
-  gem "mocha"
-  gem "poltergeist"
-  gem "shoulda-context"
-  gem "shoulda-matchers", ">= 3.0.1"
-  gem "test_after_commit"
-  gem 'simplecov', :require => false
+  gem 'capybara-screenshot', git: 'https://github.com/mattheworiordan/capybara-screenshot'
+  gem 'rack_session_access'
+  gem 'mocha'
+  gem 'poltergeist'
+  gem 'shoulda-context'
+  gem 'shoulda-matchers', '>= 3.0.1'
+  gem 'test_after_commit'
+  gem 'simplecov', require: false
 end

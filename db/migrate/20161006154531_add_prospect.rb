@@ -1,9 +1,9 @@
 class AddProspect < ActiveRecord::Migration
   def change
-    
+
     create_table :prospects do |t|
 
-      t.string :directory_id  
+      t.string :directory_id
       t.string :first_name
       t.string :last_name
       t.string :source_from
@@ -27,15 +27,15 @@ class AddProspect < ActiveRecord::Migration
 
       t.text :additional_comments
       t.text :hr_comments
-      
+
       t.timestamps null: false
 
     end
-    
+
     create_table :libraries do |t|
       t.string :name
     end
-  
+
     create_table :library_preferences do |t|
       t.references :prospect, index: true, foreign_key: true
       t.references :library, index: true, foreign_key: true
@@ -44,7 +44,7 @@ class AddProspect < ActiveRecord::Migration
     create_table :skills do |t|
       t.string :name
     end
-    
+
     create_table :prospects_skills do |t|
       t.references :prospect, index: true, foreign_key: true
       t.references :skills, index: true, foreign_key: true
@@ -61,10 +61,10 @@ class AddProspect < ActiveRecord::Migration
       t.boolean :all_day, default: false, null: false
       t.references :prospect, index: true, foreign_key: true
     end
-    
+
     create_table :available_days do |t|
       t.column :day, :integer, default: 0, null: false
-      t.references :available_time, index: true, foreign_key: true 
+      t.references :available_time, index: true, foreign_key: true
     end
 
   end
