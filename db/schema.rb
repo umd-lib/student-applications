@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20161019183151) do
+ActiveRecord::Schema.define(version: 20161021173906) do
 
   create_table "addresses", force: :cascade do |t|
     t.string  "street_address_1"
@@ -97,6 +97,10 @@ ActiveRecord::Schema.define(version: 20161019183151) do
   create_table "work_experiences", force: :cascade do |t|
     t.string  "name"
     t.integer "prospect_id"
+    t.string  "dates_of_employment"
+    t.string  "location"
+    t.text    "duties"
+    t.boolean "library_related"
   end
 
   add_index "work_experiences", ["prospect_id"], name: "index_work_experiences_on_prospect_id"
