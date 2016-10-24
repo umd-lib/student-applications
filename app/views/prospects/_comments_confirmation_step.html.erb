@@ -1,4 +1,118 @@
-<h2>Comments & Confirmation</h2>
+<h2>Confirmation &amp; Comments</h2>
 
+<div class="alert alert-info">
+  <p>Please verify that the following information is correct and complete.</p>
+</div>
 
+<table class="table table-striped">
+  <tr>
+    <th>First name</th>
+    <td><%= @prospect.first_name %></td>
+  </tr>
+  <tr>
+    <th>Last name</th>
+    <td><%= @prospect.last_name %></td>
+  </tr>
+  <tr>
+    <th>Email</th>
+    <td><%= @prospect.email%></td>
+  </tr>
+  <tr>
+    <th>Directory ID</th>
+    <td><%= @prospect.directory_id%></td>
+  </tr>
+  <tr>
+    <th>Class status</th>
+    <td><%= @prospect.class_status%></td>
+  </tr>
+  <tr>
+    <th>Graduation year</th>
+    <td><%= @prospect.graduation_year%></td>
+  </tr>
+  <% @prospect.addresses.each do |address| %>
+    <tr>
+      <th><%= address.address_type.capitalize %> Address</th>
+      <td>
+        <%= address.street_address_1 %><br/>
+        <% unless address.street_address_2.empty? %><%= address.street_address_2 %><br/><% end %>
+        <%= address.city %>, <%= address.state %> <%= address.postal_code %><br/>
+        <%= address.country %>
+      </td>
+    </tr>
+  <% end %>
+  <tr>
+    <th>Has family member who works for the Libraries</th>
+    <td>
+      <%= @prospect.family_member? ? "Yes; #{@prospect.family_member}" : 'No' %>
+    </td>
+  </tr>
+  <tr>
+    <th>In federal work study</th>
+    <td><%= @prospect.in_federal_study ? 'Yes' : 'No' %></td>
+  </tr>
+  <tr>
+    <th>Work experience</th>
+    <td>
+      <% unless @prospect.work_experiences.empty? %>
+        <% @prospect.work_experiences.each do |exp| %>
+          <table class="table table-striped table-bordered">
+            <tr>
+              <th>Name</th>
+              <th><%= exp.name %></th>
+            </tr>
+            <tr>
+              <th>Dates</th>
+              <td><%= exp.dates_of_employment %></td>
+            </tr>
+            <tr>
+              <th>Location</th>
+              <td><%= exp.location %></td>
+            </tr>
+            <tr>
+              <th>Duties</th>
+              <td><%= exp.duties %></td>
+            </tr>
+            <tr>
+              <th>Library related</th>
+              <td><%= exp.library_related ? 'Yes' : 'No' %></td>
+            </tr>
+          </table>
+        <% end %>
+      <% else %>
+        <i>(None)</i>
+      <% end %>
+    </td>
+  </tr>
+  <tr>
+    <th>Skills</th>
+    <td>
+      <% unless @prospect.skill_ids.empty? %>
+        <ul>
+          <% @prospect.skill_ids.each do |skill| %>
+            <li><%= skill %></li>
+          <% end %>
+        </ul>
+      <% else %>
+        <i>(None)</i>
+      <% end %>
+    </td>
+  </tr>
+  <tr>
+    <th>Availability</th>
+    <td>
+      <% unless @prospect.available_times.empty? %>
+        <ul>
+          <% @prospect.available_times.each do |available| %>
+            <li>
+              <%= available.days.map(&:capitalize).join(', ') %>:
+              <%= available.start.strftime('%l%P') %>–<%= available.end.strftime('%l%P').lstrip %>
+            </li>
+          <% end %>
+        </ul>
+      <% else %>
+        <i>(None)</i>
+      <% end %>
+    </td>
+  </tr>
+</table>
 <%= form.text_area :additional_comments %>

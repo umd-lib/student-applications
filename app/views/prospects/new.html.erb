@@ -4,6 +4,6 @@
 
 <%= bootstrap_nested_form_for @prospect, layout: :horizontal do |form| %>
   <%= render "#{@prospect.current_step}_step", form: form %>
-  <p><%= form.submit "Continue" %></p>
+  <p><%= form.submit @prospect.last_step? ? "Submit" : "Continue", class: @prospect.last_step? ? 'btn btn-success' : 'btn btn-default' %></p>
   <p><%= form.submit "Back", name: "back_button" unless @prospect.first_step? %></p>
 <% end %>
