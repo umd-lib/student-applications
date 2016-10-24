@@ -1,3 +1,5 @@
+load "#{Rails.root}/db/seeds.rb"
+
 require 'simplecov'
 SimpleCov.start
 

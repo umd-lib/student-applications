@@ -69,6 +69,7 @@ class ProspectsController < ApplicationController
         wl[:addresses_attributes] = params[:prospect][:addresses_attributes] unless params[:prospect][:addresses_attributes].blank?
         wl[:work_experiences_attributes] = params[:prospect][:work_experiences_attributes] unless params[:prospect][:work_experiences_attributes].blank?
         wl[:available_times_attributes] = params[:prospect][:available_times_attributes] unless params[:prospect][:available_times_attributes].blank?
+        wl[:skills_attributes] = params[:prospect][:skills_attributes] unless params[:prospect][:skills_attributes].blank?
       end
     end
 
