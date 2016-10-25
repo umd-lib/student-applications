@@ -72,6 +72,14 @@ class ProspectsController < ApplicationController
     def choose_action
       if params[:back_button]
         @prospect.previous_step
+      elsif params[:goto_contact_info]
+        @prospect.current_step = 'contact_info'
+      elsif params[:goto_work_experience]
+        @prospect.current_step = 'work_experience'
+      elsif params[:goto_skills]
+        @prospect.current_step = 'skills'
+      elsif params[:goto_availability]
+        @prospect.current_step = 'availability'
       elsif @prospect.last_step?
         @prospect.save if @prospect.all_valid?
       else
