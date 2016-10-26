@@ -35,6 +35,16 @@ label.required abbr {
 .form-horizontal  .radio-inline { padding-top: 0px  }
 .radio-question { padding-right: 20px; vertical-align: middle; }
 
+#availability-table > thead > tr > th, #availability-table > tbody > tr >  td { text-align: center;  width: 13.2%; padding: 8px 0px }
+#availability-table th.time-label, #availability-table td.time-label { position: relative; padding: 8px 0px; width: 6.6% }
+#availability-table > tbody > tr >  td:not(.time-label) { cursor: pointer; }
+#availability-table > tbody > tr >  td:not(.time-label):hover { background-color: #dff0d8; border: 2px groove #dff0d8; }
+#availability-table .time-label > span { 
+  position: absolute;
+  top: 0;
+  right: 0;
+  padding-right: 2px;
+ }
 
 
 

@@ -21,8 +21,15 @@ Minitest::Reporters.use!(
 require 'capybara/rails'
 require 'capybara/poltergeist'
 require 'capybara-screenshot/minitest'
-Capybara.javascript_driver = :poltergeist
 
+# for debugging
+# https://github.com/teampoltergeist/poltergeist#remote-debugging-experimental
+# Capybara.register_driver :poltergeist_debug do |app|
+#  Capybara::Poltergeist::Driver.new(app, :inspector => true)
+# end
+# Capybara.javascript_driver = :poltergeist_debug
+
+Capybara.javascript_driver = :poltergeist
 require 'rack_session_access/capybara'
 
 Capybara::Screenshot.after_save_html do |path|
