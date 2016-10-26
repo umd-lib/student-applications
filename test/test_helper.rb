@@ -50,3 +50,4 @@ class ActiveRecord::Base
   end
 end
 ActiveRecord::Base.shared_connection = ActiveRecord::Base.connection
+load "#{Rails.root}/db/seeds.rb"

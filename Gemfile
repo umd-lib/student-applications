@@ -36,9 +36,9 @@ gem 'capistrano-rails', group: :development
 gem 'umd_lib_style', github: 'umd-lib/umd_lib_style', branch: 'develop'
 gem 'rack-cas'
 
-gem "simple_form"
-gem "cocoon"
-gem "country_select"
+gem 'simple_form'
+gem 'cocoon'
+gem 'country_select'
 
 group :development, :test do
   # Call 'byebug' anywhere in the code to stop execution and get a debugger console

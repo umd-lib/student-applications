@@ -69,11 +69,11 @@ feature 'Enter contact information' do
 
     # lets add five new addresses
     5.times do |i|
-      assert_equal i + 1,find(:css, "#addresses").all(".nested-fields").length
-      
+      assert_equal i + 1, find(:css, '#addresses').all('.nested-fields').length
+
       within("#addresses .nested-fields:nth-child(#{i + 1})") do
-        %w( _street_address_1 _city _state _postal_code  ).each do |attr|
-          el_id =  find("input[id$='#{attr}']")[:id]
+        %w(_street_address_1 _city _state _postal_code).each do |attr|
+          el_id = find("input[id$='#{attr}']")[:id]
           fill_in(el_id, with: "#{attr} #{i} ")
         end
       end
@@ -90,8 +90,8 @@ feature 'Enter contact information' do
     # and with all our content
     5.times do |i|
       within("#addresses .nested-fields:nth-child(#{i + 1})") do
-        %w( _street_address_1 _city _state _postal_code  ).each_with_index do |attr|
-          el_id =  find("input[id$='#{attr}']")[:id]
+        %w(_street_address_1 _city _state _postal_code).each_with_index do |attr|
+          el_id = find("input[id$='#{attr}']")[:id]
           assert page.has_field?(el_id, with: "#{attr} #{i} ")
         end
       end

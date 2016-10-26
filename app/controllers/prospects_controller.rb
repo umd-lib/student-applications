@@ -48,20 +48,19 @@ class ProspectsController < ApplicationController
       # this is just a sanity check since sometimes we don't actually have
       # anything to add when using the back button. If we don't have a prospect
       # param, we just go to the step in session. if we don't have a session,
-      # we just go to first step. 
-      params[:prospect] ||=  { current_step: ( session[:prospect_step] || Prospect.steps.first  ) } 
-      whitelisted_attrs = %i( current_step commit has_family_member in_federal_study directory_id first_name last_name local_address 
-                       local_phone perm_address perm_phone email family_member class_status
-                       graduation_year additional_comments ) 
+      # we just go to first step.
+      params[:prospect] ||= { current_step: (session[:prospect_step] || Prospect.steps.first) }
+      whitelisted_attrs = %i( current_step commit has_family_member in_federal_study directory_id first_name last_name local_address
+                              local_phone perm_address perm_phone email family_member class_status
+                              graduation_year additional_comments )
       whitelisted_attrs << { day_times: [],
-                            skills_ids: [], skills: [ :id, :name, :_destroy ],
-                            work_experiences: [ :id, :name, :_destroy ] } 
+                             skill_ids: [], skills: [:id, :name, :_destroy],
+                             work_experiences: [:id, :name, :_destroy] }
       params.require(:prospect).permit(*whitelisted_attrs).tap do |wl|
-        %i(addresses_attributes work_experiences_attributes available_times_attributes).each do |attr_group_key|
-          unless params[:prospect][attr_group_key].blank?
-            wl[attr_group_key] = params[:prospect][attr_group_key]
-          end
-        end
+        wl[:addresses_attributes] = params[:prospect][:addresses_attributes] unless params[:prospect][:addresses_attributes].blank?
+        wl[:work_experiences_attributes] = params[:prospect][:work_experiences_attributes] unless params[:prospect][:work_experiences_attributes].blank?
+        wl[:available_times_attributes] = params[:prospect][:available_times_attributes] unless params[:prospect][:available_times_attributes].blank?
+        wl[:skills_attributes] = params[:prospect][:skills_attributes] unless params[:prospect][:skills_attributes].blank?
       end
     end
 

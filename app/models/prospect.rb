@@ -40,11 +40,12 @@ class Prospect < ActiveRecord::Base
   def day_times
     @day_times || []
   end
+
   def day_times=(dts)
-    available_times.destroy_all 
+    available_times.destroy_all
     dts.each do |dt|
-      day,time = dt.split("-").map(&:to_i)
-      available_times.find_or_initialize_by( day: day, time: time )
+      day, time = dt.split('-').map(&:to_i)
+      available_times.find_or_initialize_by(day: day, time: time)
     end
     @day_times = available_times.map(&:day_time)
   end
@@ -64,8 +65,11 @@ class Prospect < ActiveRecord::Base
 
   has_and_belongs_to_many :skills
   accepts_nested_attributes_for :skills
-  attr_accessor :skills_ids
-  
+
+  def special_skills
+    skills.select(&:unpromoted)
+  end
+
   attr_accessor :has_family_member
   validates :family_member, presence: true, if: ->(o) { o.family_member? }
 
