@@ -12,22 +12,20 @@
  *
  *= require_tree .
  *= require 'umd_lib'
- *= require rails_bootstrap_forms
  *= require_self
  */
 
 #home-jumbo { margin-top: 50px }
 
-label.required:after {
-  content:" *";
-  color: red;
+label.required abbr {
+  color: #a94442;
 }
 
 
 
 .panel-heading { min-height: 53px }
 .panel-heading span { font-size: 22px  }
-.fields {
+.nested-fields {
   border-bottom: 1px solid transparent;
   border-color: #ddd;
   margin: 15px 0px;
@@ -36,3 +34,8 @@ label.required:after {
 
 .form-horizontal  .radio-inline { padding-top: 0px  }
 .radio-question { padding-right: 20px; vertical-align: middle; }
+
+
+
+
+

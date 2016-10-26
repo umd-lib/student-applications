@@ -34,6 +34,21 @@ class Prospect < ActiveRecord::Base
   has_many :available_times
   accepts_nested_attributes_for :available_times, allow_destroy: true
 
+  # this is a way of feeding day-times into the prospect and have them stored
+  # in
+  attr_accessor :day_times
+  def day_times
+    @day_times || []
+  end
+  def day_times=(dts)
+    available_times.destroy_all 
+    dts.each do |dt|
+      day,time = dt.split("-").map(&:to_i)
+      available_times.find_or_initialize_by( day: day, time: time )
+    end
+    @day_times = available_times.map(&:day_time)
+  end
+
   has_many :addresses, inverse_of: :prospect
   accepts_nested_attributes_for :addresses, allow_destroy: true
   #  validates_associated :addresses, if: ->(o) { o.current_step == "contact_info" }
@@ -49,8 +64,8 @@ class Prospect < ActiveRecord::Base
 
   has_and_belongs_to_many :skills
   accepts_nested_attributes_for :skills
-  attr_accessor :skill_ids
-
+  attr_accessor :skills_ids
+  
   attr_accessor :has_family_member
   validates :family_member, presence: true, if: ->(o) { o.family_member? }
 

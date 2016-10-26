@@ -26,5 +26,17 @@ $(document).ready(function() {
     
     } 
   });  
+  
+  $(".availability-table > tbody > tr > td  input").hide();
+
+  $(".availability-table > tbody > tr > td ").on("click", function(event) {
+    var $this = $(this); 
+    var checkbox =  $this.find("input");
+    checkbox.prop("checked", !checkbox.prop("checked"));
+    $this.toggleClass("success");
+    $this.toggleClass("warning"); 
+  
+  })
+
 
 })

@@ -9,12 +9,12 @@ feature "Add some work experiences" do
     
     visit root_path
     click_link "Apply!" 
-    assert page.has_content?("Work Experiences") 
+    assert page.has_content?("Work Experience") 
     
-    click_link "Add Work Experiences"
-    assert_equal 1,find(:css, "#work-experiences").all(".fields").length
+    click_link "Add Work Experience"
+    assert_equal 1,find(:css, "#work-experiences").all(".nested-fields").length
     
-    within("#work-experiences .fields:nth-child(1)") do
+    within("#work-experiences .nested-fields:nth-child(1)") do
       %w( _name _dates_of_employment _location    ).each do |attr|
           el_id =  find("input[id$='#{attr}']")[:id]
           fill_in( el_id, with: attr ) 
@@ -26,20 +26,20 @@ feature "Add some work experiences" do
     end
 
     # we do a little dance...
-    click_link "Add Work Experiences"
-    assert_equal 2,find(:css, "#work-experiences").all(".fields").length
+    click_link "Add Work Experience"
+    assert_equal 2,find(:css, "#work-experiences").all(".nested-fields").length
     
     click_button "Continue"
     click_button "Back" 
     
-    assert_equal 2,find(:css, "#work-experiences").all(".fields").length
+    assert_equal 2,find(:css, "#work-experiences").all(".nested-fields").length
      
     click_button "Back" 
     click_button "Continue"
-    assert_equal 2,find(:css, "#work-experiences").all(".fields").length
+    assert_equal 2,find(:css, "#work-experiences").all(".nested-fields").length
 
     # ... and values are still in place
-    within("#work-experiences .fields:nth-child(1)") do
+    within("#work-experiences .nested-fields:nth-child(1)") do
       %w( _name _dates_of_employment _location  ).each_with_index do |attr|
           el_id =  find("input[id$='#{attr}']")[:id]
           assert page.has_field?( el_id, with: attr ) 

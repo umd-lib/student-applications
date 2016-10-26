@@ -1,4 +1,4 @@
 <h2>Skills</h2>
 
-<%= form.collection_select :skill_ids, Skill.all, :id, :name, {},
-  { multiple: true, class: 'select2' } %>
+<%= form.input :skills_ids, collection: Skill.all.map { |s| [ s.name, s.id ] }, 
+  as: :select, input_html: { multiple: true } %>

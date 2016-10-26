@@ -1,24 +1,18 @@
 <h2>Work Experience</h2>
 
 <div class='panel panel-default'>
-  <div class="panel-heading"><span>Work Experiences</span>
+  <div class="panel-heading"><span></span>
     <span class='pull-right'>
-      <%= form.link_to_add(:work_experiences, class: 'btn btn-success', data: { target: "#work-experiences" }) do  %>
-        <i class='glyphicon glyphicon-plus-sign'></i>Add Work Experiences 
+      <%= link_to_add_association(form, :work_experiences,
+                                  { "data-association-insertion-node": "#work-experiences",
+                                    "data-association-insertion-method": 'append'}) do  %>
+        <i class='glyphicon glyphicon-plus-sign'></i>Add Work Experience 
       <% end %> 
     </span>
   </div>
   <div class="panel-body" id="work-experiences">
-      <%= form.fields_for :work_experiences do |we| %>
-        <%= we.text_field :name %>
-        <%= we.text_field :dates_of_employment %>
-        <%= we.text_field :location %>
-        <%= we.text_area :duties %>
-        <%= we.label :library_related do %>
-          <span class='radio-question' >Is this position library related?</span> 
-          <%= we.radio_button :library_related, false, checked: true, value: false, label: "No", inline: true  %>        
-          <%= we.radio_button :library_related, true, value: true, label: "Yes", inline: true %>        
-        <% end %>
+      <%= form.fields_for :work_experiences do |ws| %>
+        <%= render 'work_experience_fields', f: ws %>
       <% end %>
   </div>
 </div>

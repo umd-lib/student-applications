@@ -13,6 +13,6 @@
 //= require jquery
 //= require jquery_ujs
 //= require turbolinks
-//= require jquery_nested_form
+//= require cocoon
 //= require_tree .
 //= require umd_lib

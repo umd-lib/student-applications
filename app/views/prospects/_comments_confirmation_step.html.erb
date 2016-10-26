@@ -96,8 +96,8 @@
   <table class="table table-striped">
     <% @prospect.available_times.each do |available| %>
       <tr>
-        <td><%= available.days.map(&:capitalize).join(', ') %></td>
-        <td><%= available.start.strftime('%l%P') %>–<%= available.end.strftime('%l%P').lstrip %></td>
+        <td><%= available.day.capitalize %></td>
+        <td><%= hour_integer_to_range(available.time) %></td>
       </tr>
     <% end %>
   </table>

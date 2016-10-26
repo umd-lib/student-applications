@@ -7,17 +7,11 @@ class AvailableTimeTest < ActiveSupport::TestCase
   end
 
   test 'it should allow to create new available times with days passed in' do
-    at = AvailableTime.new days: 'monday'
-    assert_includes at.days, 'monday'
+    at = AvailableTime.new day: 'monday', time: 0
+    assert_equal at.day_time, "1-0"
     at.save
-    assert_includes at.days, 'monday'
-    assert_includes at.available_days.map(&:day), 'monday'
+    at.day = "sunday" 
+    assert_equal at.day_time, "0-0"
   end
 
-  test "it should allow for adding days from a init'ed object" do
-    at = AvailableTime.new
-    at.days = %w(thursday sunday)
-    assert_includes at.available_days.map(&:day), 'thursday'
-    assert_includes at.days, 'sunday'
-  end
 end
