@@ -2,7 +2,14 @@
   <h1>New Student Application</h1>
 </div>
 
-<%= bootstrap_nested_form_for @prospect, layout: :horizontal do |form| %>
+<%= simple_form_for @prospect,  html: { class: 'form-horizontal' },
+  wrapper_mappings: {
+    check_boxes: :horizontal_radio_and_checkboxes,
+    radio_buttons: :horizontal_radio_and_checkboxes,
+    file: :horizontal_file_input,
+    boolean: :horizontal_boolean
+  } do |form| %>
+  <%= form.error_notification %> 
   <%= render "#{@prospect.current_step}_step", form: form %>
   <p><%= form.submit @prospect.last_step? ? "Submit" : "Continue", class: @prospect.last_step? ? 'btn btn-success' : 'btn btn-default' %></p>
   <p><%= form.submit "Back", name: "back_button" unless @prospect.first_step? %></p>

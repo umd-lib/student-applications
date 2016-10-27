@@ -8,6 +8,7 @@ contact_info_gotham:
 all_valid_springfield:
   prospect: all_valid 
   street_address_1: 555 Fake. St
+  street_address_2: 555 Fake. St
   city: Springfield
   state: IL
   postal_code: 12345

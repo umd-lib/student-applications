@@ -3,32 +3,32 @@
 <div class='panel panel-default'>
   <div class="panel-heading"><span>Basic Information</span></div>
   <div class="panel-body" id="basic-info">
-    <%= form.text_field :first_name %>
-    <%= form.text_field :last_name %>
-    <%= form.text_field :email %>
-    <%= form.text_field :directory_id %>
-    <%= form.select :class_status, Prospect.class_statuses.map { |cs| [ cs.first.capitalize, cs.first ] } %>
-    <%= form.select :graduation_year, Prospect.graduation_years.map { |gy| [ gy.first.gsub("_", " ").upcase, gy.first ] } %>
+      <%= form.input :first_name, required: true %>
+      <%= form.input :last_name,  required: true %>
+      <%= form.input :email, required: true %>
+      <%= form.input :directory_id, required: true  %>
+      <%= form.input :class_status, collection: 
+        Prospect.class_statuses.map { |cs| [ cs.first.capitalize, cs.first ] },
+        as: :select, include_blank: false %>
+      <%= form.input :graduation_year, collection:
+          Prospect.graduation_years.map { |gy| [ gy.first.gsub("_", " ").upcase, gy.first ] },
+          as: :select, include_blank: false %>
   </div>
 </div>
 
 <div class='panel panel-default'>
   <div class="panel-heading"><span>Addresses</span>
     <span class='pull-right'>
-      <%= form.link_to_add(:addresses, class: 'btn btn-success', data: { target: "#addresses" }) do  %>
+      <%= link_to_add_association(form, :addresses,
+                                  { "data-association-insertion-node": "#addresses",
+                                    "data-association-insertion-method": 'append'}) do  %>
         <i class='glyphicon glyphicon-plus-sign'></i>Add Address 
       <% end %> 
     </span>
   </div>
   <div class="panel-body" id="addresses">
       <%= form.fields_for :addresses do |addr| %>
-        <%= addr.select :address_type, Address.address_types.map(&:first) %>
-        <%= addr.text_field :street_address_1 %>
-        <%= addr.text_field :street_address_2 %>
-        <%= addr.text_field :city %>
-        <%= addr.text_field :state %>
-        <%= addr.text_field :postal_code %>
-        <%= addr.text_field :country %>
+        <%= render 'address_fields', f: addr %>
       <% end %>
   </div>
 </div>
@@ -36,20 +36,16 @@
 <div class='panel panel-default'>
   <div class="panel-heading"><span>Other Information</span></div>
   <div class="panel-body" id="other-info">
-    <%= form.label :has_family_member do %>
-      <span class='radio-question' >Do you have a family member that works at UMD Libraries?</span> 
-      <%= form.radio_button :has_family_member, false, checked: true, value: false, label: "No",  data: { toggle: "collapse", target: "#collapseFamilyMember" }, inline: true  %>        
-      <%= form.radio_button :has_family_member, true, value: true, label: "Yes",  data: { toggle: "collapse", target: "#collapseFamilyMember" }, inline: true %>        
-    <% end %>
+    <%= form.input :has_family_member, as: :radio_buttons, collection: [["No", false], ["Yes", true]], 
+      label: "Do you have a family member that works at UMD Libraries?", input_html: { data: { toggle: "collapse",
+        target: "#collapseFamilyMember" } }   %> 
     <div id="collapseFamilyMember" class="collapse">
-        <div class="panel-body"><%= form.text_field :family_member %></div>
+        <div class="panel-body"><%= form.input :family_member, required: true %></div>
     </div>
     <br/>  
-    <%= form.label :in_work_study do %>
-      <span class='radio-question' >Are you in a Federal Work Study program?</span> 
-      <%= form.radio_button :in_federal_study, false, checked: true, value: false, label: "No", inline: true  %>        
-      <%= form.radio_button :in_federal_study, true, value: true, label: "Yes", inline: true %>        
-    <% end %>
+    <%= form.input :in_federal_study, as: :radio_buttons, collection: [["No", false], ["Yes", true]], 
+      label: "Are you in a Federal Work Study program?" %>
+        
            
   </div>
 </div>

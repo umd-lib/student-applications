@@ -82,4 +82,12 @@ class ProspectTest < ActiveSupport::TestCase
     end
     assert homeless.valid?
   end
+
+  test 'it should be able to create available_times via the day_times shortcut' do
+    prospect = Prospect.new day_times: ['0-0', '4-20', '0-12']
+    assert_equal prospect.available_times.length, prospect.day_times.length
+    prospect.available_times.each do |a|
+      assert_includes prospect.day_times, a.day_time
+    end
+  end
 end

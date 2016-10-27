@@ -39,23 +39,26 @@ feature 'Enter contact information' do
     fill_in('prospect_addresses_attributes_0_state', with: 'AK')
     fill_in('prospect_addresses_attributes_0_postal_code', with: '12345')
 
-    refute page.has_field?('prospect_family_member', visible: true)
-    find('#prospect_has_family_member_true').click
-    assert page.has_field?('prospect_family_member', visible: true, with: '')
+    refute page.has_css?('#prospect_family_member', visible: true)
+    find(:css, '#prospect_has_family_member_true').click
+    sleep 1
+    assert page.has_css?('#prospect_family_member', visible: true)
 
     fill_in('prospect_family_member', with: 'Lebron James')
     click_button 'Continue'
     click_button 'Back'
 
     # we should still have the member name
-    assert page.has_field?('prospect_family_member', visible: true, with: 'Lebron James')
+    assert page.has_css?('#prospect_family_member', visible: true)
+    assert page.has_field?('prospect_family_member', with: 'Lebron James')
 
     # now click false and it should disapear and be erased
     find('#prospect_has_family_member_false').click
-    refute page.has_field?('prospect_family_member', visible: true, with: 'Lebron James')
+    refute page.has_field?('prospect_family_member', with: 'Lebron James')
     # reopen
     find('#prospect_has_family_member_true').click
-    assert page.has_field?('prospect_family_member', visible: true, with: '')
+    assert page.has_css?('#prospect_family_member', visible: true)
+    assert page.has_field?('prospect_family_member', with: '')
   end
 
   scenario 'user wants to add multiple addresses in the contact_information page', js: true do
@@ -69,9 +72,9 @@ feature 'Enter contact information' do
 
     # lets add five new addresses
     5.times do |i|
-      assert_equal i + 1, find(:css, '#addresses').all('.fields').length
+      assert_equal i + 1, find(:css, '#addresses').all('.nested-fields').length
 
-      within("#addresses .fields:nth-child(#{i + 1})") do
+      within("#addresses .nested-fields:nth-child(#{i + 1})") do
         %w(_street_address_1 _city _state _postal_code).each do |attr|
           el_id = find("input[id$='#{attr}']")[:id]
           fill_in(el_id, with: "#{attr} #{i} ")
@@ -85,11 +88,11 @@ feature 'Enter contact information' do
     click_button 'Continue'
     click_button 'Back'
 
-    assert_equal 5, find(:css, '#addresses').all('.fields').length
+    assert_equal 5, find(:css, '#addresses').all('.nested-fields').length
 
     # and with all our content
     5.times do |i|
-      within("#addresses .fields:nth-child(#{i + 1})") do
+      within("#addresses .nested-fields:nth-child(#{i + 1})") do
         %w(_street_address_1 _city _state _postal_code).each_with_index do |attr|
           el_id = find("input[id$='#{attr}']")[:id]
           assert page.has_field?(el_id, with: "#{attr} #{i} ")

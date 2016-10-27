@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20161021173906) do
+ActiveRecord::Schema.define(version: 20161024210928) do
 
   create_table "addresses", force: :cascade do |t|
     t.string  "street_address_1"
@@ -26,18 +26,10 @@ ActiveRecord::Schema.define(version: 20161021173906) do
 
   add_index "addresses", ["prospect_id"], name: "index_addresses_on_prospect_id"
 
-  create_table "available_days", force: :cascade do |t|
-    t.integer "day",               default: 0, null: false
-    t.integer "available_time_id"
-  end
-
-  add_index "available_days", ["available_time_id"], name: "index_available_days_on_available_time_id"
-
   create_table "available_times", force: :cascade do |t|
-    t.datetime "start"
-    t.datetime "end"
-    t.boolean  "all_day",     default: false, null: false
-    t.integer  "prospect_id"
+    t.integer "prospect_id"
+    t.integer "day",         default: 0, null: false
+    t.integer "time",        default: 0, null: false
   end
 
   add_index "available_times", ["prospect_id"], name: "index_available_times_on_prospect_id"
