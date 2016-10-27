@@ -24,3 +24,6 @@
 /vendor/bundle
 
 /coverage
+
+.env
+/public/assets

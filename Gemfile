@@ -30,6 +30,9 @@ gem 'sdoc', '~> 0.4.0', group: :doc
 # Use Unicorn as the app server
 # gem 'unicorn'
 
+# dotenv - For storing production configuration parameters
+gem 'dotenv-rails', '~> 2.1.1'
+
 # Use Capistrano for deployment
 gem 'capistrano-rails', group: :development
 
