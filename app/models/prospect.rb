@@ -65,7 +65,10 @@ class Prospect < ActiveRecord::Base
 
   has_and_belongs_to_many :skills
   accepts_nested_attributes_for :skills
-  attr_accessor :skills_ids
+
+  def special_skills
+    skills.select(&:unpromoted)
+  end
 
   attr_accessor :has_family_member
   validates :family_member, presence: true, if: ->(o) { o.family_member? }

@@ -76,14 +76,15 @@ ActiveRecord::Schema.define(version: 20161024210928) do
 
   create_table "prospects_skills", force: :cascade do |t|
     t.integer "prospect_id"
-    t.integer "skills_id"
+    t.integer "skill_id"
   end
 
   add_index "prospects_skills", ["prospect_id"], name: "index_prospects_skills_on_prospect_id"
-  add_index "prospects_skills", ["skills_id"], name: "index_prospects_skills_on_skills_id"
+  add_index "prospects_skills", ["skill_id"], name: "index_prospects_skills_on_skill_id"
 
   create_table "skills", force: :cascade do |t|
-    t.string "name"
+    t.string  "name"
+    t.boolean "promoted", default: false
   end
 
   create_table "work_experiences", force: :cascade do |t|

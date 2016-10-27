@@ -82,10 +82,10 @@
   <p><i>(None)</i></p>
 <% end %>
 <h3>Skills <%= form.submit "Change", name: "goto_skills", class: 'btn btn-info pull-right' %></h3>
-<% unless @prospect.skill_ids.empty? %>
+<% unless @prospect.skills.empty? %>
   <ul>
-    <% @prospect.skill_ids.each do |skill| %>
-      <li><%= skill %></li>
+    <% @prospect.skills.each do |skill| %>
+      <li><%= skill.name %></li>
     <% end %>
   </ul>
 <% else %>

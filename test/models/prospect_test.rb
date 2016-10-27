@@ -90,4 +90,13 @@ class ProspectTest < ActiveSupport::TestCase
       assert_includes prospect.day_times, a.day_time
     end
   end
+
+  test 'it can get a prospected special / unpromoted skills' do
+    prospect = Prospect.new
+    prospect.skills << Skill.new(name: 'typin', promoted: true)
+    prospect.skills << Skill.new(name: 'fightin', promoted: false)
+    assert_equal prospect.skills.length, 2
+    assert_equal prospect.special_skills.length, 1
+    assert_equal prospect.special_skills.first.name, 'fightin'
+  end
 end
