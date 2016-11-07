@@ -59,7 +59,7 @@ ActiveRecord::Schema.define(version: 20161024210928) do
     t.string   "first_name"
     t.string   "last_name"
     t.string   "source_from"
-    t.boolean  "in_federal_study",    default: false
+    t.boolean  "in_federal_study",                    null: false
     t.string   "email"
     t.string   "family_member"
     t.integer  "class_status",        default: 0,     null: false

@@ -37,7 +37,8 @@ class SubmitProspectApplicationTest < ActionDispatch::IntegrationTest
       fill_in('prospect_addresses_attributes_0_postal_code', with: '12345')
 
       fill_in('prospect_email', with: 'pj@umd.edu')
-
+      choose('prospect_in_federal_study_true')
+      
       click_button 'Continue'
       assert page.has_content?('Work Experience')
       assert_equal Prospect.steps.second, page.get_rack_session_key('prospect_step')
@@ -60,6 +61,7 @@ class SubmitProspectApplicationTest < ActionDispatch::IntegrationTest
 
       fill_in('prospect_email', with: 'pj@umd.edu')
 
+      choose('prospect_in_federal_study_true')
       click_button 'Continue'
       assert page.has_content?('Work Experience')
       click_button 'Back'

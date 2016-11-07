@@ -18,6 +18,7 @@ feature 'Enter contact information' do
     fill_in('prospect_addresses_attributes_0_state', with: 'HI')
     fill_in('prospect_addresses_attributes_0_postal_code', with: '12345')
 
+    choose('prospect_in_federal_study_true')
     click_button 'Continue'
     assert page.has_content?('Work Experience')
     assert_equal Prospect.steps.second, page.get_rack_session_key('prospect_step')
@@ -43,6 +44,8 @@ feature 'Enter contact information' do
     find(:css, '#prospect_has_family_member_true').click
     sleep 1
     assert page.has_css?('#prospect_family_member', visible: true)
+    
+    choose('prospect_in_federal_study_true')
 
     fill_in('prospect_family_member', with: 'Lebron James')
     click_button 'Continue'
@@ -83,6 +86,8 @@ feature 'Enter contact information' do
 
       click_link 'Add Address' unless i == 4
     end
+    
+    choose('prospect_in_federal_study_true')
 
     # we should do forward and back and they should all be there...
     click_button 'Continue'

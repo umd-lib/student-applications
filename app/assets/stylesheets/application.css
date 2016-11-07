@@ -31,9 +31,8 @@ label.required abbr {
   margin: 15px 0px;
 }
 
-
-.form-horizontal  .radio-inline { padding-top: 0px  }
-.radio-question { padding-right: 20px; vertical-align: middle; }
+.radio-question { padding-left: 50px; padding-right: 20px; vertical-align: middle; }
+.help-block.radio-question-help { vertical-align: middle; margin-bottom: 2px; display: inline-block; padding-left: 10px } 
 
 #availability-table > thead > tr > th, #availability-table > tbody > tr >  td { text-align: center;  width: 13.2%; padding: 8px 0px }
 #availability-table th.time-label, #availability-table td.time-label { position: relative; padding: 8px 0px; width: 6.6% }
