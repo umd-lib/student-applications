@@ -92,18 +92,9 @@
   <p><i>(None)</i></p>
 <% end %>
 <h3>Availability <%= form.submit "Change", name: "goto_availability", class: 'btn btn-info pull-right' %></h3>
-<% unless @prospect.available_times.empty? %>
-  <table class="table table-striped">
-    <% @prospect.available_times.each do |available| %>
-      <tr>
-        <td><%= available.day.capitalize %></td>
-        <td><%= hour_integer_to_range(available.time) %></td>
-      </tr>
-    <% end %>
-  </table>
-<% else %>
-  <p><i>(None)</i></p>
-<% end %>
+<div class="table-responsive">
+  <%= availablity_table(form) %>
+</div>
 
 <h2>Additional Comments</h2>
 <%= form.text_area :additional_comments %>
