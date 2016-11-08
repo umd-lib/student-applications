@@ -47,7 +47,7 @@ feature 'submit an application' do
     assert page.has_content?('Skills')
     # to do add skills test
     skill = Skill.promoted.first.name
-    select skill, from: 'prospect_skill_ids'
+    check "prospect_skill_ids_1"
 
     click_link 'Add Skill'
     within('#skills .nested-fields:nth-child(1)') do
