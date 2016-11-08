@@ -41,6 +41,7 @@ class ProspectsController < ApplicationController
       session[:prospect_params].keys.select { |a| a =~ /_attributes$/ }.each do |attr|
         session[:prospect_params][attr] = params[:prospect][attr] unless params[:prospect][attr].blank?
       end
+      session[:prospect_params].each { |k,v| session[:prospect_params][k] = v.to_hash if v.is_a?(ActionController::Parameters) } 
       @prospect = prospect_from_session
     end
 
@@ -58,6 +59,7 @@ class ProspectsController < ApplicationController
                              work_experiences: [:id, :name, :_destroy] }
       params.require(:prospect).permit(*whitelisted_attrs).tap do |wl|
         wl[:addresses_attributes] = params[:prospect][:addresses_attributes] unless params[:prospect][:addresses_attributes].blank?
+        wl[:permanent_address] = params[:prospect][:permanent_address] unless params[:prospect][:permanent_address].blank?
         wl[:work_experiences_attributes] = params[:prospect][:work_experiences_attributes] unless params[:prospect][:work_experiences_attributes].blank?
         wl[:available_times_attributes] = params[:prospect][:available_times_attributes] unless params[:prospect][:available_times_attributes].blank?
         wl[:skills_attributes] = params[:prospect][:skills_attributes] unless params[:prospect][:skills_attributes].blank?

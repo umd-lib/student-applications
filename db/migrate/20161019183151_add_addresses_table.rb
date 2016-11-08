@@ -12,7 +12,7 @@ class AddAddressesTable < ActiveRecord::Migration
       t.string :state
       t.string :postal_code
       t.string :country
-      t.column :address_type, :integer, default: 0, null: false
+      t.column :address_type, :integer, default: 1, null: false
 
       t.references :prospect, index: true, foreign_key: true
     end

@@ -59,9 +59,14 @@ class Prospect < ActiveRecord::Base
   def local_address_with_default
     addresses.find(&:local?) || addresses.build(address_type: 'local')
   end
+
   has_one :local_address, -> { where(address_type: 'local') }, class_name: Address
+  accepts_nested_attributes_for :local_address, allow_destroy: true
+  
   alias_method_chain :local_address, :default
   validates :local_address, presence: true, if: ->(o) { o.current_step == 'contact_info' }
+  
+  has_one :permanent_address, -> { where(address_type: 'permanent') }, class_name: Address
 
   has_and_belongs_to_many :skills
   accepts_nested_attributes_for :skills

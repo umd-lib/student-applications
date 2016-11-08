@@ -19,11 +19,15 @@
 <div class='panel panel-default'>
   <div class="panel-heading"><span>Addresses</span>
     <span class='pull-right'>
-      <%= link_to_add_association(form, :addresses,
-                                  { "data-association-insertion-node": "#addresses",
-                                    "data-association-insertion-method": 'append'}) do  %>
-        <i class='glyphicon glyphicon-plus-sign'></i>Add Address 
-      <% end %> 
+      <% unless @prospect.permanent_address %> 
+        <%= link_to_add_association(form, :addresses,
+                                    { class: "add-permanent-address", 
+                                       force_non_association_create: true,  
+                                      "data-association-insertion-node": "#addresses",
+                                      "data-association-insertion-method": 'append'}) do  %>
+          <i class='glyphicon glyphicon-plus-sign'></i>Add A Permanent Address 
+        <% end %> 
+      <% end %>   
     </span>
   </div>
   <div class="panel-body" id="addresses">

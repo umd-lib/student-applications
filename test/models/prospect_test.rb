@@ -42,7 +42,7 @@ class ProspectTest < ActiveSupport::TestCase
   end
 
   test 'should keep the local address if created with one' do
-    prospect = Prospect.new(addresses: [Address.new(street_address_1: '666 Lovers Ln')])
+    prospect = Prospect.new(addresses: [Address.new( address_type: "local", street_address_1: '666 Lovers Ln')])
     assert_equal prospect.addresses.length, 1
     assert_equal prospect.addresses.first.street_address_1, prospect.local_address.street_address_1
   end

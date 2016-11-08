@@ -20,7 +20,7 @@ ActiveRecord::Schema.define(version: 20161024210928) do
     t.string  "state"
     t.string  "postal_code"
     t.string  "country"
-    t.integer "address_type",     default: 0, null: false
+    t.integer "address_type",     default: 1, null: false
     t.integer "prospect_id"
   end
 
