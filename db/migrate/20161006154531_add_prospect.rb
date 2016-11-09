@@ -7,7 +7,7 @@ class AddProspect < ActiveRecord::Migration
       t.string :first_name
       t.string :last_name
       t.string :source_from
-      t.boolean :in_federal_study, default: 0
+      t.boolean :in_federal_study, null: false
 
       t.string :local_address
       t.string :local_phone

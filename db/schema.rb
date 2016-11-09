@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20161024210928) do
+ActiveRecord::Schema.define(version: 20161109095813) do
 
   create_table "addresses", force: :cascade do |t|
     t.string  "street_address_1"
@@ -20,7 +20,7 @@ ActiveRecord::Schema.define(version: 20161024210928) do
     t.string  "state"
     t.string  "postal_code"
     t.string  "country"
-    t.integer "address_type",     default: 0, null: false
+    t.integer "address_type",     default: 1, null: false
     t.integer "prospect_id"
   end
 
@@ -59,19 +59,21 @@ ActiveRecord::Schema.define(version: 20161024210928) do
     t.string   "first_name"
     t.string   "last_name"
     t.string   "source_from"
-    t.boolean  "in_federal_study",    default: false
+    t.boolean  "in_federal_study",                         null: false
     t.string   "email"
     t.string   "family_member"
-    t.integer  "class_status",        default: 0,     null: false
+    t.integer  "class_status",             default: 0,     null: false
     t.string   "major"
-    t.integer  "graduation_year",     default: 0,     null: false
+    t.integer  "graduation_year",          default: 0,     null: false
     t.integer  "number_of_hours"
-    t.boolean  "hired",               default: false, null: false
-    t.boolean  "suppress",            default: false, null: false
+    t.boolean  "hired",                    default: false, null: false
+    t.boolean  "suppress",                 default: false, null: false
     t.text     "additional_comments"
     t.text     "hr_comments"
-    t.datetime "created_at",                          null: false
-    t.datetime "updated_at",                          null: false
+    t.datetime "created_at",                               null: false
+    t.datetime "updated_at",                               null: false
+    t.integer  "available_hours_per_week", default: 0,     null: false
+    t.integer  "available_times_count",    default: 0,     null: false
   end
 
   create_table "prospects_skills", force: :cascade do |t|

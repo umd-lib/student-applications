@@ -18,6 +18,7 @@ feature 'Enter contact information' do
     fill_in('prospect_addresses_attributes_0_state', with: 'HI')
     fill_in('prospect_addresses_attributes_0_postal_code', with: '12345')
 
+    choose('prospect_in_federal_study_true')
     click_button 'Continue'
     assert page.has_content?('Work Experience')
     assert_equal Prospect.steps.second, page.get_rack_session_key('prospect_step')
@@ -43,6 +44,8 @@ feature 'Enter contact information' do
     find(:css, '#prospect_has_family_member_true').click
     sleep 1
     assert page.has_css?('#prospect_family_member', visible: true)
+    
+    choose('prospect_in_federal_study_true')
 
     fill_in('prospect_family_member', with: 'Lebron James')
     click_button 'Continue'
@@ -71,7 +74,7 @@ feature 'Enter contact information' do
     fill_in('prospect_email', with: 'pj@umd.edu')
 
     # lets add five new addresses
-    5.times do |i|
+    2.times do |i|
       assert_equal i + 1, find(:css, '#addresses').all('.nested-fields').length
 
       within("#addresses .nested-fields:nth-child(#{i + 1})") do
@@ -80,18 +83,19 @@ feature 'Enter contact information' do
           fill_in(el_id, with: "#{attr} #{i} ")
         end
       end
-
-      click_link 'Add Address' unless i == 4
+      click_link 'Add A Permanent Address' unless i == 1 
     end
+    
+    choose('prospect_in_federal_study_true')
 
     # we should do forward and back and they should all be there...
     click_button 'Continue'
     click_button 'Back'
 
-    assert_equal 5, find(:css, '#addresses').all('.nested-fields').length
+    assert_equal 2, find(:css, '#addresses').all('.nested-fields').length
 
     # and with all our content
-    5.times do |i|
+    2.times do |i|
       within("#addresses .nested-fields:nth-child(#{i + 1})") do
         %w(_street_address_1 _city _state _postal_code).each_with_index do |attr|
           el_id = find("input[id$='#{attr}']")[:id]

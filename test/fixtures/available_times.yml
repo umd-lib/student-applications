@@ -1,0 +1,4 @@
+all_valid_sunday:
+  prospect: all_valid 
+  day: sunday
+  time: 12

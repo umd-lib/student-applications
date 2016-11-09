@@ -2,6 +2,14 @@
 
 $(document).ready(function() {
 
+
+  // this is for adding permanent_addresses. we just want one
+  $("#addresses").on('cocoon:after-insert', function() {
+    $('.add-permanent-address').toggle();   
+  }).on('cocoon:before-remove', function() { 
+    $('.add-permanent-address').toggle();   
+   });
+
   // we had a pattern for collapses and radio buttons. if the true is checked,
   // make sure its associated collapse is open.
   $("input[type='radio'][value='true']:checked").each( function() { 

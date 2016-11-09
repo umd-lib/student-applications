@@ -23,16 +23,26 @@ class Prospect < ActiveRecord::Base
   end
 
   # these are the validations for the contact_information step
-  validates :in_federal_study, inclusion: { in: [true, false], if: ->(o) { o.current_step == 'contact_info' } }
+  validates_inclusion_of :in_federal_study, in: [true, false], if: ->(o) { o.current_step == 'contact_info' }
   %i(directory_id first_name last_name email graduation_year).each do |attr|
     validates attr, presence: true, if: ->(o) { o.current_step == 'contact_info' }
   end
+
 
   has_many :work_experiences
   accepts_nested_attributes_for :work_experiences, allow_destroy: true
 
   has_many :available_times
   accepts_nested_attributes_for :available_times, allow_destroy: true
+  
+  # the number of available hours per week should =< number of available_times
+  validate :available_hours_per_week_gt_available_times
+
+  def available_hours_per_week_gt_available_times
+    if available_hours_per_week > available_times.size
+      errors.add(:available_hours_per_week, "can't be greater than the number of available times provided.")
+    end
+  end
 
   # this is a way of feeding day-times into the prospect and have them stored
   # in
@@ -59,9 +69,14 @@ class Prospect < ActiveRecord::Base
   def local_address_with_default
     addresses.find(&:local?) || addresses.build(address_type: 'local')
   end
+
   has_one :local_address, -> { where(address_type: 'local') }, class_name: Address
+  accepts_nested_attributes_for :local_address, allow_destroy: true
+  
   alias_method_chain :local_address, :default
   validates :local_address, presence: true, if: ->(o) { o.current_step == 'contact_info' }
+  
+  has_one :permanent_address, -> { where(address_type: 'permanent') }, class_name: Address
 
   has_and_belongs_to_many :skills
   accepts_nested_attributes_for :skills

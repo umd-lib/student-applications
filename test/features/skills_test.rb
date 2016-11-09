@@ -10,8 +10,9 @@ feature 'Add some skills' do
     visit root_path
     click_link 'Apply!'
     assert page.has_content?('Skills')
+    
+    check "prospect_skill_ids_1"
 
-    find("option[value='1']").select_option
 
     click_link 'Add Skill'
     assert_equal 1, find(:css, '#skills').all('.nested-fields').length
@@ -28,7 +29,7 @@ feature 'Add some skills' do
       el_id = find("input[id$='_name']")[:id]
       assert page.has_field?(el_id, with: 'C00king')
     end
-    assert page.has_select?('prospect_skill_ids', selected: Skill.promoted.first.name)
+    assert page.has_checked_field?("prospect_skill_ids_1")
 
     click_button 'Back'
     click_button 'Continue'
@@ -37,6 +38,6 @@ feature 'Add some skills' do
       el_id = find("input[id$='_name']")[:id]
       assert page.has_field?(el_id, with: 'C00king')
     end
-    assert page.has_select?('prospect_skill_ids', selected: Skill.promoted.first.name)
+    assert page.has_checked_field?("prospect_skill_ids_1")
   end
 end

@@ -2,9 +2,22 @@
 <div class='panel panel-default'>
   <div class="panel-heading"><span>Please Select:</span></div>
   <div class="panel-body" id="skills-promoted">
-    <%= form.association :skills, collection: Skill.promoted, label: false, 
-      label_method: :name,
-      input_html: { multiple: true  } %>
+    <div class='table-responsive'> 
+      <table class='table table-bordered'>
+        <tbody>
+          <% Skill.promoted.find_in_batches( batch_size: 3 ) do |batch| %>
+            <tr>
+              <% batch.each do |skill| %> 
+                <td>
+                  <%= form.check_box( :skill_ids,  { :multiple => true }, skill.id, nil  )  %>
+                  <%= form.label(  :skills,  skill.name )  %>
+                </td>
+              <% end %> 
+            </tr>
+          <% end %>   
+        </tbody>
+      </table>
+    </div>   
   </div>
 </div>
 
