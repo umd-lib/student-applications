@@ -28,11 +28,21 @@ class Prospect < ActiveRecord::Base
     validates attr, presence: true, if: ->(o) { o.current_step == 'contact_info' }
   end
 
+
   has_many :work_experiences
   accepts_nested_attributes_for :work_experiences, allow_destroy: true
 
   has_many :available_times
   accepts_nested_attributes_for :available_times, allow_destroy: true
+  
+  # the number of available hours per week should =< number of available_times
+  validate :available_hours_per_week_gt_available_times
+
+  def available_hours_per_week_gt_available_times
+    if available_hours_per_week > available_times.size
+      errors.add(:available_hours_per_week, "can't be greater than the number of available times provided.")
+    end
+  end
 
   # this is a way of feeding day-times into the prospect and have them stored
   # in

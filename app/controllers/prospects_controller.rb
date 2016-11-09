@@ -28,7 +28,9 @@ class ProspectsController < ApplicationController
 
     def prospect_from_session
       Prospect.new(ActionController::Parameters.new(session[:prospect_params]).permit!)
-    rescue
+    rescue => e
+      # a nice place to debug.. 
+      # byebug 
       reset_session
       redirect_to root_path, flash: { error: "We're sorry, but something has gone wrong. Please try again." }
     end
@@ -51,12 +53,6 @@ class ProspectsController < ApplicationController
       # param, we just go to the step in session. if we don't have a session,
       # we just go to first step.
       params[:prospect] ||= { current_step: (session[:prospect_step] || Prospect.steps.first) }
-      whitelisted_attrs = %i( current_step commit has_family_member in_federal_study directory_id first_name last_name local_address
-                              local_phone perm_address perm_phone email family_member class_status
-                              graduation_year additional_comments )
-      whitelisted_attrs << { day_times: [],
-                             skill_ids: [], skills: [:id, :name, :_destroy],
-                             work_experiences: [:id, :name, :_destroy] }
       params.require(:prospect).permit(*whitelisted_attrs).tap do |wl|
         wl[:addresses_attributes] = params[:prospect][:addresses_attributes] unless params[:prospect][:addresses_attributes].blank?
         wl[:permanent_address] = params[:prospect][:permanent_address] unless params[:prospect][:permanent_address].blank?
@@ -70,9 +66,9 @@ class ProspectsController < ApplicationController
       whitelisted_attrs = %i(
         current_step commit has_family_member in_federal_study directory_id first_name last_name
         local_address local_phone perm_address perm_phone email family_member class_status
-        graduation_year additional_comments
+        graduation_year additional_comments available_hours_per_week
       )
-      whitelisted_attrs << { skill_ids: [], skills: [:id, :name, :_destroy], work_experiences: [:id, :name, :_destroy] }
+      whitelisted_attrs << {  day_times: [], skill_ids: [], skills: [:id, :name, :_destroy], work_experiences: [:id, :name, :_destroy] }
     end
 
     # decide which step to move to depending on which button was clicked and which step we are already on

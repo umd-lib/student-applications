@@ -90,6 +90,14 @@ class ProspectTest < ActiveSupport::TestCase
       assert_includes prospect.day_times, a.day_time
     end
   end
+  
+  test 'it ensure the total available hours is not more than the available_times selected' do
+    assert_equal @all_valid.available_hours_per_week, 1
+    @all_valid.available_hours_per_week = 100
+    refute @all_valid.valid?
+    @all_valid.available_hours_per_week = @all_valid.available_times.size
+    assert @all_valid.valid?
+  end
 
   test 'it can get a prospected special / unpromoted skills' do
     prospect = Prospect.new

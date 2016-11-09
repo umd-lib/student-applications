@@ -16,6 +16,8 @@ all_valid:
   family_member:
   class_status: Undergraduate
   graduation_year: 0
+  available_hours_per_week: 1
+  available_times_count: 1
 contact_info:
   in_federal_study: true
   directory_id: astudent

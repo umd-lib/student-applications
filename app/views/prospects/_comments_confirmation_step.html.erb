@@ -92,6 +92,7 @@
   <p><i>(None)</i></p>
 <% end %>
 <h3>Availability <%= form.submit "Change", name: "goto_availability", class: 'btn btn-info pull-right' %></h3>
+<%= form.input :available_hours_per_week, disabled: true %>
 <div class="table-responsive">
   <%= availablity_table(form) %>
 </div>
