@@ -40,8 +40,8 @@ module Walkable
   end
 
   class_methods do
-    def self.steps
-      %w(contact_info work_experience skills availability comments_confirmation)
+    def steps
+      %w(contact_info work_experience skills availability upload_resume comments_confirmation)
     end
   end
 end

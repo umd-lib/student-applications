@@ -2,6 +2,7 @@
 
 <div class="alert alert-info">
   <p>Please verify that the following information is correct and complete.</p>
+  <p>After you submit, you will have an opprotunity to upload a copy of your résumé.</p>
 </div>
 
 <h3>Contact Info <%= form.submit "Change", name: "goto_contact_info", class: 'btn btn-info pull-right' %></h3>
@@ -96,6 +97,11 @@
 <div class="table-responsive">
   <%= availablity_table(form) %>
 </div>
-
+<h3>Resume <%= form.submit "Change", name: "goto_upload_resume", class: 'btn btn-info pull-right' %></h3>
+<% if @resume.file? %>
+  <%= link_to( "View #{ @resume.file_file_name}",  resume_path(@resume), target: "_self" ) %>
+<% else %>
+  <p><i>(None)</i></p>
+<% end %>
 <h2>Additional Comments</h2>
 <%= form.text_area :additional_comments %>

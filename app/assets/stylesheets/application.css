@@ -15,7 +15,7 @@
  *= require_self
  */
 
-#home-jumbo { margin-top: 50px }
+#home-jumbo, #upload-jumbo { margin-top: 50px }
 
 label.required abbr {
   color: #a94442;
@@ -44,6 +44,18 @@ label.required abbr {
   right: 0;
   padding-right: 2px;
  }
+
+
+.upload { display: none;  }
+
+input#resume_file {
+ width: 0.1px;
+ height: 0.1px;
+ opacity: 0;
+ overflow: hidden;
+ position: absolute;
+ z-index: -1;
+}
 
 
 

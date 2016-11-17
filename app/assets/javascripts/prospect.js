@@ -46,5 +46,57 @@ $(document).ready(function() {
     checkbox.prop("checked", !checkbox.prop("checked"));
   })
 
+  // For the file upload bits
+  $("input#resume_file").on("change", function(e) { 
+    var $uploader = $(".upload");
+    $uploader.attr("value", "Submit (" + e.target.value + ")");
+    $uploader.show();
+    $(".show-link").hide();
+  });
+
+
+
+
+
+  $("form.uploadForm").submit( function(e){
+    e.preventDefault();
+   
+    var $this = $(this);
+    var formData = new FormData();
+
+    var file =  document.getElementById('resume_file').files[0];
+    
+    if ( !file.type.match('application/pdf')) {
+      alert("Not permitted format. Please upload a PDF.");
+      return;
+    }
+    
+    formData.append("resume[file]", file, file.name);
+
+
+    var token = $this.find("input[name='authenticity_token']")[0].value;
+    formData.append("authenticity_token", token);
+
+    var method = $this.find("input[name='_method']");
+    if ( method.length > 0  ) {
+      formData.append("_method", method[0].value );
+    } 
+
+    var xhr = new XMLHttpRequest();
+    xhr.open('POST', $(this).attr("action"), true);
+    xhr.onload = function() {
+      if (xhr.status === 200) {
+        var resume = JSON.parse( xhr.response );
+        $("#prospect_resume_id").attr( "value", resume.id );
+        $upload = $(".upload"); 
+        $upload.removeClass("btn-warning").addClass("btn-success")
+        $upload.attr("value", "Success!").attr("disabled", "disabled") 
+      } else {
+        alert("Sorry, we have encountered an error..."); 
+      }
+    }
+    
+    xhr.send(formData);
+  })
 
 })

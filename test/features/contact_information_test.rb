@@ -44,7 +44,7 @@ feature 'Enter contact information' do
     find(:css, '#prospect_has_family_member_true').click
     sleep 1
     assert page.has_css?('#prospect_family_member', visible: true)
-    
+
     choose('prospect_in_federal_study_true')
 
     fill_in('prospect_family_member', with: 'Lebron James')
@@ -83,9 +83,9 @@ feature 'Enter contact information' do
           fill_in(el_id, with: "#{attr} #{i} ")
         end
       end
-      click_link 'Add A Permanent Address' unless i == 1 
+      click_link 'Add A Permanent Address' unless i == 1
     end
-    
+
     choose('prospect_in_federal_study_true')
 
     # we should do forward and back and they should all be there...
