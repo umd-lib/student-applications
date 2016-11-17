@@ -35,6 +35,7 @@ gem 'dotenv-rails', '~> 2.1.1'
 
 # Use Capistrano for deployment
 gem 'capistrano-rails', group: :development
+gem "figaro"
 
 gem 'umd_lib_style', github: 'umd-lib/umd_lib_style', branch: 'develop'
 gem 'rack-cas'
