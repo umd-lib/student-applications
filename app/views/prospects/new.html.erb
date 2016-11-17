@@ -2,6 +2,7 @@
   <h1>New Student Application</h1>
 </div>
 
+<%= render "resume_uploader" if @prospect.current_step == "upload_resume" %> 
 <%= simple_form_for @prospect,  html: { class: 'form-horizontal' },
   wrapper_mappings: {
     check_boxes: :horizontal_radio_and_checkboxes,

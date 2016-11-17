@@ -42,7 +42,7 @@ class ProspectTest < ActiveSupport::TestCase
   end
 
   test 'should keep the local address if created with one' do
-    prospect = Prospect.new(addresses: [Address.new( address_type: "local", street_address_1: '666 Lovers Ln')])
+    prospect = Prospect.new(addresses: [Address.new(address_type: 'local', street_address_1: '666 Lovers Ln')])
     assert_equal prospect.addresses.length, 1
     assert_equal prospect.addresses.first.street_address_1, prospect.local_address.street_address_1
   end
@@ -90,7 +90,7 @@ class ProspectTest < ActiveSupport::TestCase
       assert_includes prospect.day_times, a.day_time
     end
   end
-  
+
   test 'it ensure the total available hours is not more than the available_times selected' do
     assert_equal @all_valid.available_hours_per_week, 1
     @all_valid.available_hours_per_week = 100

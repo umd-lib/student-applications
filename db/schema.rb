@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20161109095813) do
+ActiveRecord::Schema.define(version: 20161116152012) do
 
   create_table "addresses", force: :cascade do |t|
     t.string  "street_address_1"
@@ -74,7 +74,10 @@ ActiveRecord::Schema.define(version: 20161109095813) do
     t.datetime "updated_at",                               null: false
     t.integer  "available_hours_per_week", default: 0,     null: false
     t.integer  "available_times_count",    default: 0,     null: false
+    t.integer  "resume_id"
   end
+
+  add_index "prospects", ["resume_id"], name: "index_prospects_on_resume_id"
 
   create_table "prospects_skills", force: :cascade do |t|
     t.integer "prospect_id"
@@ -83,6 +86,13 @@ ActiveRecord::Schema.define(version: 20161109095813) do
 
   add_index "prospects_skills", ["prospect_id"], name: "index_prospects_skills_on_prospect_id"
   add_index "prospects_skills", ["skill_id"], name: "index_prospects_skills_on_skill_id"
+
+  create_table "resumes", force: :cascade do |t|
+    t.string   "file_file_name"
+    t.string   "file_content_type"
+    t.integer  "file_file_size"
+    t.datetime "file_updated_at"
+  end
 
   create_table "skills", force: :cascade do |t|
     t.string  "name"

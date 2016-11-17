@@ -7,6 +7,8 @@
 # Ignore bundler config.
 /.bundle
 
+/resumes/*/**
+
 # Ignore the default SQLite database.
 /db/*.sqlite3
 /db/*.sqlite3-journal
@@ -27,3 +29,6 @@
 
 .env
 /public/assets
+
+# Ignore application configuration
+/config/application.yml

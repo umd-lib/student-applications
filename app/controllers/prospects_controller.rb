@@ -11,17 +11,26 @@ class ProspectsController < ApplicationController
     if @prospect.new_record?
       render 'new'
     else
-      session[:prospect_step] = session[:prospect_params] = nil
-      flash[:notice] = 'Saved!'
+      SubmittedMailer.default_email(@prospect).deliver
+      reset_session
+      flash[:notice] = 'Submitted!'
       redirect_to @prospect
     end
   end
 
   def show
+    @prospect = Prospect.find(params[:id])
   end
 
   def index
     redirect_to action: 'new'
+  end
+
+  def update
+    @prospect = Prospect.find(params[:id])
+    if @prospect.update(prospect_params)
+      redirect_to prospect_path(@prospect), notice: 'Your application has been updated'
+    end
   end
 
   private
@@ -29,8 +38,8 @@ class ProspectsController < ApplicationController
     def prospect_from_session
       Prospect.new(ActionController::Parameters.new(session[:prospect_params]).permit!)
     rescue => e
-      # a nice place to debug.. 
-      # byebug 
+      # a nice place to debug..
+      # byebug
       reset_session
       redirect_to root_path, flash: { error: "We're sorry, but something has gone wrong. Please try again." }
     end
@@ -43,8 +52,10 @@ class ProspectsController < ApplicationController
       session[:prospect_params].keys.select { |a| a =~ /_attributes$/ }.each do |attr|
         session[:prospect_params][attr] = params[:prospect][attr] unless params[:prospect][attr].blank?
       end
-      session[:prospect_params].each { |k,v| session[:prospect_params][k] = v.to_hash if v.is_a?(ActionController::Parameters) } 
+      session[:prospect_params].each { |k, v| session[:prospect_params][k] = v.to_hash if v.is_a?(ActionController::Parameters) }
       @prospect = prospect_from_session
+      # byebug
+      @resume = @prospect.resume ? @prospect.resume : @prospect.build_resume
     end
 
     def prospect_params
@@ -66,9 +77,9 @@ class ProspectsController < ApplicationController
       whitelisted_attrs = %i(
         current_step commit has_family_member in_federal_study directory_id first_name last_name
         local_address local_phone perm_address perm_phone email family_member class_status
-        graduation_year additional_comments available_hours_per_week
+        graduation_year additional_comments available_hours_per_week resume_id
       )
-      whitelisted_attrs << {  day_times: [], skill_ids: [], skills: [:id, :name, :_destroy], work_experiences: [:id, :name, :_destroy] }
+      whitelisted_attrs << { day_times: [], skill_ids: [], skills: [:id, :name, :_destroy], work_experiences: [:id, :name, :_destroy] }
     end
 
     # decide which step to move to depending on which button was clicked and which step we are already on
@@ -81,6 +92,8 @@ class ProspectsController < ApplicationController
         @prospect.current_step = 'work_experience'
       elsif params[:goto_skills]
         @prospect.current_step = 'skills'
+      elsif params[:goto_upload_resume]
+        @prospect.current_step = 'upload_resume'
       elsif params[:goto_availability]
         @prospect.current_step = 'availability'
       elsif @prospect.last_step?
