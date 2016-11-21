@@ -47,6 +47,6 @@ module ApplicationHelper
         end)
       end
     end
-    content_tag(:table, class: 'table table-bordered', id: 'availability-table') { thead.concat(tbody) }
+    content_tag(:table, class: "table table-bordered #{@prospect.current_step}-availability-table", id: 'availability-table') { thead.concat(tbody) }
   end
 end
