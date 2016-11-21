@@ -47,7 +47,7 @@ class AddProspect < ActiveRecord::Migration
 
     create_table :prospects_skills do |t|
       t.references :prospect, index: true, foreign_key: true
-      t.references :skills, index: true, foreign_key: true
+      t.references :skill, index: true, foreign_key: true
     end
 
     create_table :work_experiences do |t|
