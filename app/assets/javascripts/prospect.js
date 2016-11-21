@@ -37,7 +37,7 @@ $(document).ready(function() {
   
   $("#availability-table > tbody > tr > td  input").hide();
 
-  $("#availability-table > tbody > tr > td:not(.time-label) ").on("click", function(event) {
+  $(".availability-availability-table > tbody > tr > td:not(.time-label) ").on("click", function(event) {
     var $this = $(this); 
     $this.toggleClass("success");
     $this.toggleClass("warning"); 
