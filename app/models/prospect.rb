@@ -37,6 +37,7 @@ class Prospect < ActiveRecord::Base
 
   # the number of available hours per week should =< number of available_times
   validate :available_hours_per_week_gt_available_times
+  validates_numericality_of :available_hours_per_week, greater_than_or_equal_to: 0
 
   def available_hours_per_week_gt_available_times
     if available_hours_per_week > available_times.size
