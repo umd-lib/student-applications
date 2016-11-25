@@ -60,7 +60,7 @@ feature 'submit an application' do
     assert page.has_content?('Availability')
     # to do add availability test
     click_button 'Continue'
-    assert page.has_content?('Résumé')
+    assert page.has_content?('Resume')
     click_button 'Continue'
     assert page.has_content?('Confirmation')
 
