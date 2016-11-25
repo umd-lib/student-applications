@@ -18,10 +18,6 @@ feature 'submit an application' do
     fill_in('prospect_addresses_attributes_0_state', with: 'HI')
     fill_in('prospect_addresses_attributes_0_postal_code', with: '12345')
 
-    find('#prospect_has_family_member_true').click
-    assert page.has_field?('prospect_family_member', visible: true, with: '')
-
-    fill_in('prospect_family_member', with: 'Steve Blake')
 
     find('#prospect_in_federal_study_true').click
 

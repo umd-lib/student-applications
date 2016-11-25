@@ -40,13 +40,6 @@
 <div class='panel panel-default'>
   <div class="panel-heading"><span>Other Information</span></div>
   <div class="panel-body" id="other-info">
-    <%= form.input :has_family_member, as: :radio_buttons, collection: [["No", false], ["Yes", true]], 
-      label: "Do you have a family member that works at UMD Libraries?", input_html: { data: { toggle: "collapse",
-        target: "#collapseFamilyMember" } }   %> 
-    <div id="collapseFamilyMember" class="collapse">
-        <div class="panel-body"><%= form.input :family_member, required: true %></div>
-    </div>
-    <br/>  
     <%= form.input :in_federal_study, as: :radio_buttons, collection: [["No", false], ["Yes", true]], 
       required: true, label: "Are you in a Federal Work Study program?" %>
   </div>
