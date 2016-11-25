@@ -53,3 +53,25 @@
            
   </div>
 </div>
+
+<div class='panel panel-default'>
+  <div class="panel-heading"><span>Preferred Libraries:</span></div>
+  <div class="panel-body" id="preferred-libraries">
+    <div class='table-responsive'> 
+      <table class='table table-bordered'>
+        <tbody>
+          <% Library.find_in_batches( batch_size: 3 ) do |batch| %>
+            <tr>
+              <% batch.each do |lib| %> 
+                <td>
+                  <%= form.check_box( :library_ids,  { :multiple => true }, lib.id, nil  )  %>
+                  <%= form.label(  :libraries,  lib.name )  %>
+                </td>
+              <% end %> 
+            </tr>
+          <% end %>   
+        </tbody>
+      </table>
+    </div>   
+  </div>
+</div>

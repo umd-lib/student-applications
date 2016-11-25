@@ -49,6 +49,16 @@
     </td>
   </tr>
   <tr>
+    <th>Preferred Libraries</th>
+    <td>
+      <ul>
+        <% @prospect.libraries.each do |l| %>
+          <li><%= l.name %></li>
+        <% end %>
+      </ul>
+    </td>
+  </tr>
+  <tr>
     <th>In federal work study</th>
     <td><%= @prospect.in_federal_study ? 'Yes' : 'No' %></td>
   </tr>

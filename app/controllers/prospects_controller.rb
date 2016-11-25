@@ -79,7 +79,7 @@ class ProspectsController < ApplicationController
         local_address local_phone perm_address perm_phone email family_member class_status
         graduation_year additional_comments available_hours_per_week resume_id
       )
-      whitelisted_attrs << { day_times: [], skill_ids: [], skills: [:id, :name, :_destroy], work_experiences: [:id, :name, :_destroy] }
+      whitelisted_attrs << { day_times: [], skill_ids: [], library_ids: [], skills: [:id, :name, :_destroy], work_experiences: [:id, :name, :_destroy] }
     end
 
     # decide which step to move to depending on which button was clicked and which step we are already on

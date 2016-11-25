@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20161116152012) do
+ActiveRecord::Schema.define(version: 20161125095203) do
 
   create_table "addresses", force: :cascade do |t|
     t.string  "street_address_1"
@@ -38,13 +38,13 @@ ActiveRecord::Schema.define(version: 20161116152012) do
     t.string "name"
   end
 
-  create_table "library_preferences", force: :cascade do |t|
+  create_table "libraries_prospects", force: :cascade do |t|
     t.integer "prospect_id"
     t.integer "library_id"
   end
 
-  add_index "library_preferences", ["library_id"], name: "index_library_preferences_on_library_id"
-  add_index "library_preferences", ["prospect_id"], name: "index_library_preferences_on_prospect_id"
+  add_index "libraries_prospects", ["library_id"], name: "index_libraries_prospects_on_library_id"
+  add_index "libraries_prospects", ["prospect_id"], name: "index_libraries_prospects_on_prospect_id"
 
   create_table "phone_numbers", force: :cascade do |t|
     t.string  "number"

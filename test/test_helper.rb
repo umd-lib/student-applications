@@ -32,10 +32,6 @@ require 'capybara-screenshot/minitest'
 Capybara.javascript_driver = :poltergeist
 require 'rack_session_access/capybara'
 
-Capybara::Screenshot.after_save_html do |path|
-  Launchy.open path if ENV['OPEN_ON_FAIL']
-end
-
 class ActiveSupport::TestCase
   # Setup all fixtures in test/fixtures/*.yml for all tests in alphabetical order.
   fixtures :all

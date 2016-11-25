@@ -88,6 +88,9 @@ class Prospect < ActiveRecord::Base
   attr_accessor :has_family_member
   validates :family_member, presence: true, if: ->(o) { o.family_member? }
 
+  has_and_belongs_to_many :libraries
+  accepts_nested_attributes_for :libraries
+
   enum class_status: %i(Undergraduate Graduate)
   enum graduation_year: (2016..2020).map { |year| ["#{year}_dec".intern, "#{year}_may".intern] }.flatten
 end

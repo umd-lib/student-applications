@@ -8,3 +8,7 @@ Skill.find_or_create_by(name: 'Mathematics and Numeracy', promoted: true)
 Skill.find_or_create_by(name: 'Creative', promoted: true)
 Skill.find_or_create_by(name: 'Social Media', promoted: true)
 Skill.find_or_create_by(name: 'Communication', promoted: true)
+
+['No preference', 'Art', 'Architecture', 'Chemistry', 'Engineering and Physical Sciences Library',
+ 'Hornbake: Special Collections/University Archives', 'Hornbake: Library Media Services', 'McKeldin',
+ 'MS Performing Arts Library'].each { |name| Library.find_or_create_by(name: name) }

@@ -61,7 +61,9 @@ class SubmitProspectApplicationTest < ActionDispatch::IntegrationTest
 
       fill_in('prospect_email', with: 'pj@umd.edu')
 
+      check('prospect_library_ids_1')
       choose('prospect_in_federal_study_true')
+
       click_button 'Continue'
       assert page.has_content?('Work Experience')
       click_button 'Back'
@@ -74,7 +76,7 @@ class SubmitProspectApplicationTest < ActionDispatch::IntegrationTest
       assert page.has_field?('prospect_addresses_attributes_0_city', with: 'Springfield')
       assert page.has_field?('prospect_addresses_attributes_0_state', with: 'HI')
       assert page.has_field?('prospect_addresses_attributes_0_postal_code', with: '12345')
-
+      assert page.has_checked_field?('prospect_library_ids_1')
       assert page.has_field?('prospect_email', with: 'pj@umd.edu')
       assert_equal Prospect.steps.first, page.get_rack_session_key('prospect_step')
     end

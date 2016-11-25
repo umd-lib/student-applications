@@ -35,7 +35,7 @@ gem 'dotenv-rails', '~> 2.1.1'
 
 # Use Capistrano for deployment
 gem 'capistrano-rails', group: :development
-gem "figaro"
+gem 'figaro'
 
 gem 'umd_lib_style', github: 'umd-lib/umd_lib_style', branch: 'develop'
 gem 'rack-cas'
@@ -74,7 +74,7 @@ group :test do
   gem 'launchy'
   gem 'minitest-reporters'
   # use the head to get the callback functionality
-  gem 'capybara-screenshot', git: 'https://github.com/mattheworiordan/capybara-screenshot'
+  gem 'capybara-screenshot'
   gem 'rack_session_access'
   gem 'mocha'
   gem 'poltergeist'
