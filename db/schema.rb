@@ -48,7 +48,7 @@ ActiveRecord::Schema.define(version: 20161125095203) do
 
   create_table "phone_numbers", force: :cascade do |t|
     t.string  "number"
-    t.string  "type"
+    t.integer "phone_type",  default: 0, null: false
     t.integer "prospect_id"
   end
 

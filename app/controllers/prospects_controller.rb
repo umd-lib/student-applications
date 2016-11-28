@@ -64,9 +64,11 @@ class ProspectsController < ApplicationController
       # param, we just go to the step in session. if we don't have a session,
       # we just go to first step.
       params[:prospect] ||= { current_step: (session[:prospect_step] || Prospect.steps.first) }
+      params[:prospect] = params[:prospect].with_indifferent_access
       params.require(:prospect).permit(*whitelisted_attrs).tap do |wl|
         wl[:addresses_attributes] = params[:prospect][:addresses_attributes] unless params[:prospect][:addresses_attributes].blank?
         wl[:permanent_address] = params[:prospect][:permanent_address] unless params[:prospect][:permanent_address].blank?
+        wl[:phone_numbers_attributes] = params[:prospect][:phone_numbers_attributes] unless params[:prospect][:phone_numbers_attributes].blank?
         wl[:work_experiences_attributes] = params[:prospect][:work_experiences_attributes] unless params[:prospect][:work_experiences_attributes].blank?
         wl[:available_times_attributes] = params[:prospect][:available_times_attributes] unless params[:prospect][:available_times_attributes].blank?
         wl[:skills_attributes] = params[:prospect][:skills_attributes] unless params[:prospect][:skills_attributes].blank?

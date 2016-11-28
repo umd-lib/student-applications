@@ -33,18 +33,28 @@ feature 'Enter contact information' do
     fill_in('prospect_first_name', with: 'Polly')
     fill_in('prospect_last_name', with: 'Jane')
     fill_in('prospect_email', with: 'pj@umd.edu')
-
-    # lets add five new addresses
-    2.times do |i|
-      assert_equal i + 1, find(:css, '#addresses').all('.nested-fields').length
-
+      
+    click_link 'Add A Permanent Address' 
+    assert_equal 2, find(:css, '#addresses').all('.nested-fields').length
+    2.times do |i| 
       within("#addresses .nested-fields:nth-child(#{i + 1})") do
-        %w(_street_address_1 _city _state _postal_code).each do |attr|
-          el_id = find("input[id$='#{attr}']")[:id]
-          fill_in(el_id, with: "#{attr} #{i} ")
-        end
+          %w(_street_address_1 _city _state _postal_code).each do |attr|
+            el_id = find("input[id$='#{attr}']")[:id]
+            fill_in(el_id, with: "#{attr} #{i}")
+          end
       end
-      click_link 'Add A Permanent Address' unless i == 1
+    end
+    
+     
+    2.times { click_link 'Add A Phone Number'  }
+    assert_equal 2, find(:css, '#phone-numbers').all('.nested-fields').length
+    2.times do |i| 
+      within("#phone-numbers .nested-fields:nth-child(#{i + 1})") do
+          %w(_number ).each do |attr|
+            el_id = find("input[id$='#{attr}']")[:id]
+            fill_in(el_id, with: "#{ i.to_s * 11 }")
+          end
+      end
     end
 
     choose('prospect_in_federal_study_true')
@@ -55,14 +65,24 @@ feature 'Enter contact information' do
 
     assert_equal 2, find(:css, '#addresses').all('.nested-fields').length
 
-    # and with all our content
     2.times do |i|
+      # and with all our content
       within("#addresses .nested-fields:nth-child(#{i + 1})") do
         %w(_street_address_1 _city _state _postal_code).each_with_index do |attr|
           el_id = find("input[id$='#{attr}']")[:id]
-          assert page.has_field?(el_id, with: "#{attr} #{i} ")
+          assert page.has_field?(el_id, with: "#{attr} #{i}")
         end
       end
+    end 
+    
+    2.times do |i| 
+      within("#phone-numbers .nested-fields:nth-child(#{i + 1})") do
+          %w(_number ).each do |attr|
+            el_id = find("input[id$='#{attr}']")[:id]
+            assert page.has_field?(el_id, with: "#{i.to_s * 11}")
+          end
+      end
     end
+  
   end
 end

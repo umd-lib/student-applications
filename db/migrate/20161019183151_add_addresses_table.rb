@@ -19,7 +19,7 @@ class AddAddressesTable < ActiveRecord::Migration
 
     create_table :phone_numbers do |t|
       t.string :number
-      t.string :type
+      t.column :phone_type, :integer, default: 0, null: false
       t.references :prospect, index: true, foreign_key: true
     end
   

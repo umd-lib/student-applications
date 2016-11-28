@@ -38,6 +38,24 @@
 </div>
 
 <div class='panel panel-default'>
+  <div class="panel-heading"><span>Phone Number</span>
+    <span class='pull-right'>
+        <%= link_to_add_association(form, :phone_numbers,
+                                    { class: "add-phone-number", 
+                                      "data-association-insertion-node": "#phone-numbers",
+                                      "data-association-insertion-method": 'append' } ) do  %>
+          <i class='glyphicon glyphicon-plus-sign'></i>Add A Phone Number 
+        <% end %> 
+    </span>
+  </div>
+  <div class="panel-body" id="phone-numbers">
+      <%= form.fields_for :phone_numbers, form.object.phone_numbers do |pn| %>
+          <%= render 'phone_number_fields', f: pn %>
+      <% end %>
+  </div>
+</div>
+
+<div class='panel panel-default'>
   <div class="panel-heading"><span>Other Information</span></div>
   <div class="panel-body" id="other-info">
     <%= form.input :in_federal_study, as: :radio_buttons, collection: [["No", false], ["Yes", true]], 

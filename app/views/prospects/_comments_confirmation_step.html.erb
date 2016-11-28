@@ -42,10 +42,14 @@
     </tr>
   <% end %>
   <tr>
-    <th>Has family member who works for the Libraries</th>
-    <td>
-      <%= @prospect.family_member? ? "Yes; #{@prospect.family_member}" : 'No' %>
-    </td>
+    <th>Phone Numbers:</th>
+    <td> 
+      <ul>
+        <% @prospect.phone_numbers.each do |p| %>
+          <li><%= "#{p.number} ( #{p.phone_type} )"  %></li>
+        <% end %>
+      </ul> 
+    </td> 
   </tr>
   <tr>
     <th>Preferred Libraries</th>

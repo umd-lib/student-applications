@@ -60,6 +60,9 @@ class Prospect < ActiveRecord::Base
     end
     @day_times = available_times.map(&:day_time)
   end
+  
+  has_many :phone_numbers, inverse_of: :prospect
+  accepts_nested_attributes_for :phone_numbers
 
   has_many :addresses, inverse_of: :prospect
   accepts_nested_attributes_for :addresses, allow_destroy: true
