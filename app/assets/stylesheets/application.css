@@ -15,6 +15,9 @@
  *= require_self
  */
 
+
+.alert { margin-top: 15px; }
+
 #home-jumbo, #upload-jumbo { margin-top: 50px }
 
 label.required abbr {
