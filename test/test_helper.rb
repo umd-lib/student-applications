@@ -1,5 +1,9 @@
 require 'simplecov'
+require 'database_cleaner'
 SimpleCov.start
+
+DatabaseCleaner.strategy = :truncation, { only: %w( prospects ) }
+
 
 require 'securerandom'
 
@@ -35,12 +39,29 @@ require 'rack_session_access/capybara'
 class ActiveSupport::TestCase
   # Setup all fixtures in test/fixtures/*.yml for all tests in alphabetical order.
   fixtures :all
+  self.use_transactional_fixtures = false
   # Add more helper methods to be used by all tests here...
+  
+  def setup
+    DatabaseCleaner.start
+  end
+
+  def teardown
+    DatabaseCleaner.clean
+  end
+
 end
 
 class ActionDispatch::IntegrationTest
   include Capybara::DSL
   include Capybara::Screenshot::MiniTestPlugin
+
+   before :after do
+      DatabaseCleaner.clean
+      Capybara.reset_sessions!
+   end
+
+
 end
 
 # See: https://gist.github.com/mperham/3049152

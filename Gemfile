@@ -82,4 +82,5 @@ group :test do
   gem 'shoulda-matchers', '>= 3.0.1'
   gem 'test_after_commit'
   gem 'simplecov', require: false
+  gem 'database_cleaner'
 end

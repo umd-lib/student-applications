@@ -3,6 +3,7 @@ require 'test_helper'
 # rubocop:disable Metrics/BlockLength
 feature 'submit an application' do
   scenario 'just submit a standard application from start to finish', js: true do
+    
     # pretty boring test, since it's the exact same as out integration
     # test..just to get the ball rollin'
     visit root_path
@@ -67,7 +68,13 @@ feature 'submit an application' do
     # to do add confirmation test
 
     # need to fix this. running into a db lock. switch to database_cleaner
-    # click_button 'Submit'
-    # assert   page.has_content?('Saved')
+    check("prospect_user_confirmation")
+    fill_in("prospect_user_signature", with: "Bob Bob")    
+    
+    click_button 'Submit'
+    
+    assert   page.has_content?('Submitted')
+    visit root_path
+    assert page.has_content?("Apply")
   end
 end

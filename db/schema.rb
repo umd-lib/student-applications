@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20161125095203) do
+ActiveRecord::Schema.define(version: 20161128144544) do
 
   create_table "addresses", force: :cascade do |t|
     t.string  "street_address_1"
@@ -75,6 +75,7 @@ ActiveRecord::Schema.define(version: 20161125095203) do
     t.integer  "available_hours_per_week", default: 0,     null: false
     t.integer  "available_times_count",    default: 0,     null: false
     t.integer  "resume_id"
+    t.string   "user_signature"
   end
 
   add_index "prospects", ["resume_id"], name: "index_prospects_on_resume_id"

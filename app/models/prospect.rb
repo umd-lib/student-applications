@@ -6,6 +6,8 @@ class Prospect < ActiveRecord::Base
   belongs_to :resume
   after_initialize :after_initialize
 
+
+
   # this makes sure we have a local address and that has_family_member is set
   # correctly
   def after_initialize
@@ -23,10 +25,17 @@ class Prospect < ActiveRecord::Base
     ActiveRecord::Type::Boolean.new.type_cast_from_user(@has_family_member) || !family_member.blank?
   end
 
+
+  # this validates if the user has clicked "All information is correct" on last
+  # step
+  validates :user_confirmation, acceptance: true, if: ->(p) { p.last_step? }
+  validates :user_signature, presence: true, if: ->(p) { p.last_step? }
+
+
   # these are the validations for the contact_information step
-  validates :in_federal_study, inclusion: { in: [true, false], if: ->(o) { o.current_step == 'contact_info' } }
+  validates :in_federal_study, inclusion: { in: [true, false], if: ->(p) { p.current_step == 'contact_info' } }
   %i(directory_id first_name last_name email graduation_year).each do |attr|
-    validates attr, presence: true, if: ->(o) { o.current_step == 'contact_info' }
+    validates attr, presence: true, if: ->(p) { p.current_step == 'contact_info' }
   end
 
   has_many :work_experiences

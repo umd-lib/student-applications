@@ -18,6 +18,7 @@ all_valid:
   graduation_year: 0
   available_hours_per_week: 1
   available_times_count: 1
+  user_signature: All Valid  
 contact_info:
   in_federal_study: true
   directory_id: astudent

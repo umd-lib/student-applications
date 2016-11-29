@@ -117,4 +117,9 @@
   <p><i>(None)</i></p>
 <% end %>
 <h2>Additional Comments</h2>
-<%= form.text_area :additional_comments %>
+<%= form.input :additional_comments, label: "Enter below:" %>
+<h2>Confirmation</h2>
+<%= form.label(  :user_confirmation,  "I certify that all information on this application is accurate and recognize it is subject to verification." )  %>
+<%= form.check_box( :user_confirmation, { class: 'user_confirmation', required: true } )  %> Yes.
+<br/>
+<%= form.input( :user_signature, { class: 'user_signature', required: true , label: "Please type your name as it will serve as a digital signature:" } )  %>
