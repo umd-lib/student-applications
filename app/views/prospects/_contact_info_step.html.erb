@@ -7,7 +7,7 @@
       <%= form.input :last_name,  required: true %>
       <%= form.input :email, required: true %>
       <%= form.input :directory_id, required: true  %>
-      <%= form.input :class_status, collection: 
+      <%= form.input :class_status, required: true, collection: 
         Prospect.class_statuses.map { |cs| [ cs.first.capitalize, cs.first ] },
         as: :select, include_blank: false %>
       <%= form.input :graduation_year, collection:

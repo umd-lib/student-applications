@@ -34,7 +34,7 @@ class Prospect < ActiveRecord::Base
 
   # these are the validations for the contact_information step
   validates :in_federal_study, inclusion: { in: [true, false], if: ->(p) { p.current_step == 'contact_info' } }
-  %i(directory_id first_name last_name email graduation_year).each do |attr|
+  %i(directory_id first_name last_name email graduation_year class_status).each do |attr|
     validates attr, presence: true, if: ->(p) { p.current_step == 'contact_info' }
   end
 
