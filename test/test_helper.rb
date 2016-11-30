@@ -1,5 +1,9 @@
 require 'simplecov'
+require 'database_cleaner'
 SimpleCov.start
+
+DatabaseCleaner.strategy = :truncation, { only: %w( prospects ) }
+
 
 require 'securerandom'
 
@@ -32,19 +36,32 @@ require 'capybara-screenshot/minitest'
 Capybara.javascript_driver = :poltergeist
 require 'rack_session_access/capybara'
 
-Capybara::Screenshot.after_save_html do |path|
-  Launchy.open path if ENV['OPEN_ON_FAIL']
-end
-
 class ActiveSupport::TestCase
   # Setup all fixtures in test/fixtures/*.yml for all tests in alphabetical order.
   fixtures :all
+  self.use_transactional_fixtures = false
   # Add more helper methods to be used by all tests here...
+  
+  def setup
+    DatabaseCleaner.start
+  end
+
+  def teardown
+    DatabaseCleaner.clean
+  end
+
 end
 
 class ActionDispatch::IntegrationTest
   include Capybara::DSL
   include Capybara::Screenshot::MiniTestPlugin
+
+   before :after do
+      DatabaseCleaner.clean
+      Capybara.reset_sessions!
+   end
+
+
 end
 
 # See: https://gist.github.com/mperham/3049152

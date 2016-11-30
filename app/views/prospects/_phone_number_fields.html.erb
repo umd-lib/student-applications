@@ -1,0 +1,4 @@
+<div class='phone_number nested-fields'>
+  <%= f.input :number %>
+  <%= f.input :phone_type, collection: PhoneNumber.phone_types.map(&:first),  as: :select, required: true %>
+</div>

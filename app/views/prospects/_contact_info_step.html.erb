@@ -7,12 +7,12 @@
       <%= form.input :last_name,  required: true %>
       <%= form.input :email, required: true %>
       <%= form.input :directory_id, required: true  %>
-      <%= form.input :class_status, collection: 
+      <%= form.input :class_status, required: true, collection: 
         Prospect.class_statuses.map { |cs| [ cs.first.capitalize, cs.first ] },
         as: :select, include_blank: false %>
       <%= form.input :graduation_year, collection:
           Prospect.graduation_years.map { |gy| [ gy.first.gsub("_", " ").upcase, gy.first ] },
-          as: :select, include_blank: false %>
+          as: :select, include_blank: false, label: "Anticipated Graducation Year"  %>
   </div>
 </div>
 
@@ -38,18 +38,49 @@
 </div>
 
 <div class='panel panel-default'>
+  <div class="panel-heading"><span>Phone Number</span>
+    <span class='pull-right'>
+        <%= link_to_add_association(form, :phone_numbers,
+                                    { class: "add-phone-number", 
+                                      "data-association-insertion-node": "#phone-numbers",
+                                      "data-association-insertion-method": 'append' } ) do  %>
+          <i class='glyphicon glyphicon-plus-sign'></i>Add A Phone Number 
+        <% end %> 
+    </span>
+  </div>
+  <div class="panel-body" id="phone-numbers">
+      <%= form.fields_for :phone_numbers, form.object.phone_numbers do |pn| %>
+          <%= render 'phone_number_fields', f: pn %>
+      <% end %>
+  </div>
+</div>
+
+<div class='panel panel-default'>
   <div class="panel-heading"><span>Other Information</span></div>
   <div class="panel-body" id="other-info">
-    <%= form.input :has_family_member, as: :radio_buttons, collection: [["No", false], ["Yes", true]], 
-      label: "Do you have a family member that works at UMD Libraries?", input_html: { data: { toggle: "collapse",
-        target: "#collapseFamilyMember" } }   %> 
-    <div id="collapseFamilyMember" class="collapse">
-        <div class="panel-body"><%= form.input :family_member, required: true %></div>
-    </div>
-    <br/>  
     <%= form.input :in_federal_study, as: :radio_buttons, collection: [["No", false], ["Yes", true]], 
       required: true, label: "Are you in a Federal Work Study program?" %>
-        
-           
+  </div>
+</div>
+
+<div class='panel panel-default'>
+  <div class="panel-heading"><span>Preferred Libraries:</span></div>
+  <div class="panel-body" id="preferred-libraries">
+    <div class='table-responsive'> 
+      <table class='table table-bordered'>
+        <tbody>
+          <% Library.find_in_batches( batch_size: 3 ) do |batch| %>
+            <tr>
+              <% batch.each do |lib| %> 
+                <td>
+                  <%= form.check_box( :library_ids,  { :multiple => true }, lib.id, nil  )  %>
+                  <%= form.label(  :libraries,  lib.name )  %>
+                </td>
+              <% end %> 
+            </tr>
+          <% end %>   
+        </tbody>
+      </table>
+    </div>   
   </div>
 </div>

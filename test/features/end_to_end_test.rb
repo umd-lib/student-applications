@@ -1,8 +1,10 @@
 require 'test_helper'
+require 'securerandom'
 
 # rubocop:disable Metrics/BlockLength
 feature 'submit an application' do
   scenario 'just submit a standard application from start to finish', js: true do
+    
     # pretty boring test, since it's the exact same as out integration
     # test..just to get the ball rollin'
     visit root_path
@@ -11,17 +13,15 @@ feature 'submit an application' do
     fill_in('Directory', with: 'myIdentifier')
     fill_in('prospect_first_name', with: 'Polly')
     fill_in('prospect_last_name', with: 'Jane')
-    fill_in('prospect_email', with: 'pj@umd.edu')
+    
+    email_addr = "#{SecureRandom.hex}@umd.edu" 
+    fill_in('prospect_email', with: email_addr )
 
     fill_in('prospect_addresses_attributes_0_street_address_1', with: '555 Fake St')
     fill_in('prospect_addresses_attributes_0_city', with: 'Springfield')
     fill_in('prospect_addresses_attributes_0_state', with: 'HI')
     fill_in('prospect_addresses_attributes_0_postal_code', with: '12345')
 
-    find('#prospect_has_family_member_true').click
-    assert page.has_field?('prospect_family_member', visible: true, with: '')
-
-    fill_in('prospect_family_member', with: 'Steve Blake')
 
     find('#prospect_in_federal_study_true').click
 
@@ -60,7 +60,7 @@ feature 'submit an application' do
     assert page.has_content?('Availability')
     # to do add availability test
     click_button 'Continue'
-    assert page.has_content?('Résumé')
+    assert page.has_content?('Resume')
     click_button 'Continue'
     assert page.has_content?('Confirmation')
 
@@ -71,7 +71,17 @@ feature 'submit an application' do
     # to do add confirmation test
 
     # need to fix this. running into a db lock. switch to database_cleaner
-    # click_button 'Submit'
-    # assert   page.has_content?('Saved')
+    check("prospect_user_confirmation")
+    fill_in("prospect_user_signature", with: "Bob Bob")    
+    
+    click_button 'Submit'
+    
+    assert page.has_content?('Submitted')
+    visit root_path
+    assert page.has_content?("Apply")
+  
+    email = ActionMailer::Base.deliveries.last
+    assert_equal email.to.first, email_addr
+
   end
 end

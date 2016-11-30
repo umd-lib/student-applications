@@ -6,6 +6,8 @@ class Prospect < ActiveRecord::Base
   belongs_to :resume
   after_initialize :after_initialize
 
+
+
   # this makes sure we have a local address and that has_family_member is set
   # correctly
   def after_initialize
@@ -23,10 +25,17 @@ class Prospect < ActiveRecord::Base
     ActiveRecord::Type::Boolean.new.type_cast_from_user(@has_family_member) || !family_member.blank?
   end
 
+
+  # this validates if the user has clicked "All information is correct" on last
+  # step
+  validates :user_confirmation, acceptance: true, if: ->(p) { p.last_step? }
+  validates :user_signature, presence: true, if: ->(p) { p.last_step? }
+
+
   # these are the validations for the contact_information step
-  validates :in_federal_study, inclusion: { in: [true, false], if: ->(o) { o.current_step == 'contact_info' } }
-  %i(directory_id first_name last_name email graduation_year).each do |attr|
-    validates attr, presence: true, if: ->(o) { o.current_step == 'contact_info' }
+  validates :in_federal_study, inclusion: { in: [true, false], if: ->(p) { p.current_step == 'contact_info' } }
+  %i(directory_id first_name last_name email graduation_year class_status).each do |attr|
+    validates attr, presence: true, if: ->(p) { p.current_step == 'contact_info' }
   end
 
   has_many :work_experiences
@@ -37,6 +46,7 @@ class Prospect < ActiveRecord::Base
 
   # the number of available hours per week should =< number of available_times
   validate :available_hours_per_week_gt_available_times
+  validates_numericality_of :available_hours_per_week, greater_than_or_equal_to: 0
 
   def available_hours_per_week_gt_available_times
     if available_hours_per_week > available_times.size
@@ -59,6 +69,9 @@ class Prospect < ActiveRecord::Base
     end
     @day_times = available_times.map(&:day_time)
   end
+  
+  has_many :phone_numbers, inverse_of: :prospect
+  accepts_nested_attributes_for :phone_numbers
 
   has_many :addresses, inverse_of: :prospect
   accepts_nested_attributes_for :addresses, allow_destroy: true
@@ -87,6 +100,9 @@ class Prospect < ActiveRecord::Base
 
   attr_accessor :has_family_member
   validates :family_member, presence: true, if: ->(o) { o.family_member? }
+
+  has_and_belongs_to_many :libraries
+  accepts_nested_attributes_for :libraries
 
   enum class_status: %i(Undergraduate Graduate)
   enum graduation_year: (2016..2020).map { |year| ["#{year}_dec".intern, "#{year}_may".intern] }.flatten
