@@ -1,4 +1,5 @@
 require 'test_helper'
+require 'securerandom'
 
 # rubocop:disable Metrics/BlockLength
 feature 'submit an application' do
@@ -12,7 +13,9 @@ feature 'submit an application' do
     fill_in('Directory', with: 'myIdentifier')
     fill_in('prospect_first_name', with: 'Polly')
     fill_in('prospect_last_name', with: 'Jane')
-    fill_in('prospect_email', with: 'pj@umd.edu')
+    
+    email_addr = "#{SecureRandom.hex}@umd.edu" 
+    fill_in('prospect_email', with: email_addr )
 
     fill_in('prospect_addresses_attributes_0_street_address_1', with: '555 Fake St')
     fill_in('prospect_addresses_attributes_0_city', with: 'Springfield')
@@ -73,8 +76,12 @@ feature 'submit an application' do
     
     click_button 'Submit'
     
-    assert   page.has_content?('Submitted')
+    assert page.has_content?('Submitted')
     visit root_path
     assert page.has_content?("Apply")
+  
+    email = ActionMailer::Base.deliveries.last
+    assert_equal email.to.first, email_addr
+
   end
 end

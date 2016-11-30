@@ -12,7 +12,7 @@ class ProspectsController < ApplicationController
     if @prospect.new_record?
       render 'new'
     else
-      SubmittedMailer.default_email(@prospect).deliver
+      SubmittedMailer.default_email(@prospect).deliver_now
       reset_session
       flash[:notice] = 'Submitted!'
       redirect_to @prospect
