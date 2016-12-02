@@ -1,5 +1,6 @@
 class ProspectsController < ApplicationController
   before_action :set_session_and_prospect, only: [:new, :create]
+  before_action :ensure_auth, only: [:index, :update, :show]
 
   def new
     @prospect.current_step = session[:prospect_step] || Prospect.steps.first
@@ -15,16 +16,21 @@ class ProspectsController < ApplicationController
       SubmittedMailer.default_email(@prospect).deliver_now
       reset_session
       flash[:notice] = 'Submitted!'
-      redirect_to @prospect
+      redirect_to action: 'thank_you', id: @prospect.id
     end
+  end
+
+  def thank_you
+    @prospect = Prospect.find(params[:id])
   end
 
   def show
     @prospect = Prospect.find(params[:id])
+    @resume = @prospect.resume
   end
 
   def index
-    redirect_to action: 'new'
+    @prospects = Prospect.paginate(page: params[:page])
   end
 
   def update

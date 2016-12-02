@@ -49,4 +49,10 @@ module ApplicationHelper
     end
     content_tag(:table, class: "table table-bordered #{@prospect.current_step}-availability-table", id: 'availability-table') { thead.concat(tbody) }
   end
+
+  def prospect_row_show_link(prospect)
+    link_to(prospect) do
+      "<i class='glyphicon glyphicon-eye-open'/>".html_safe
+    end
+  end
 end

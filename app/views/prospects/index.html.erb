@@ -1,0 +1,11 @@
+<table class="table table-striped">
+  <thead>
+    <tr><th/><th>Name</th><th>Class Status</th><th>Expected Graduation Year</th><th>Available Hours Per Week</th></tr> 
+  </thead>
+  <tbody>
+    <% @prospects.each do |prospect| %>
+      <tr><td><%= prospect_row_show_link(prospect) %></td><td><%= prospect.name %></td><td><%= prospect.class_status %></td><td><%= prospect.graduation_year %></td><td><%= prospect.available_hours_per_week %></td></tr>
+    <% end %>
+  </tbody>
+  <%= will_paginate @prospects %>
+</table>

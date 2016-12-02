@@ -1,5 +1,3 @@
-<div id="upload-jumbo" class="jumbotron">
-  <h4>Thank You!</h4>
-  <p>We are reviewing your application</p>
-</div>
-
+<%= simple_form_for @prospect,  html: { class: 'form-horizontal' } do |form| %>
+  <%= render partial: "summary", locals: { form: form } %>
+<% end %>
