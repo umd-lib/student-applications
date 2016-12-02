@@ -4,7 +4,6 @@ SimpleCov.start
 
 DatabaseCleaner.strategy = :truncation, { only: %w( prospects ) }
 
-
 require 'securerandom'
 
 ENV['RAILS_ENV'] ||= 'test'
@@ -41,7 +40,7 @@ class ActiveSupport::TestCase
   fixtures :all
   self.use_transactional_fixtures = false
   # Add more helper methods to be used by all tests here...
-  
+
   def setup
     DatabaseCleaner.start
   end
@@ -49,19 +48,16 @@ class ActiveSupport::TestCase
   def teardown
     DatabaseCleaner.clean
   end
-
 end
 
 class ActionDispatch::IntegrationTest
   include Capybara::DSL
   include Capybara::Screenshot::MiniTestPlugin
 
-   before :after do
-      DatabaseCleaner.clean
-      Capybara.reset_sessions!
-   end
-
-
+  before :after do
+    DatabaseCleaner.clean
+    Capybara.reset_sessions!
+  end
 end
 
 # See: https://gist.github.com/mperham/3049152
