@@ -6,8 +6,6 @@ class Prospect < ActiveRecord::Base
   belongs_to :resume
   after_initialize :after_initialize
 
-
-
   # this makes sure we have a local address and that has_family_member is set
   # correctly
   def after_initialize
@@ -25,12 +23,10 @@ class Prospect < ActiveRecord::Base
     ActiveRecord::Type::Boolean.new.type_cast_from_user(@has_family_member) || !family_member.blank?
   end
 
-
   # this validates if the user has clicked "All information is correct" on last
   # step
   validates :user_confirmation, acceptance: true, if: ->(p) { p.last_step? }
   validates :user_signature, presence: true, if: ->(p) { p.last_step? }
-
 
   # these are the validations for the contact_information step
   validates :in_federal_study, inclusion: { in: [true, false], if: ->(p) { p.current_step == 'contact_info' } }
@@ -54,6 +50,10 @@ class Prospect < ActiveRecord::Base
     end
   end
 
+  def name
+    "#{last_name}, #{first_name}"
+  end
+
   # this is a way of feeding day-times into the prospect and have them stored
   # in
   attr_accessor :day_times
@@ -69,7 +69,7 @@ class Prospect < ActiveRecord::Base
     end
     @day_times = available_times.map(&:day_time)
   end
-  
+
   has_many :phone_numbers, inverse_of: :prospect
   accepts_nested_attributes_for :phone_numbers
 
