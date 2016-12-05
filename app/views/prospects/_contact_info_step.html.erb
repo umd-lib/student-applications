@@ -12,7 +12,7 @@
         as: :select, include_blank: false %>
       <%= form.input :graduation_year, collection:
           Prospect.graduation_years.map { |gy| [ gy.first.gsub("_", " ").upcase, gy.first ] },
-          as: :select, include_blank: false, label: "Anticipated Graducation Year"  %>
+          as: :select, include_blank: false, label: "Anticipated Graduation Year"  %>
   </div>
 </div>
 
