@@ -3,14 +3,16 @@ class ProspectsController < ApplicationController
   before_action :ensure_auth, only: [:index, :update, :show]
 
   def new
-    reset_session
-    @prospect = Prospect.new
-    @prospect.current_step = session[:prospect_step] || Prospect.steps.first
+    start_new
   end
 
   def create
-    @prospect.current_step = session[:prospect_step] || Prospect.steps.first
-    choose_action if @prospect.valid?
+    if params[:reset]
+      start_new
+    else
+      @prospect.current_step = session[:prospect_step] || Prospect.steps.first
+      choose_action if @prospect.valid?
+    end
 
     if @prospect.new_record?
       render 'new'
@@ -43,6 +45,12 @@ class ProspectsController < ApplicationController
   end
 
   private
+
+    def start_new
+      reset_session
+      @prospect = Prospect.new
+      @prospect.current_step = Prospect.steps.first
+    end
 
     def prospect_from_session
       Prospect.new(ActionController::Parameters.new(session[:prospect_params]).permit!)
