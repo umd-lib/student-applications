@@ -1,8 +1,10 @@
 class ProspectsController < ApplicationController
-  before_action :set_session_and_prospect, only: [:new, :create]
+  before_action :set_session_and_prospect, only: [:create]
   before_action :ensure_auth, only: [:index, :update, :show]
 
   def new
+    reset_session
+    @prospect = Prospect.new
     @prospect.current_step = session[:prospect_step] || Prospect.steps.first
   end
 
