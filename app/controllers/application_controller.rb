@@ -14,5 +14,9 @@ class ApplicationController < ActionController::Base
     if session[:cas].nil? || session[:cas][:user].nil?
       render status: 401, text: 'Redirecting to SSO...'
     end
+    user = User.find_by cas_directory_id: session[:cas][:user]
+    if user.nil?
+      render status: 403, text: 'Unrecognized user'
+    end
   end
 end
