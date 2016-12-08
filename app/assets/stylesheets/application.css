@@ -29,29 +29,36 @@ label.required abbr {
 
 .panel-heading { min-height: 53px }
 .panel-heading span { font-size: 22px  }
-.nested-fields {
-  border-bottom: 1px solid transparent;
-  border-color: #ddd;
+.nested-fields+.nested-fields {
+  border-top: 1px solid #ddd;
   margin: 15px 0px;
+}
+.skill.nested-fields {
+  border-top: none;
 }
 
 .radio-question { padding-left: 50px; padding-right: 20px; vertical-align: middle; }
 .help-block.radio-question-help { vertical-align: middle; margin-bottom: 2px; display: inline-block; padding-left: 10px } 
 
-#availability-table > thead > tr > th, #availability-table > tbody > tr >  td { text-align: center;  width: 13.2%; padding: 8px 0px }
-#availability-table th.time-label, #availability-table td.time-label { position: relative; padding: 8px 0px; width: 6.6% }
+#availability-table > thead > tr > th, #availability-table > tbody > tr >  td {
+  text-align: center;  
+  width: 13.2%; 
+  padding: 8px 0px; 
+  border: 1px dotted #666666;
+}
+#availability-table th.time-label, #availability-table td.time-label {
+  text-align: right;
+  vertical-align: top;
+  width: 6.6%;
+  padding: 2px;
+}
 
 /* only for tables on the availability step */
 .availability-availability-table > tbody > tr >  td:not(.time-label) { cursor: pointer; }
-.availability-availability-table > tbody > tr >  td:not(.time-label):hover { background-color: #dff0d8; border: 2px groove #dff0d8; }
-
-#availability-table .time-label > span { 
-  position: absolute;
-  top: 0;
-  right: 0;
-  padding-right: 2px;
- }
-
+.availability-availability-table > tbody > tr >  td:not(.time-label):hover {
+  border-color: #5cb85c;
+  background: #dff0d8;
+}
 
 .upload { display: none;  }
 
@@ -64,6 +71,46 @@ input#resume_file {
  z-index: -1;
 }
 
+#prospect_first_name, #prospect_last_name, #prospect_email, #prospect_directory_id {
+  width: 20em;
+}
+#prospect_class_status, #prospect_graduation_year {
+  width: inherit;
+}
+.form-horizontal .form-group {
+  margin-left: 0;
+  margin-right: 0;
+}
+.prospect_addresses_address_type select,
+.prospect_phone_numbers_phone_type select {
+  width: inherit;
+}
+.prospect_phone_numbers_number input {
+  width: 10em;
+}
+.prospect_addresses_street_address_1, .prospect_addresses_street_address_2, .prospect_addresses_city {
+  width: 20em;
+}
+.prospect_addresses_state {
+  width: 5em;
+}
+.prospect_addresses_postal_code {
+  width: 10em;
+}
+.address select {
+  width: inherit;
+}
+.prospect_work_experiences_name,
+.prospect_work_experiences_dates_of_employment,
+.prospect_work_experiences_location {
+  width: 20em;
+}
+.prospect_work_experiences_duties,
+.prospect_skills_name {
+  width: 30em;
+}
 
 
-
+.prospect_available_hours_per_week input {
+  width: 5em;
+}
