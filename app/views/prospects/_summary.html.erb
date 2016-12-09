@@ -59,6 +59,10 @@
     <th>In federal work study</th>
     <td><%= @prospect.in_federal_study ? 'Yes' : 'No' %></td>
   </tr>
+  <tr>
+    <th>Semester applying for</th>
+    <td><%= @prospect.semester.gsub('_', ' ').capitalize %></td>
+  </tr>
 </table>
 <h3>Work Experience <%= form.submit( "Change", name: "goto_work_experience", class: 'btn btn-info pull-right')  unless current_page?(action: 'show') %></h3>
 <% unless @prospect.work_experiences.empty? %>
