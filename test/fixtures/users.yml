@@ -1,0 +1,9 @@
+# Read about fixtures at http://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
+
+one:
+  cas_directory_id: MyString
+  name: MyString
+
+two:
+  cas_directory_id: MyString
+  name: MyString
