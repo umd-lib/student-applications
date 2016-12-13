@@ -13,7 +13,6 @@
 
 ActiveRecord::Schema.define(version: 20161209153023) do
 
-
   create_table "addresses", force: :cascade do |t|
     t.string  "street_address_1"
     t.string  "street_address_2"
@@ -35,17 +34,12 @@ ActiveRecord::Schema.define(version: 20161209153023) do
 
   add_index "available_times", ["prospect_id"], name: "index_available_times_on_prospect_id"
 
-  create_table "libraries", force: :cascade do |t|
-    t.string "name"
+  create_table "enumerations", force: :cascade do |t|
+    t.string  "value",                   null: false
+    t.integer "list",     default: 0,    null: false
+    t.boolean "active",   default: true
+    t.integer "position", default: 0,    null: false
   end
-
-  create_table "libraries_prospects", force: :cascade do |t|
-    t.integer "prospect_id"
-    t.integer "library_id"
-  end
-
-  add_index "libraries_prospects", ["library_id"], name: "index_libraries_prospects_on_library_id"
-  add_index "libraries_prospects", ["prospect_id"], name: "index_libraries_prospects_on_prospect_id"
 
   create_table "phone_numbers", force: :cascade do |t|
     t.string  "number"
@@ -63,9 +57,7 @@ ActiveRecord::Schema.define(version: 20161209153023) do
     t.boolean  "in_federal_study",                         null: false
     t.string   "email"
     t.string   "family_member"
-    t.integer  "class_status",             default: 0,     null: false
     t.string   "major"
-    t.integer  "graduation_year",          default: 0,     null: false
     t.integer  "number_of_hours"
     t.boolean  "hired",                    default: false, null: false
     t.boolean  "suppress",                 default: false, null: false
@@ -81,6 +73,14 @@ ActiveRecord::Schema.define(version: 20161209153023) do
   end
 
   add_index "prospects", ["resume_id"], name: "index_prospects_on_resume_id"
+
+  create_table "prospects_enumerations", id: false, force: :cascade do |t|
+    t.integer "prospect_id"
+    t.integer "enumeration_id"
+  end
+
+  add_index "prospects_enumerations", ["enumeration_id"], name: "index_prospects_enumerations_on_enumeration_id"
+  add_index "prospects_enumerations", ["prospect_id"], name: "index_prospects_enumerations_on_prospect_id"
 
   create_table "prospects_skills", force: :cascade do |t|
     t.integer "prospect_id"

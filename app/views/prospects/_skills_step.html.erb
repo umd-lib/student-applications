@@ -5,12 +5,14 @@
     <div class='table-responsive'> 
       <table class='table table-bordered'>
         <tbody>
-          <% Skill.promoted.find_in_batches( batch_size: 3 ) do |batch| %>
+          <% Skill.promoted.in_groups_of(3) do |batch| %>
             <tr>
               <% batch.each do |skill| %> 
                 <td>
-                  <%= form.check_box( :skill_ids,  { :multiple => true }, skill.id, nil  )  %>
-                  <%= form.label(  :skills,  skill.name )  %>
+                  <% unless skill.nil? %> 
+                    <%= form.check_box( :skill_ids,  { :multiple => true }, skill.id, nil  )  %>
+                    <%= form.label(  :skills,  skill.name )  %>
+                  <% end %>
                 </td>
               <% end %> 
             </tr>

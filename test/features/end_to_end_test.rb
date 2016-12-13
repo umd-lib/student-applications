@@ -21,6 +21,10 @@ feature 'submit an application' do
     fill_in('prospect_addresses_attributes_0_state', with: 'HI')
     fill_in('prospect_addresses_attributes_0_postal_code', with: '12345')
 
+    select(Enumeration.active_graduation_years.first.value, from: 'graduation_year')
+    select(Enumeration.active_class_statuses.first.value, from: 'class_status')
+    select(Enumeration.active_semesters.first.value, from: 'semester')
+
     find('#prospect_in_federal_study_true').click
 
     click_button 'Continue'
@@ -44,15 +48,15 @@ feature 'submit an application' do
 
     assert page.has_content?('Skills')
     # to do add skills test
-    skill = Skill.promoted.first.name
-    check 'prospect_skill_ids_1'
+    skill = Skill.promoted.first
+    check "prospect_skill_ids_#{skill.id}"
 
     click_link 'Add Skill'
     within('#skills .nested-fields:nth-child(1)') do
       el_id = find("input[id$='_name']")[:id]
       fill_in(el_id, with: 'zzzyyyqqq')
     end
-    skills = [skill, 'zzzyyyqqq']
+    skills = [skill.name, 'zzzyyyqqq']
 
     click_button 'Continue'
     assert page.has_content?('Availability')

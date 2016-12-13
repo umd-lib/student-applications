@@ -18,6 +18,10 @@ feature 'Enter contact information' do
     fill_in('prospect_addresses_attributes_0_state', with: 'HI')
     fill_in('prospect_addresses_attributes_0_postal_code', with: '12345')
 
+    select(Enumeration.active_graduation_years.first.value, from: 'graduation_year')
+    select(Enumeration.active_class_statuses.first.value, from: 'class_status')
+    select(Enumeration.active_semesters.first.value, from: 'semester')
+
     choose('prospect_in_federal_study_true')
     click_button 'Continue'
     assert page.has_content?('Work Experience')
@@ -32,6 +36,10 @@ feature 'Enter contact information' do
     fill_in('prospect_first_name', with: 'Polly')
     fill_in('prospect_last_name', with: 'Jane')
     fill_in('prospect_email', with: 'pj@umd.edu')
+
+    select(Enumeration.active_graduation_years.first.value, from: 'graduation_year')
+    select(Enumeration.active_class_statuses.first.value, from: 'class_status')
+    select(Enumeration.active_semesters.first.value, from: 'semester')
 
     click_link 'Add A Permanent Address'
     assert_equal 2, find(:css, '#addresses').all('.nested-fields').length

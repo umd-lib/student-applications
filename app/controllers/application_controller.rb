@@ -17,6 +17,19 @@ class ApplicationController < ActionController::Base
     user = User.find_by cas_directory_id: session[:cas][:user]
     if user.nil?
       render status: 403, text: 'Unrecognized user'
+    else
+      update_current_user(user)
     end
+    return 
   end
+
+  private 
+
+  attr_writer :current_user
+  def update_current_user(user)
+    @current_user = user
+    @current_user
+  end
+
+
 end

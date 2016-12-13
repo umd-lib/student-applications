@@ -3,12 +3,13 @@ require 'test_helper'
 feature 'Add some work experiences' do
   scenario 'add some experiences to the prospect', js: true do
     # we can fast-forward to the work_experiences step
-    all_valid = prospects(:all_valid).attributes
+    fixture = prospects(:all_valid)
+    all_valid = fixture.attributes
+    all_valid[:enumeration_ids] = fixture.enumerations.map(&:id)
+
     page.set_rack_session("prospect_params": all_valid)
     page.set_rack_session("prospect_step": 'work_experience')
-
-    visit root_path
-    click_link 'Apply!'
+    visit new_prospect_path
     assert page.has_content?('Work Experience')
 
     click_link 'Add Work Experience'

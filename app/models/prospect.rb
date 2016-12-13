@@ -6,22 +6,61 @@ class Prospect < ActiveRecord::Base
   belongs_to :resume
   after_initialize :after_initialize
 
+  has_and_belongs_to_many :enumerations, join_table: 'prospects_enumerations'
+
+  has_and_belongs_to_many :libraries
+  accepts_nested_attributes_for :libraries
+  
+  
   # this makes sure we have a local address and that has_family_member is set
   # correctly
   def after_initialize
     local_address # we call this to make sure we have one.
-    @has_family_member = if @has_family_member.nil?
-                           !family_member.blank?
-                         else
-                           ActiveRecord::Type::Boolean.new.type_cast_from_user(@has_family_member)
-                         end
   end
 
-  # if has_family_member = false but we do have a family_member value, we
-  # should return true.
-  def family_member?
-    ActiveRecord::Type::Boolean.new.type_cast_from_user(@has_family_member) || !family_member.blank?
+  # Custom Validations 
+  validate :must_have_class_status, :must_have_graduation_year, :must_have_semester
+
+  def must_have_class_status
+    if current_step == 'contact_info' && class_status.nil?
+      errors.add(:class_status, 'You must have one ( and only one ) Class Status selected.')
+    end
   end
+
+  def must_have_graduation_year
+    if current_step == 'contact_info' && graduation_year.nil?
+      errors.add(:graduation_year, 'You must have one ( and only one ) Graduation Year selected.')
+    end
+  end
+  
+  def must_have_semester
+    if current_step == 'contact_info' && semester.nil?
+      errors.add(:semester, 'Please indicate which semester you are applying for.')
+    end
+  end
+
+
+  attr_accessor :class_status
+  def class_status
+    enumerations.find { |e| e['list'] == Enumeration.lists['class_status'] }
+  end
+
+  attr_accessor :graduation_year
+  def graduation_year
+    enumerations.find { |e| e['list'] == Enumeration.lists['graduation_year'] }
+  end
+
+  attr_accessor :semester
+  def semester
+    enumerations.find { |e| e['list'] == Enumeration.lists['semester'] }
+  end
+
+  attr_accessor :libraries
+  def libraries
+    enumerations.select { |e| e['list'] == Enumeration.lists['library'] } || []
+  end
+
+
 
   # this validates if the user has clicked "All information is correct" on last
   # step
@@ -30,7 +69,7 @@ class Prospect < ActiveRecord::Base
 
   # these are the validations for the contact_information step
   validates :in_federal_study, inclusion: { in: [true, false], if: ->(p) { p.current_step == 'contact_info' } }
-  %i(directory_id first_name last_name email graduation_year class_status semester).each do |attr|
+  %i(directory_id first_name last_name email ).each do |attr|
     validates attr, presence: true, if: ->(p) { p.current_step == 'contact_info' }
   end
 
@@ -90,6 +129,7 @@ class Prospect < ActiveRecord::Base
   validates :local_address, presence: true, if: ->(o) { o.current_step == 'contact_info' }
 
   has_one :permanent_address, -> { where(address_type: 'permanent') }, class_name: Address
+  accepts_nested_attributes_for :permanent_address, allow_destroy: true
 
   has_and_belongs_to_many :skills
   accepts_nested_attributes_for :skills
@@ -98,13 +138,4 @@ class Prospect < ActiveRecord::Base
     skills.select(&:unpromoted)
   end
 
-  attr_accessor :has_family_member
-  validates :family_member, presence: true, if: ->(o) { o.family_member? }
-
-  has_and_belongs_to_many :libraries
-  accepts_nested_attributes_for :libraries
-
-  enum class_status: %i(Undergraduate Graduate)
-  enum graduation_year: (2016..2020).map { |year| ["#{year}_dec".intern, "#{year}_may".intern] }.flatten
-  enum semester: (2017..2018).map { |year| ["spring_#{year}".intern, "fall_#{year}".intern] }.flatten
 end

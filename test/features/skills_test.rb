@@ -7,11 +7,11 @@ feature 'Add some skills' do
     page.set_rack_session("prospect_params": all_valid)
     page.set_rack_session("prospect_step": 'skills')
 
-    visit root_path
-    click_link 'Apply!'
+    visit new_prospect_path
     assert page.has_content?('Skills')
 
-    check 'prospect_skill_ids_1'
+    skill_id = "prospect_skill_ids_#{Skill.promoted.sample.id}"
+    check skill_id
 
     click_link 'Add Skill'
     assert_equal 1, find(:css, '#skills').all('.nested-fields').length
@@ -28,7 +28,7 @@ feature 'Add some skills' do
       el_id = find("input[id$='_name']")[:id]
       assert page.has_field?(el_id, with: 'C00king')
     end
-    assert page.has_checked_field?('prospect_skill_ids_1')
+    assert page.has_checked_field?(skill_id)
 
     click_button 'Back'
     click_button 'Continue'
@@ -37,6 +37,6 @@ feature 'Add some skills' do
       el_id = find("input[id$='_name']")[:id]
       assert page.has_field?(el_id, with: 'C00king')
     end
-    assert page.has_checked_field?('prospect_skill_ids_1')
+    assert page.has_checked_field?(skill_id)
   end
 end

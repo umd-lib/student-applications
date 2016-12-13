@@ -44,6 +44,7 @@ gem 'rack-cas'
 gem 'simple_form'
 gem 'cocoon'
 gem 'country_select'
+gem 'bootstrap-toggle-rails'
 
 gem 'paperclip', '~> 5.0.0'
 gem 'rack-cas'
@@ -85,4 +86,5 @@ group :test do
   gem 'test_after_commit'
   gem 'simplecov', require: false
   gem 'database_cleaner'
+  gem 'minitest-reporters'
 end

@@ -1,4 +1,9 @@
 module ApplicationHelper
+  # check if user if authenticated
+  def authenticated?
+    session && !session[:cas].nil? && !session[:cas][:user].nil?
+  end
+
   # takes an 24 hour integer and formcats it into "HHam/pm".
   # like 13 => 1pm
   def hour_integer_to_humanized(time)

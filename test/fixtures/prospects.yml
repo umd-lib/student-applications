@@ -4,27 +4,21 @@ homeless:
   first_name: Rolling 
   last_name: Stone
   email: hobo@umd.edu
-  family_member:
-  class_status: Undergraduate
-  graduation_year: 0
+  enumerations: graduate, seventeen_may, seventeen_fall 
 all_valid:
   in_federal_study: true
   directory_id: bstudent
   first_name: Betty
   last_name: Student
   email: bstudent@umd.edu
-  family_member:
-  class_status: Undergraduate
-  graduation_year: 0
   available_hours_per_week: 1
   available_times_count: 1
   user_signature: All Valid  
+  enumerations: graduate, seventeen_dec, seventeen_fall 
 contact_info:
   in_federal_study: true
   directory_id: astudent
   first_name: Alvin
   last_name: Student
+  enumerations: undergraduate, seventeen_may, seventeen_fall 
   email: astudent@umd.edu
-  family_member:
-  class_status: Undergraduate
-  graduation_year: 0

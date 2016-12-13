@@ -1,0 +1,22 @@
+<%= simple_form_for Enumeration.new, url: update_configuration_path, html: { class: 'form-horizontal' } do |form| %>
+  <% @enumerations.each do |list, values| %>
+    <caption><%= list.humanize.pluralize.upcase %></caption>
+    <ul class="list-group" data-list="<%= list %>" >
+      <% values.each do |value| %> 
+        <li class="list-group-item" id="enumeration_<%= value.id %>" data-position="<%= value.position %>"> 
+          <span class="glyphicon glyphicon-resize-vertical mover" aria-hidden="true"></span> 
+          <span class='enumeration-value'><%= value.value %></span>    
+          <span class="toggler">                                                                                                                                                                                      
+            <input class="active-toggle" type='checkbox' data-toggle="toggle" name="enumeration[<%= value.id %>][active]" <%= "checked" if value.active %> >                                                                
+          </span>      
+        </li>
+      <% end %>
+      <li class="list-group-item new-enumeration" id="new_<%= list %>" > 
+        <span class="glyphicon mover" aria-hidden="true"></span> 
+        <span class='enumeration-value'><%= form.input :value, placeholder: "Add A New Value", label: false,
+          input_html: { class: "new-enumeration-value", id: "enumeration_#{list}_value" } %></span> 
+        <span class="toggler"><input type='checkbox' data-toggle="toggle" disabled checked ></span>  
+      </li>
+    </ul>
+  <% end %>
+<%end %>

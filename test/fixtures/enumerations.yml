@@ -1,0 +1,52 @@
+undergraduate:
+  value: Undergraduate
+  list: 0
+  position: 0
+  prospects: contact_info
+graduate:
+  value: Graduate
+  list: 0 
+  position: 1
+  prospects: homeless, all_valid
+sixteen_dec:
+  value: 2016 Dec
+  list: 1 
+  position: 0
+seventeen_may:
+  value: 2017 May
+  list: 1 
+  position: 1
+  prospects: homeless, contact_info
+seventeen_dec:
+  value: 2017 Dec
+  list: 1 
+  position: 1
+  prospects: all_valid
+art_lib:
+  value: Art Library
+  list: 2 
+  position: 0
+science_lib:
+  value: Science Library
+  list: 2 
+  position: 1
+engineering_lib:
+  value: Engineering Library
+  list: 2 
+  position: 2
+arch_lib:
+  value: Architecture Library
+  list: 2 
+  position: 3
+seventeen_spring:
+  value: Spring 2017
+  list: 3
+  position: 0
+seventeen_fall:
+  value: Fall 2017
+  list: 3
+  position: 0
+eighteen_spring:
+  value: Spring 2018
+  list: 3
+  position: 2
