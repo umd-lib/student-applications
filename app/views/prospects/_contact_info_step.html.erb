@@ -60,6 +60,10 @@
   <div class="panel-body" id="other-info">
     <%= form.input :in_federal_study, as: :radio_buttons, collection: [["No", false], ["Yes", true]], 
       required: true, label: "Are you in a Federal Work Study program?" %>
+    <%= form.input :semester, 
+      collection: Prospect.semesters.map { |s| [ s.first.gsub("_", " ").capitalize, s.first ] },
+      required: true,
+      label: 'Which semester are you applying for?' %>
   </div>
 </div>
 

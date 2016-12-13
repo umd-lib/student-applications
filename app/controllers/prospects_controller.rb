@@ -97,7 +97,7 @@ class ProspectsController < ApplicationController
         current_step commit has_family_member in_federal_study directory_id first_name last_name
         local_address local_phone perm_address perm_phone email family_member class_status
         graduation_year additional_comments available_hours_per_week resume_id user_confirmation
-        user_signature
+        user_signature semester
       )
       whitelisted_attrs << { day_times: [], skill_ids: [], library_ids: [], skills: [:id, :name, :_destroy], work_experiences: [:id, :name, :_destroy] }
     end

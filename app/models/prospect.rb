@@ -30,7 +30,7 @@ class Prospect < ActiveRecord::Base
 
   # these are the validations for the contact_information step
   validates :in_federal_study, inclusion: { in: [true, false], if: ->(p) { p.current_step == 'contact_info' } }
-  %i(directory_id first_name last_name email graduation_year class_status).each do |attr|
+  %i(directory_id first_name last_name email graduation_year class_status semester).each do |attr|
     validates attr, presence: true, if: ->(p) { p.current_step == 'contact_info' }
   end
 
@@ -106,4 +106,5 @@ class Prospect < ActiveRecord::Base
 
   enum class_status: %i(Undergraduate Graduate)
   enum graduation_year: (2016..2020).map { |year| ["#{year}_dec".intern, "#{year}_may".intern] }.flatten
+  enum semester: (2017..2018).map { |year| ["spring_#{year}".intern, "fall_#{year}".intern] }.flatten
 end
