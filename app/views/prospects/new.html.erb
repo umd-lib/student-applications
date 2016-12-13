@@ -12,6 +12,9 @@
   } do |form| %>
   <%= form.error_notification %> 
   <%= render "#{@prospect.current_step}_step", form: form %>
-  <p><%= form.submit @prospect.last_step? ? "Submit" : "Continue", class: @prospect.last_step? ? 'btn btn-success' : 'btn btn-default' %></p>
-  <p><%= form.submit "Back", name: "back_button" unless @prospect.first_step? %></p>
+  <p>
+    <%= form.submit "Back", name: "back_button", class: 'btn btn-default' unless @prospect.first_step? %>
+    <%= form.submit @prospect.last_step? ? "Submit" : "Continue", class: @prospect.last_step? ? 'btn btn-success' : 'btn btn-default' %>
+    <%= form.submit "Reset", name: "reset", data: { confirm: "Are you sure want to reset the form?\n\nThis will erase any information you have already entered." }, class: 'btn btn-danger' %>
+  </p>
 <% end %>
