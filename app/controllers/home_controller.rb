@@ -5,5 +5,4 @@ class HomeController < ApplicationController
     reset_session
     redirect_to new_prospect_path
   end
-
 end

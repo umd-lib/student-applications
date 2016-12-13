@@ -1,10 +1,9 @@
 require 'simplecov'
 require 'database_cleaner'
 
-
 SimpleCov.start
 
-DatabaseCleaner.strategy = :truncation, { only: %w( prospects ) }
+DatabaseCleaner.strategy = :truncation, { only: %w(prospects) }
 
 require 'securerandom'
 
@@ -20,8 +19,8 @@ require 'minitest/reporters'
 # add  Minitest::Reporters::SpecReporter.new to first param if you want to see
 # what's running so damn slow.
 Minitest::Reporters.use!(
-  # Minitest::Reporters::SpecReporter.new, 
-  Minitest::Reporters::ProgressReporter.new, 
+  # Minitest::Reporters::SpecReporter.new,
+  Minitest::Reporters::ProgressReporter.new,
   ENV,
   Minitest.backtrace_filter
 )

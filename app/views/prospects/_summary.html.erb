@@ -1,4 +1,4 @@
-<h3>Contact Info <%= form.submit "Change", name: "goto_contact_info", class: 'btn btn-info pull-right' unless @current_user %></h3>
+<h3>Contact Info <%= link_to "Change Contact Info", new_prospect_path( step: "contact_info" ), class: 'btn btn-info pull-right' unless @current_user %></h3>
 <table class="table table-striped">
   <tr>
     <th>First name</th>
@@ -64,7 +64,7 @@
     <td><%= @prospect.semester.value.gsub('_', ' ').capitalize %></td>
   </tr>
 </table>
-<h3>Work Experience <%= form.submit( "Change", name: "goto_work_experience", class: 'btn btn-info pull-right')  unless @current_user %></h3>
+<h3>Work Experience <%= link_to "Change Work Experience", new_prospect_path( step: "work_experience" ), class: 'btn btn-info pull-right' unless @current_user %></h3>
 <% unless @prospect.work_experiences.empty? %>
   <% @prospect.work_experiences.each do |exp| %>
     <table class="table table-striped">
@@ -93,7 +93,7 @@
 <% else %>
   <p><i>(None)</i></p>
 <% end %>
-<h3>Skills <%= form.submit( "Change", name: "goto_skills", class: 'btn btn-info pull-right' )  unless @current_user  %></h3>
+<h3>Skills <%= link_to "Change Skills", new_prospect_path( step: "skills" ), class: 'btn btn-info pull-right' unless @current_user %></h3>
 <% unless @prospect.skills.empty? %>
   <ul>
     <% @prospect.skills.each do |skill| %>
@@ -103,12 +103,12 @@
 <% else %>
   <p><i>(None)</i></p>
 <% end %>
-<h3>Availability <%= form.submit("Change", name: "goto_availability", class: 'btn btn-info pull-right')  unless @current_user %></h3>
+<h3>Availability <%= link_to "Change Availability", new_prospect_path( step: "availability" ), class: 'btn btn-info pull-right' unless @current_user %></h3>
 <%= form.input(:available_hours_per_week, disabled: true)  %>
 <div class="table-responsive">
   <%= availablity_table(form) %>
 </div>
-<h3>Resume <%= form.submit("Change", name: "goto_upload_resume", class: 'btn btn-info pull-right')  unless @current_user %></h3>
+<h3>Resume <%= link_to "Change Resume", new_prospect_path( step: "upload_resume" ), class: 'btn btn-info pull-right' unless @current_user %></h3>
 <% if @resume.file? %>
   <%= link_to( "View #{ @resume.file_file_name}",  resume_path(@resume), target: "_self" ) %>
 <% else %>

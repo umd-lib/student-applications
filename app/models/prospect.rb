@@ -10,15 +10,14 @@ class Prospect < ActiveRecord::Base
 
   has_and_belongs_to_many :libraries
   accepts_nested_attributes_for :libraries
-  
-  
+
   # this makes sure we have a local address and that has_family_member is set
   # correctly
   def after_initialize
     local_address # we call this to make sure we have one.
   end
 
-  # Custom Validations 
+  # Custom Validations
   validate :must_have_class_status, :must_have_graduation_year, :must_have_semester
 
   def must_have_class_status
@@ -32,13 +31,12 @@ class Prospect < ActiveRecord::Base
       errors.add(:graduation_year, 'You must have one ( and only one ) Graduation Year selected.')
     end
   end
-  
+
   def must_have_semester
     if current_step == 'contact_info' && semester.nil?
       errors.add(:semester, 'Please indicate which semester you are applying for.')
     end
   end
-
 
   attr_accessor :class_status
   def class_status
@@ -60,8 +58,6 @@ class Prospect < ActiveRecord::Base
     enumerations.select { |e| e['list'] == Enumeration.lists['library'] } || []
   end
 
-
-
   # this validates if the user has clicked "All information is correct" on last
   # step
   validates :user_confirmation, acceptance: true, if: ->(p) { p.last_step? }
@@ -69,7 +65,7 @@ class Prospect < ActiveRecord::Base
 
   # these are the validations for the contact_information step
   validates :in_federal_study, inclusion: { in: [true, false], if: ->(p) { p.current_step == 'contact_info' } }
-  %i(directory_id first_name last_name email ).each do |attr|
+  %i(directory_id first_name last_name email).each do |attr|
     validates attr, presence: true, if: ->(p) { p.current_step == 'contact_info' }
   end
 
@@ -81,7 +77,7 @@ class Prospect < ActiveRecord::Base
 
   # the number of available hours per week should =< number of available_times
   validate :available_hours_per_week_gt_available_times
-  validates_numericality_of :available_hours_per_week, greater_than_or_equal_to: 0
+  validates :available_hours_per_week, numericality: { greater_than_or_equal_to: 0 }
 
   def available_hours_per_week_gt_available_times
     if available_hours_per_week > available_times.size
@@ -137,5 +133,4 @@ class Prospect < ActiveRecord::Base
   def special_skills
     skills.select(&:unpromoted)
   end
-
 end

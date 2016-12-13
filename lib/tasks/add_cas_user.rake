@@ -4,7 +4,7 @@ namespace :db do
   task :add_cas_user, [:cas_directory_id, :full_name] => :environment do |_t, args|
     cas_directory_id = args[:cas_directory_id]
 
-    if !User.find_by_cas_directory_id(cas_directory_id)
+    if !User.find_by(cas_directory_id: cas_directory_id)
       User.create!(cas_directory_id: args[:cas_directory_id], name: args[:full_name])
       puts "User '#{cas_directory_id}' created!"
     else

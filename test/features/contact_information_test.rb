@@ -56,7 +56,7 @@ feature 'Enter contact information' do
     assert_equal 2, find(:css, '#phone-numbers').all('.nested-fields').length
     2.times do |i|
       within("#phone-numbers .nested-fields:nth-child(#{i + 1})") do
-        %w(_number ).each do |attr|
+        %w(_number).each do |attr|
           el_id = find("input[id$='#{attr}']")[:id]
           fill_in(el_id, with: (i.to_s * 11).to_s)
         end
@@ -83,7 +83,7 @@ feature 'Enter contact information' do
 
     2.times do |i|
       within("#phone-numbers .nested-fields:nth-child(#{i + 1})") do
-        %w(_number ).each do |attr|
+        %w(_number).each do |attr|
           el_id = find("input[id$='#{attr}']")[:id]
           assert page.has_field?(el_id, with: (i.to_s * 11).to_s)
         end

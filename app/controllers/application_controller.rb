@@ -11,25 +11,28 @@ class ApplicationController < ActionController::Base
   end
 
   def ensure_auth
-    if session[:cas].nil? || session[:cas][:user].nil?
+    if session[:prospect_params]
+      # we have an application going so we've probably just refreshed the
+      # screen
+      redirect_to action: 'new', controller: 'prospects'
+    elsif session[:cas].nil? || session[:cas][:user].nil?
       render status: 401, text: 'Redirecting to SSO...'
-    end
-    user = User.find_by cas_directory_id: session[:cas][:user]
-    if user.nil?
-      render status: 403, text: 'Unrecognized user'
     else
-      update_current_user(user)
+      user = User.find_by cas_directory_id: session[:cas][:user]
+      if user.nil?
+        render status: 403, text: 'Unrecognized user'
+      else
+        update_current_user(user)
+      end
     end
-    return 
+    nil
   end
 
-  private 
+  private
 
-  attr_writer :current_user
-  def update_current_user(user)
-    @current_user = user
-    @current_user
-  end
-
-
+    attr_writer :current_user
+    def update_current_user(user)
+      @current_user = user
+      @current_user
+    end
 end

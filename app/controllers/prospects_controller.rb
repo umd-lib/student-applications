@@ -2,17 +2,21 @@ class ProspectsController < ApplicationController
   before_action :set_session_and_prospect, only: [:new, :create]
   before_action :ensure_auth, only: [:index, :update, :show]
 
+  def new
+    choose_action if params[:step]
+  end
+
   def create
     if params[:reset]
       reset_session
-      redirect_to action: "reset" 
+      redirect_to action: 'reset'
     else
       @prospect.current_step = session[:prospect_step] || Prospect.steps.first
-      choose_action if @prospect.valid?
+      choose_action if @prospect.valid? || params[:back_button]
     end
 
     if @prospect.new_record?
-      render "new" 
+      render 'new'
     else
       SubmittedMailer.default_email(@prospect).deliver_now
       reset_session
@@ -112,16 +116,8 @@ class ProspectsController < ApplicationController
     def choose_action
       if params[:back_button]
         @prospect.previous_step
-      elsif params[:goto_contact_info]
-        @prospect.current_step = 'contact_info'
-      elsif params[:goto_work_experience]
-        @prospect.current_step = 'work_experience'
-      elsif params[:goto_skills]
-        @prospect.current_step = 'skills'
-      elsif params[:goto_upload_resume]
-        @prospect.current_step = 'upload_resume'
-      elsif params[:goto_availability]
-        @prospect.current_step = 'availability'
+      elsif params[:step]
+        @prospect.current_step = params[:step]
       elsif @prospect.last_step?
         @prospect.save if @prospect.all_valid?
       else
