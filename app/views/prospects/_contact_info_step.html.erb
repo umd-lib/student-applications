@@ -7,12 +7,18 @@
       <%= form.input :last_name,  required: true %>
       <%= form.input :email, required: true %>
       <%= form.input :directory_id, required: true  %>
-      <%= form.input :class_status, required: true, collection: 
-        Prospect.class_statuses.map { |cs| [ cs.first.capitalize, cs.first ] },
-        as: :select, include_blank: false %>
-      <%= form.input :graduation_year, collection:
-          Prospect.graduation_years.map { |gy| [ gy.first.gsub("_", " ").upcase, gy.first ] },
-          as: :select, include_blank: false, label: "Anticipated Graduation Year"  %>
+
+      <%= form.association :enumerations, collection: Enumeration.active_class_statuses.map { |e| [ e.value, e.id ] },
+        label: "Class Status", required: true,   input_html: { multiple: false, id: "class_status", name: "prospect[enumeration_ids][]" },
+        wrapper_html: { class: "prospect_class_status #{ 'has-error' if form.object.errors.keys.include?(:class_status) }" } 
+      %> 
+      <%= form.error :class_status, id: "class_status_error", class: "#{ 'has-error' if form.object.errors.keys.include?(:class_status) }" %> 
+
+      <%= form.association :enumerations, collection: Enumeration.active_graduation_years.map { |e| [ e.value, e.id ] },
+        label: "Expected Graduation Year", required: true,  input_html: { id: "graduation_year", name: "prospect[enumeration_ids][]"  },
+        wrapper_html: { class: "prospect_graduation_year #{ 'has-error' if form.object.errors.keys.include?(:graduation_year) }" } 
+      %> 
+      <%= form.error :graduation_year, id: "graduation_year_error", class: "#{ 'has-error' if form.object.errors.keys.include?(:graduation_year) }" %> 
   </div>
 </div>
 
@@ -60,9 +66,10 @@
   <div class="panel-body" id="other-info">
     <%= form.input :in_federal_study, as: :radio_buttons, collection: [["No", false], ["Yes", true]], 
       required: true, label: "Are you in a Federal Work Study program?" %>
-    <%= form.input :semester, 
-      collection: Prospect.semesters.map { |s| [ s.first.gsub("_", " ").capitalize, s.first ] },
-      required: true,
+    <%= form.association :enumerations, 
+      collection: Enumeration.active_semesters.map { |e| [ e.value, e.id ] },
+      wrapper_html: { class: "prospect_semester #{ 'has-error' if form.object.errors.keys.include?(:semester) }" }, 
+      required: true, input_html: { multiple:false, id: "semester", name: "prospect[enumeration_ids][]" },
       label: 'Which semester are you applying for?' %>
   </div>
 </div>
@@ -73,12 +80,14 @@
     <div class='table-responsive'> 
       <table class='table table-bordered'>
         <tbody>
-          <% Library.find_in_batches( batch_size: 3 ) do |batch| %>
+          <% Enumeration.active_libraries.in_groups_of( 3 ) do |batch| %>
             <tr>
               <% batch.each do |lib| %> 
                 <td>
-                  <%= form.check_box( :library_ids,  { :multiple => true }, lib.id, nil  )  %>
-                  <%= form.label(  :libraries,  lib.name )  %>
+                  <% unless lib.nil? %> 
+                    <%= form.check_box( :enumeration_ids,  { :multiple => true }, lib.id, nil  )  %>
+                    <%= form.label(  :enumeration_ids,  lib.value )  %>
+                  <% end %>   
                 </td>
               <% end %> 
             </tr>

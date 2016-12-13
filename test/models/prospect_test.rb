@@ -47,27 +47,6 @@ class ProspectTest < ActiveSupport::TestCase
     assert_equal prospect.addresses.first.street_address_1, prospect.local_address.street_address_1
   end
 
-  test 'it should set the family_member attr correct and only validate if the name is provided' do
-    [true, 'true', 1].each do |truthy|
-      prospect = Prospect.new @all_valid.attributes.merge(has_family_member: truthy)
-      refute prospect.valid?
-      prospect.family_member = 'Stehpen Colbert'
-      assert prospect.valid?
-    end
-  end
-
-  test "it should also know if there's a family member if a family member name has been provided" do
-    prospect = Prospect.new @all_valid.attributes.merge(family_member: 'Jon Stewart')
-    assert prospect.family_member?
-    assert prospect.has_family_member
-
-    # if the attr is set to false but a name has been provided, thats ok, but
-    # the family_member? should still return true for validation.
-    prospect = Prospect.new @all_valid.attributes.merge(family_member: "Conan O'Brien", has_family_member: false)
-    assert prospect.family_member?
-    refute prospect.has_family_member
-  end
-
   test "it should be invalid if it's on the contact_info step and it has no address" do
     homeless = prospects(:homeless)
     # not valid bc no address
@@ -80,7 +59,7 @@ class ProspectTest < ActiveSupport::TestCase
     %i(street_address_1= city= state= postal_code=).each do |attr|
       homeless.local_address.send(attr, SecureRandom.hex)
     end
-    assert homeless.valid?
+    assert homeless.valid?, homeless.errors
   end
 
   test 'it should be able to create available_times via the day_times shortcut' do

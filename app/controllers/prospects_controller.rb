@@ -1,17 +1,18 @@
 class ProspectsController < ApplicationController
-  before_action :set_session_and_prospect, only: [:create]
+  before_action :set_session_and_prospect, only: [:new, :create]
   before_action :ensure_auth, only: [:index, :update, :show]
 
   def new
-    start_new
+    choose_action if params[:step]
   end
 
   def create
     if params[:reset]
-      start_new
+      reset_session
+      redirect_to action: 'reset'
     else
       @prospect.current_step = session[:prospect_step] || Prospect.steps.first
-      choose_action if @prospect.valid?
+      choose_action if @prospect.valid? || params[:back_button]
     end
 
     if @prospect.new_record?
@@ -70,9 +71,13 @@ class ProspectsController < ApplicationController
         session[:prospect_params][attr] = params[:prospect][attr] unless params[:prospect][attr].blank?
       end
       session[:prospect_params].each { |k, v| session[:prospect_params][k] = v.to_hash if v.is_a?(ActionController::Parameters) }
-      @prospect = prospect_from_session
-      # byebug
-      @resume = @prospect.resume ? @prospect.resume : @prospect.build_resume
+      @prospect = Prospect.new(ActionController::Parameters.new(session[:prospect_params]).permit!)
+      if @prospect.nil? || !@prospect.is_a?(Prospect)
+        reset_session
+        redirect_to(root_path, flash: { error: "We're sorry, but something has gone wrong. Please try again." }) && raise(false)
+      else
+        @resume = @prospect.resume ? @prospect.resume : @prospect.build_resume
+      end
     end
 
     def prospect_params
@@ -82,40 +87,37 @@ class ProspectsController < ApplicationController
       # we just go to first step.
       params[:prospect] ||= { current_step: (session[:prospect_step] || Prospect.steps.first) }
       params[:prospect] = params[:prospect].with_indifferent_access
-      params.require(:prospect).permit(*whitelisted_attrs).tap do |wl|
-        wl[:addresses_attributes] = params[:prospect][:addresses_attributes] unless params[:prospect][:addresses_attributes].blank?
-        wl[:permanent_address] = params[:prospect][:permanent_address] unless params[:prospect][:permanent_address].blank?
-        wl[:phone_numbers_attributes] = params[:prospect][:phone_numbers_attributes] unless params[:prospect][:phone_numbers_attributes].blank?
-        wl[:work_experiences_attributes] = params[:prospect][:work_experiences_attributes] unless params[:prospect][:work_experiences_attributes].blank?
-        wl[:available_times_attributes] = params[:prospect][:available_times_attributes] unless params[:prospect][:available_times_attributes].blank?
-        wl[:skills_attributes] = params[:prospect][:skills_attributes] unless params[:prospect][:skills_attributes].blank?
-      end
+      params.require(:prospect).permit(*whitelisted_attrs)
     end
 
     def whitelisted_attrs
-      whitelisted_attrs = %i(
-        current_step commit has_family_member in_federal_study directory_id first_name last_name
-        local_address local_phone perm_address perm_phone email family_member class_status
-        graduation_year additional_comments available_hours_per_week resume_id user_confirmation
-        user_signature semester
+      # these are all the single keys that are allowed.
+      attrs = %i(
+        current_step commit in_federal_study directory_id first_name last_name
+        email class_status graduation_year additional_comments available_hours_per_week
+        resume_id user_confirmation user_signature class_status
       )
-      whitelisted_attrs << { day_times: [], skill_ids: [], library_ids: [], skills: [:id, :name, :_destroy], work_experiences: [:id, :name, :_destroy] }
+      # these are has_many relationships that point to other pre-existing records
+      has_many_ids = { enumeration_ids: [], day_times: [], skill_ids: [], library_ids: [] }
+      # these are has_many relationships that point to newly created records
+      # (accepts_nested_attributes )
+      attrs << has_many_ids.merge(addresses_attributes: sanitize_model_attrs(Address), permanent_address_attributes: sanitize_model_attrs(Address),
+                                  local_address_attributes: sanitize_model_attrs(Address), phone_numbers_attributes: sanitize_model_attrs(PhoneNumber),
+                                  work_experiences_attributes: sanitize_model_attrs(WorkExperience), available_times_attributes: sanitize_model_attrs(AvailableTime),
+                                  skills_attributes: sanitize_model_attrs(Skill))
+    end
+
+    # This takes a model and pops out the prospect_id which is not needed
+    def sanitize_model_attrs(model)
+      model.column_names.map(&:intern).reject { |k| k == :prospect_id }
     end
 
     # decide which step to move to depending on which button was clicked and which step we are already on
     def choose_action
       if params[:back_button]
         @prospect.previous_step
-      elsif params[:goto_contact_info]
-        @prospect.current_step = 'contact_info'
-      elsif params[:goto_work_experience]
-        @prospect.current_step = 'work_experience'
-      elsif params[:goto_skills]
-        @prospect.current_step = 'skills'
-      elsif params[:goto_upload_resume]
-        @prospect.current_step = 'upload_resume'
-      elsif params[:goto_availability]
-        @prospect.current_step = 'availability'
+      elsif params[:step]
+        @prospect.current_step = params[:step]
       elsif @prospect.last_step?
         @prospect.save if @prospect.all_valid?
       else

@@ -3,14 +3,16 @@ require 'test_helper'
 feature 'Add some Available Times' do
   scenario 'add some availability to the prospect', js: true do
     # we can fast-forward to the available_times step
-    all_valid = prospects(:all_valid).attributes
+    fixture = prospects(:all_valid)
+    all_valid = fixture.attributes
+    all_valid[:enumeration_ids] = fixture.enumerations.map(&:id)
     all_valid.reject! { |a| %w(id created_at updated_at).include? a }
+
     all_valid['addresses_attributes'] = [addresses(:all_valid_springfield).attributes.reject { |a| a == 'id' }]
     all_valid['available_times_attributes'] = [available_times(:all_valid_sunday).attributes.reject { |a| a == 'id' }]
     page.set_rack_session("prospect_params": all_valid)
 
-    visit root_path
-    click_link 'Apply!'
+    visit new_prospect_path
 
     10.times do
       click_button 'Continue'
@@ -44,14 +46,16 @@ feature 'Add some Available Times' do
 
   scenario 'make sure our total times is in line with the times available', js: true do
     # we can fast-forward to the available_times step
-    all_valid = prospects(:all_valid).attributes
+    fixture = prospects(:all_valid)
+    all_valid = fixture.attributes
+    all_valid[:enumeration_ids] = fixture.enumerations.map(&:id)
     all_valid.reject! { |a| %w(id created_at updated_at).include? a }
+
     all_valid['addresses_attributes'] = [addresses(:all_valid_springfield).attributes.reject { |a| a == 'id' }]
     all_valid['available_times_attributes'] = [available_times(:all_valid_sunday).attributes.reject { |a| a == 'id' }]
     page.set_rack_session("prospect_params": all_valid)
 
-    visit root_path
-    click_link 'Apply!'
+    visit new_prospect_path
 
     10.times do
       click_button 'Continue'

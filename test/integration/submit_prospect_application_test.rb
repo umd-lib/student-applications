@@ -36,6 +36,10 @@ class SubmitProspectApplicationTest < ActionDispatch::IntegrationTest
       fill_in('prospect_addresses_attributes_0_state', with: 'HI')
       fill_in('prospect_addresses_attributes_0_postal_code', with: '12345')
 
+      select(Enumeration.active_graduation_years.first.value, from: 'graduation_year')
+      select(Enumeration.active_class_statuses.first.value, from: 'class_status')
+      select(Enumeration.active_semesters.first.value, from: 'semester')
+
       fill_in('prospect_email', with: 'pj@umd.edu')
       choose('prospect_in_federal_study_true')
 
@@ -59,9 +63,15 @@ class SubmitProspectApplicationTest < ActionDispatch::IntegrationTest
       fill_in('prospect_addresses_attributes_0_state', with: 'HI')
       fill_in('prospect_addresses_attributes_0_postal_code', with: '12345')
 
+      select(Enumeration.active_graduation_years.first.value, from: 'graduation_year')
+      select(Enumeration.active_class_statuses.first.value, from: 'class_status')
+      select(Enumeration.active_semesters.first.value, from: 'semester')
+
       fill_in('prospect_email', with: 'pj@umd.edu')
 
-      check('prospect_library_ids_1')
+      library = Enumeration.active_libraries.sample
+      check("prospect_enumeration_ids_#{library.id}")
+
       choose('prospect_in_federal_study_true')
 
       click_button 'Continue'
@@ -76,7 +86,7 @@ class SubmitProspectApplicationTest < ActionDispatch::IntegrationTest
       assert page.has_field?('prospect_addresses_attributes_0_city', with: 'Springfield')
       assert page.has_field?('prospect_addresses_attributes_0_state', with: 'HI')
       assert page.has_field?('prospect_addresses_attributes_0_postal_code', with: '12345')
-      assert page.has_checked_field?('prospect_library_ids_1')
+      assert page.has_checked_field?("prospect_enumeration_ids_#{library.id}")
       assert page.has_field?('prospect_email', with: 'pj@umd.edu')
       assert_equal Prospect.steps.first, page.get_rack_session_key('prospect_step')
     end

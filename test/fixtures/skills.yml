@@ -1,0 +1,9 @@
+helicopter_pilot:
+  name: Helicopter Pilot
+  promoted: true
+dancing:
+  name: Dancing
+  promoted: true
+sewing:
+  name: Sewing
+  promoted: true

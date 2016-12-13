@@ -1,8 +1,9 @@
 require 'simplecov'
 require 'database_cleaner'
+
 SimpleCov.start
 
-DatabaseCleaner.strategy = :truncation, { only: %w( prospects ) }
+DatabaseCleaner.strategy = :truncation, { only: %w(prospects) }
 
 require 'securerandom'
 
@@ -14,7 +15,11 @@ require 'minitest/rails/capybara'
 
 # Improved Minitest output (color and progress bar)
 require 'minitest/reporters'
+
+# add  Minitest::Reporters::SpecReporter.new to first param if you want to see
+# what's running so damn slow.
 Minitest::Reporters.use!(
+  # Minitest::Reporters::SpecReporter.new,
   Minitest::Reporters::ProgressReporter.new,
   ENV,
   Minitest.backtrace_filter
@@ -70,4 +75,3 @@ class ActiveRecord::Base
   end
 end
 ActiveRecord::Base.shared_connection = ActiveRecord::Base.connection
-load "#{Rails.root}/db/seeds.rb"

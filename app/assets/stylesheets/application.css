@@ -10,6 +10,7 @@
  * defined in the other CSS/SCSS files in this directory. It is generally better to create a new
  * file per style scope.
  *
+ *= require bootstrap-toggle
  *= require_tree .
  *= require 'umd_lib'
  *= require_self
@@ -36,6 +37,9 @@ label.required abbr {
 .skill.nested-fields {
   border-top: none;
 }
+
+
+.help-block.has-error { color: #a94442 }
 
 .radio-question { padding-left: 50px; padding-right: 20px; vertical-align: middle; }
 .help-block.radio-question-help { vertical-align: middle; margin-bottom: 2px; display: inline-block; padding-left: 10px } 
@@ -114,3 +118,11 @@ input#resume_file {
 .prospect_available_hours_per_week input {
   width: 5em;
 }
+
+/* configuration page */
+.mover { width: 5% }
+.toggler { float: right }
+ul.list-group { list-style-type: none; } 
+.list-group-item { min-height: 56px } 
+.list-group-item div.form-group { margin-bottom: 0; display: inline-block }  
+.enumeration-value > div { width: 50% }  

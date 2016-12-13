@@ -1,5 +1,7 @@
 <% content_for :navbar do %>
-  <ul class="nav navbar-nav"></ul>
+  <ul class="nav navbar-nav">
+    <li><%= link_to_if( authenticated?, "Configuration", configuration_path ) {   } %></li>
+  </ul>
 <% end %>
 
 <%= render 'layouts/umd_lib' %>
