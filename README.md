@@ -1,5 +1,6 @@
 # student-applications
 Rails application for processing student applications for Libraries employment
+
 # Student Application Application
 
 This is an application to  accept applications from students. 
@@ -13,21 +14,25 @@ Each step has a view defined in the app/views/prospect which is rendered when th
 ## Setup 
 
 Requires:
+
 * Ruby 2.2
 * Bundler
-* [phantomjs](http://phantomjs.org/)
+* [phantomjs](http://phantomjs.org/) - PhantomJS must be installed separately, and the executable directory placed on the PATH.
 
 
 To run the application:
+
 ```
-$ git clone https://github.com/umd-lib/online-student-applications
-$ cd online-student-applications
+$ git clone https://github.com/umd-lib/student-applications.git
+$ cd student-applications
 $ bundle
 $ ./bin/rake db:migrate
-$ ./bin/rails s
+$ ./bin/rake db:seed
+$ ./bin/rails server
 ```
 
 To develop, you can run [Guard](https://github.com/guard/guard) by issuing:
+
 ```
 $ ./bin/bundle exec guard
 ```
