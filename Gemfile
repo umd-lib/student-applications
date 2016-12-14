@@ -38,7 +38,7 @@ gem 'dotenv-rails', '~> 2.1.1'
 gem 'capistrano-rails', group: :development
 gem 'figaro'
 
-gem 'umd_lib_style', github: 'umd-lib/umd_lib_style', branch: 'develop'
+gem 'umd_lib_style', git: 'https://github.com/umd-lib/umd_lib_style.git', branch: 'develop'
 gem 'rack-cas'
 
 gem 'simple_form'

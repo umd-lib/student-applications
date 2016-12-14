@@ -1,5 +1,5 @@
 GIT
-  remote: git://github.com/umd-lib/umd_lib_style.git
+  remote: https://github.com/umd-lib/umd_lib_style.git
   revision: 82421bcb6a7a223cb5d39668cf3417cbc6dd2533
   branch: develop
   specs:
@@ -370,4 +370,4 @@ DEPENDENCIES
   will_paginate (~> 3.1.0)
 
 BUNDLED WITH
-   1.13.5
+   1.13.6
