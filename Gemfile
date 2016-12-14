@@ -47,7 +47,6 @@ gem 'country_select'
 gem 'bootstrap-toggle-rails'
 
 gem 'paperclip', '~> 5.0.0'
-gem 'rack-cas'
 
 group :development, :test do
   # Call 'byebug' anywhere in the code to stop execution and get a debugger console
@@ -86,5 +85,4 @@ group :test do
   gem 'test_after_commit'
   gem 'simplecov', require: false
   gem 'database_cleaner'
-  gem 'minitest-reporters'
 end
