@@ -1,6 +1,6 @@
 GIT
   remote: https://github.com/umd-lib/umd_lib_style.git
-  revision: 82421bcb6a7a223cb5d39668cf3417cbc6dd2533
+  revision: 0b9763ba7cd3db8cfc654d4508167c6e610db972
   branch: develop
   specs:
     umd_lib_style (0.1.0)
