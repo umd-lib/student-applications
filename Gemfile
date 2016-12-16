@@ -38,7 +38,7 @@ gem 'dotenv-rails', '~> 2.1.1'
 gem 'capistrano-rails', group: :development
 gem 'figaro'
 
-gem 'umd_lib_style', github: 'umd-lib/umd_lib_style', branch: 'develop'
+gem 'umd_lib_style', git: 'https://github.com/umd-lib/umd_lib_style.git', branch: 'develop'
 gem 'rack-cas'
 
 gem 'simple_form'
@@ -47,7 +47,6 @@ gem 'country_select'
 gem 'bootstrap-toggle-rails'
 
 gem 'paperclip', '~> 5.0.0'
-gem 'rack-cas'
 
 group :development, :test do
   # Call 'byebug' anywhere in the code to stop execution and get a debugger console
@@ -86,5 +85,4 @@ group :test do
   gem 'test_after_commit'
   gem 'simplecov', require: false
   gem 'database_cleaner'
-  gem 'minitest-reporters'
 end
