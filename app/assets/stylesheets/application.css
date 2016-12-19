@@ -125,3 +125,6 @@ ul.list-group { list-style-type: none; }
 .list-group-item { min-height: 56px } 
 .list-group-item div.form-group { margin-bottom: 0; display: inline-block }  
 .enumeration-value > div { width: 50% }  
+
+
+ .modal-dialog { width: 800px; }

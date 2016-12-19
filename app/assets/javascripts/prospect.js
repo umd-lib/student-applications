@@ -41,7 +41,7 @@ var init = function() {
     var $this = $(this); 
     $this.toggleClass("success");
     $this.toggleClass("warning"); 
-    
+
     var checkbox =  $this.find("input");
     checkbox.prop("checked", !checkbox.prop("checked"));
   })

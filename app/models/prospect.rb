@@ -8,9 +8,6 @@ class Prospect < ActiveRecord::Base
 
   has_and_belongs_to_many :enumerations, join_table: 'prospects_enumerations'
 
-  has_and_belongs_to_many :libraries
-  accepts_nested_attributes_for :libraries
-
   # this makes sure we have a local address and that has_family_member is set
   # correctly
   def after_initialize
@@ -93,7 +90,8 @@ class Prospect < ActiveRecord::Base
   # in
   attr_accessor :day_times
   def day_times
-    @day_times || []
+    @day_times ||= available_times.map(&:day_time)
+    @day_times
   end
 
   def day_times=(dts)

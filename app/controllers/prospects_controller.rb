@@ -28,14 +28,13 @@ class ProspectsController < ApplicationController
     @prospect = Prospect.find(params[:id])
   end
 
-
   def show
     @prospect = Prospect.find(params[:id])
     @resume = @prospect.resume
   end
 
   def index
-    @prospects = Prospect.paginate(page: params[:page])
+    @prospects = Prospect.includes(:enumerations, :available_times, :skills).paginate(page: params[:page])
   end
 
   def update

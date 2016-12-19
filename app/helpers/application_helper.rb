@@ -1,5 +1,4 @@
 module ApplicationHelper
-  
   def bootstrap_class_for(flash_type)
     { success: 'alert-success', error: 'alert-danger', alert: 'alert-warning',
       notice: 'alert-info' }[flash_type.intern] || flash_type.to_s
@@ -15,10 +14,9 @@ module ApplicationHelper
     nil
   end
 
-  
   # check if user if authenticated
   def authenticated?
-    @current_user 
+    @current_user
   end
 
   def admin?
@@ -63,7 +61,7 @@ module ApplicationHelper
               form.input(:day_times, include_hidden: false, label: false, wrapper: false) do
                 form.collection_check_boxes :day_times, ["#{day.last}-#{hour}"],
                                             :to_s, :to_s, include_hidden: false, multiple: true do |cb|
-                  content_tag(:td, class: avail_table_cell_status(form, cb.object).to_s) do
+                  content_tag(:td, id: "avail-#{day.last}-#{hour}", class: "#{avail_table_cell_status(form, cb.object)} avail-cell") do
                     cb.label { cb.check_box }
                   end
                 end
@@ -73,7 +71,7 @@ module ApplicationHelper
         end)
       end
     end
-    content_tag(:table, class: "table table-bordered #{@prospect.current_step}-availability-table", id: 'availability-table') { thead.concat(tbody) }
+    content_tag(:table, class: "table table-bordered #{form.object.current_step}-availability-table", id: 'availability-table') { thead.concat(tbody) }
   end
 
   def prospect_row_show_link(prospect)
@@ -84,11 +82,9 @@ module ApplicationHelper
 
   def login_label
     if authenticated?
-      "<b>Review Applications</b>".html_safe 
+      '<b>Review Applications</b>'.html_safe
     else
       '<b>Staff Sign-In</b>'.html_safe
     end
   end
-
-
 end
