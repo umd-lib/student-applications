@@ -21,7 +21,7 @@ feature 'Add some Available Times' do
     assert page.has_content?('Availability')
 
     # lets get 5 random date_times
-    day_times = [*0..4].map do
+    day_times = [*0..3].map do
       [*0..6].sample
     end.inject([]) do |c, v|
       val = "#{v}-#{[*0..23].sample}"
@@ -64,7 +64,7 @@ feature 'Add some Available Times' do
     assert page.has_content?('Availability')
 
     # like before,  lets get 5 random date_times
-    day_times = [*0..4].map do
+    day_times = [*0..3].map do
       [*0..6].sample
     end.inject([]) do |c, v|
       val = "#{v}-#{[*0..23].sample}"

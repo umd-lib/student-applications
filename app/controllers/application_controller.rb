@@ -30,8 +30,8 @@ class ApplicationController < ActionController::Base
 
   def ensure_admin
     unless @current_user.admin?
-      flash[:alert] = "Access Denied"
-      redirect_to root_url 
+      flash[:alert] = 'Access Denied'
+      redirect_to root_url
     end
   end
 

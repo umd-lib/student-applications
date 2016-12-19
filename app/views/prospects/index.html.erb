@@ -1,11 +1,66 @@
 <table class="table table-striped">
   <thead>
-    <tr><th/><th>Name</th><th>Class Status</th><th>Expected Graduation Year</th><th>Available Hours Per Week</th></tr> 
+    <% if  @current_user.admin? %> 
+      <tr>
+        <th></th>
+        <th>Name</th>
+        <th>UID</th>
+        <th>Federal Work Study</th>
+        <th>Class Status</th>
+        <th>Skills</th>
+        <th>Hired</th>
+        <th>Semester</th>
+      </tr> 
+    <% else %>
+      <tr>
+        <th></th>
+        <th>Name</th>
+        <th>Federal Work Study</th>
+        <th>Class Status</th>
+        <th>Expected Graduation Year</th>
+        <th>Skills</th>
+        <th>Hours Per Week</th>
+        <th>Availability</th>
+        <th>Preferred Library</th>
+        <th>Hired</th>
+        <th>Semester</th>
+      </tr> 
+    <% end %> 
   </thead>
   <tbody>
     <% @prospects.each do |prospect| %>
-      <tr><td><%= prospect_row_show_link(prospect) %></td><td><%= prospect.name %></td><td><%= prospect.class_status %></td><td><%= prospect.graduation_year %></td><td><%= prospect.available_hours_per_week %></td></tr>
+      <% if @current_user.admin? %> 
+        <tr>
+          <td><%= prospect_row_show_link(prospect) %></td>
+          <td><%= prospect.name %></td>
+          <td><%= prospect.id %></td>
+          <td><%= prospect.in_federal_study? %></td>
+          <td><%= prospect.class_status %></td>
+          <td><%= prospect.skills.map(&:name).join(" , ") %></td>
+          <td><%= prospect.hired? %></td>
+          <td><%= prospect.semester %></td>
+        </tr>
+      <% else %>
+        <tr>
+          <td><%= prospect_row_show_link(prospect) %></td>
+          <td><%= prospect.name %></td>
+          <td><%= prospect.in_federal_study? %></td>
+          <td><%= prospect.class_status %></td>
+          <td><%= prospect.graduation_year %></td>
+          <td><%= prospect.skills.map(&:name).join(" , ") %></td>
+          <td><%= prospect.available_hours_per_week %></td>
+          <td>
+            <%= link_to( "javascript:", class: 'btn btn-success',  data: { toggle: "modal", target: "#availabilityModal", dayTimes:  prospect.available_times.map(&:day_time)  } ) do %> 
+              <span class="glyphicon glyphicon-calendar" />
+            <% end %> 
+          </td>
+          <td><%= prospect.libraries.map(&:value).join(" , ") %></td>
+          <td><%= prospect.hired? %></td>
+          <td><%= prospect.semester %></td>
+        </tr>
+      <% end %>
     <% end %>
   </tbody>
   <%= will_paginate @prospects %>
 </table>
+<%= render "availability_modal" %>
