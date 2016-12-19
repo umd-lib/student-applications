@@ -27,4 +27,11 @@ class Enumeration < ActiveRecord::Base
       Enumeration.update(ids, positions)
     end
   end
+
+    def to_s
+      value
+    end
+
+
+
 end

@@ -22,6 +22,12 @@ var getId = function(str) {
 }
 
 var init = function() {
+  // pretty cheesy but we just want this to run on enumeration. 
+  var el = document.getElementById("new_enumeration"); 
+  if ( el == null ) { return  }
+
+  $('input[type="checkbox"].active-toggle').bootstrapToggle(); // assumes the checkboxes have the class "toggle"
+  
   // For the row mover 
   $('.list-group').each( function() {
     sortable(this, { items: ':not(.new-enumeration)' })[0].addEventListener('sortupdate', function(e) {
@@ -74,4 +80,4 @@ var init = function() {
 }
 
 $(document).ready(init);
-$(document).on('page:load', init);
+$(document).on('turbolinks:load', init);
