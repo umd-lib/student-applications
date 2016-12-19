@@ -28,6 +28,13 @@ class ApplicationController < ActionController::Base
     nil
   end
 
+  def ensure_admin
+    unless @current_user.admin?
+      flash[:alert] = "Access Denied"
+      redirect_to root_url 
+    end
+  end
+
   private
 
     attr_writer :current_user

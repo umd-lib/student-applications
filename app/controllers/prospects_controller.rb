@@ -8,8 +8,7 @@ class ProspectsController < ApplicationController
 
   def create
     if params[:reset]
-      reset_session
-      redirect_to action: 'reset'
+      redirect_to reset_url
     else
       @prospect.current_step = session[:prospect_step] || Prospect.steps.first
       choose_action if @prospect.valid? || params[:back_button]
@@ -28,6 +27,7 @@ class ProspectsController < ApplicationController
   def thank_you
     @prospect = Prospect.find(params[:id])
   end
+
 
   def show
     @prospect = Prospect.find(params[:id])

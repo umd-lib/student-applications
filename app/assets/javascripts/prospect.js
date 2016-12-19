@@ -1,6 +1,6 @@
 
 
-$(document).ready(function() {
+var init = function() { 
 
 
   // this is for adding permanent_addresses. we just want one
@@ -99,4 +99,12 @@ $(document).ready(function() {
     xhr.send(formData);
   })
 
-})
+
+
+ }
+
+$(document).ready(function() {
+  init();
+});
+
+$(document).on("turbolinks:load", init);

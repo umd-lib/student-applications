@@ -1,7 +1,28 @@
 module ApplicationHelper
+  
+  def bootstrap_class_for(flash_type)
+    { success: 'alert-success', error: 'alert-danger', alert: 'alert-warning',
+      notice: 'alert-info' }[flash_type.intern] || flash_type.to_s
+  end
+
+  def flash_messages(_opts = {})
+    flash.each do |msg_type, message|
+      concat(content_tag(:div, message, class: "alert #{bootstrap_class_for(msg_type)} fade in") do
+               concat content_tag(:button, 'x', class: 'close', data: { dismiss: 'alert' })
+               concat message
+             end)
+    end
+    nil
+  end
+
+  
   # check if user if authenticated
   def authenticated?
-    session && !session[:cas].nil? && !session[:cas][:user].nil?
+    @current_user 
+  end
+
+  def admin?
+    @current_user && @current_user.admin?
   end
 
   # takes an 24 hour integer and formcats it into "HHam/pm".
@@ -60,4 +81,14 @@ module ApplicationHelper
       "<i class='glyphicon glyphicon-eye-open'/>".html_safe
     end
   end
+
+  def login_label
+    if authenticated?
+      "<b>Review Applications</b>".html_safe 
+    else
+      '<b>Staff Sign-In</b>'.html_safe
+    end
+  end
+
+
 end

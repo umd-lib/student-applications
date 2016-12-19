@@ -1,5 +1,6 @@
 class ConfigurationController < ApplicationController
   before_action :ensure_auth
+  before_action :ensure_admin
 
   def show
     @enumerations = Enumeration.all.order(:position).group_by(&:list)
