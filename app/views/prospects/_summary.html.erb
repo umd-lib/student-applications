@@ -29,7 +29,7 @@
       <th><%= address.address_type.capitalize %> Address</th>
       <td>
         <%= address.street_address_1 %><br/>
-        <% unless address.street_address_2.empty? %><%= address.street_address_2 %><br/><% end %>
+        <% unless address.street_address_2.blank? %><%= address.street_address_2 %><br/><% end %>
         <%= address.city %>, <%= address.state %> <%= address.postal_code %><br/>
         <%= address.country %>
       </td>
@@ -109,7 +109,7 @@
   <%= availablity_table(form) %>
 </div>
 <h3>Resume <%= link_to "Change Resume", new_prospect_path( step: "upload_resume" ), class: 'btn btn-info pull-right' unless @current_user %></h3>
-<% if @resume.file? %>
+<% if @resume && @resume.file? %>
   <%= link_to( "View #{ @resume.file_file_name}",  resume_path(@resume), target: "_self" ) %>
 <% else %>
   <p><i>(None)</i></p>
