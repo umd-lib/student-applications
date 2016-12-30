@@ -2,7 +2,7 @@
   <ul class="nav navbar-nav">
     <li>
       <% if !session[:prospect_params] %> 
-        <%= link_to(  prospects_path ) do  %>
+        <%= link_to(  prospects_path, id: 'user-sign-in' ) do  %>
           <%= login_label %>
         <% end %>
       <% else %>  

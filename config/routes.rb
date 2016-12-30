@@ -8,6 +8,7 @@ Rails.application.routes.draw do
   get 'logout' => 'home#sign_out', as: :logout
 
   resources :users
+  get 'disable_admin' => 'users#disable_admin', as: :disable_admin
 
   resources :prospects
   get 'prospects/:id/resume' => 'prospects#resume', as: :prospect_resume
