@@ -10,10 +10,13 @@ class ResumesController < ApplicationController
 
   def show
     @resume = Resume.includes(:prospect).find(params[:id])
-    if @resume.prospect # we only send unsubmitted resumes
-      render(text: 'forbidden', status: 403, layout: false)
-    else
+
+    # only allow access to unsubmited resumes
+    # if a user if logged in, they can see if.
+    if @resume.prospect.nil? || logged_in?
       send_file(@resume.file.path, disposition: 'attachment', filename: @resume.file_file_name)
+    else 
+      render(text: 'forbidden', status: 403, layout: false)
     end
   end
 
