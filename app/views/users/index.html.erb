@@ -1,3 +1,14 @@
+<% if @current_user.admin? %>
+<div id="admin_container" class="container" >
+  <div class="well text-center">
+    <h4>You are an admin user and you will see fields slightly different that other logged in users.</h4>
+    <h5>If you would like to temporarly switch this off, please click the link below:</h5> 
+      <%= link_to "Disable Admin", disable_admin_url, class: "btn btn-warning" %> 
+  </div>
+
+</div>
+<% end %>
+
 <div id="users_container" class="container" >
   <table class="table table-strpied">
     <thead>

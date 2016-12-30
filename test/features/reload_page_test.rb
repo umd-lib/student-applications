@@ -27,6 +27,7 @@ feature 'Refresh during an application should cause any problems' do
     page.evaluate_script('window.location.reload()')
     assert page.has_content?('Availability')
     click_button 'Back'
+    click_button 'Back' unless page.has_content?('Skills')
     assert page.has_content?('Skills')
 
     within('#skills .nested-fields:nth-child(1)') do

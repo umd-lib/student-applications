@@ -40,6 +40,7 @@ class ApplicationController < ActionController::Base
     attr_writer :current_user
     def update_current_user(user)
       @current_user = user
+      @current_user.admin = false if session[:disable_admin]
       @current_user
     end
 end

@@ -1,6 +1,6 @@
 class UsersController < ApplicationController
   before_action :ensure_auth
-  before_action :ensure_admin
+  before_action :ensure_admin, except: :disable_admin
 
   def create
     @user = User.new(user_params)
@@ -33,6 +33,13 @@ class UsersController < ApplicationController
     respond_to do |format|
       format.html { redirect_to users_url, notice: "#{@user.name} deleted." }
       format.json { head :no_content }
+    end
+  end
+
+  def disable_admin
+    session[:disable_admin] = true
+    respond_to do |format|
+      format.html { redirect_to prospects_url, notice: 'You have temporarly disabled admin functionality. Sign out and log back in to restore admin role.' }
     end
   end
 
