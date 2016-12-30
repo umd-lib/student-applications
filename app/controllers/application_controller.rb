@@ -10,6 +10,14 @@ class ApplicationController < ActionController::Base
     end
   end
 
+  # just returns tue if the user is logged in. does not redirect
+  # if not logged in
+  def logged_in?
+    return false if session[:cas].nil? || session[:cas][:user].nil?
+    return User.exists?( cas_directory_id: session[:cas][:user] )  
+  end
+
+  # this logs the user in. 
   def ensure_auth
     if session[:prospect_params]
       # we have an application going so we've probably just refreshed the
