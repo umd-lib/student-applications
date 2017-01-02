@@ -1,6 +1,6 @@
 class ProspectsController < ApplicationController
   before_action :set_session_and_prospect, only: [:new, :create]
-  before_action :ensure_auth, only: [:index, :update, :show]
+  before_action :ensure_auth, only: [:index, :update, :show, :deactivate]
 
   def new
     choose_action if params[:step]
@@ -34,7 +34,7 @@ class ProspectsController < ApplicationController
   end
 
   def index
-    @prospects = Prospect.includes(:enumerations, :available_times, :skills).paginate(page: params[:page])
+    @prospects = Prospect.includes(:enumerations, :available_times, :skills).active.paginate(page: params[:page])
   end
 
   def update
@@ -43,6 +43,18 @@ class ProspectsController < ApplicationController
       redirect_to prospect_path(@prospect), notice: 'Your application has been updated'
     end
   end
+
+  # we don't actually want to destroy record, but just mark them as inactive
+  # accepts a hash of params 
+  def deactivate
+    ids = params[:ids] 
+    Prospect.where( id: ids  ).update_all( suppressed: true ) 
+    respond_to do |format|
+      format.html { redirect_to prospects_path, flash: { info: "Prospects ( #{ ids.join(',')  } ) deactivated." } } 
+      format.json { head :no_content } 
+    end
+  end
+
 
   private
 

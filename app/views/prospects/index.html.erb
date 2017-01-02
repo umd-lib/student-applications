@@ -1,8 +1,16 @@
+<%= flash_messages %>
 <table class="table table-striped prospects">
+  <% if  @current_user.admin? %> 
+    <caption>
+      <button type="button" class="btn btn-danger" id='deactivate-prospects' disabled='disabled' data-toggle="modal"  data-target="#deactivate-modal"  aria-haspopup="true" aria-expanded="false">
+        Delete
+      </button>
+    </caption> 
+  <% end %>   
   <thead>
     <% if  @current_user.admin? %> 
       <tr>
-        <th></th>
+        <th><input id="prospect-select-all" type="checkbox"/></th>
         <th>Name</th>
         <th>UID</th>
         <th>Federal Work Study</th>
@@ -13,7 +21,6 @@
       </tr> 
     <% else %>
       <tr>
-        <th></th>
         <th>Name</th>
         <th>Federal Work Study</th>
         <th>Class Status</th>
@@ -31,8 +38,8 @@
     <% @prospects.each do |prospect| %>
       <% if @current_user.admin? %> 
         <tr>
-          <td><%= prospect_row_show_link(prospect) %></td>
-          <td><%= prospect.name %></td>
+          <td><input name="ids[]"  class="deactivate" value="<%= prospect.id %>" type="checkbox"/></td>
+          <td><%= link_to( prospect.name, prospect) %></td> 
           <td><%= prospect.id %></td>
           <td><%= prospect.in_federal_study? %></td>
           <td><%= prospect.class_status %></td>
@@ -42,8 +49,7 @@
         </tr>
       <% else %>
         <tr>
-          <td><%= prospect_row_show_link(prospect) %></td>
-          <td><%= prospect.name %></td>
+          <td><%= link_to( prospect.name, prospect) %></td> 
           <td><%= prospect.in_federal_study? %></td>
           <td><%= prospect.class_status %></td>
           <td><%= prospect.graduation_year %></td>
@@ -61,6 +67,7 @@
       <% end %>
     <% end %>
   </tbody>
-  <%= will_paginate @prospects %>
 </table>
+<%= will_paginate @prospects %>
 <%= render "availability_modal" %>
+<%= render "deactivate_modal" %>

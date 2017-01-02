@@ -74,12 +74,6 @@ module ApplicationHelper
     content_tag(:table, class: "table table-bordered #{form.object.current_step}-availability-table", id: 'availability-table') { thead.concat(tbody) }
   end
 
-  def prospect_row_show_link(prospect)
-    link_to(prospect) do
-      "<i class='glyphicon glyphicon-eye-open'/>".html_safe
-    end
-  end
-
   def login_label
     if authenticated?
       '<b>Review Applications</b>'.html_safe

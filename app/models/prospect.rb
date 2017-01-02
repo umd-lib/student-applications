@@ -7,6 +7,10 @@ class Prospect < ActiveRecord::Base
   after_initialize :after_initialize
 
   has_and_belongs_to_many :enumerations, join_table: 'prospects_enumerations'
+    
+  def self.active
+      where( suppressed: false )
+  end
 
   # this makes sure we have a local address and that has_family_member is set
   # correctly

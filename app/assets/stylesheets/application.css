@@ -128,3 +128,6 @@ ul.list-group { list-style-type: none; }
 
 
  .modal-dialog { width: 800px; }
+#deactivate-modal input { display: none; } 
+
+
