@@ -1,6 +1,7 @@
 <div class='address nested-fields'>
   <%= link_to_remove_association "remove", f, { class: 'pull-right' } %>
-  <%= f.input :name %>
+  <%= f.input :name, label: "Name Of Employer" %>
+  <%= f.input :position_title %>
   <%= f.input :dates_of_employment %>
   <%= f.input :location %>
   <%= f.input :duties %>

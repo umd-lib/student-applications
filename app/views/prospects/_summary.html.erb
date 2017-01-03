@@ -71,8 +71,12 @@
   <% @prospect.work_experiences.each do |exp| %>
     <table class="table table-striped">
       <tr>
-        <th>Name</th>
+        <th>Employer Name</th>
         <th><%= exp.name %></th>
+      </tr>
+      <tr>
+        <th>Position Title</th>
+        <th><%= exp.position_title %></th>
       </tr>
       <tr>
         <th>Dates</th>

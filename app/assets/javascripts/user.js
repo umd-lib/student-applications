@@ -32,4 +32,5 @@ var init_user = function() {
 }
 
 
+$(document).ready(init_user);
 $(document).on('turbolinks:load', init_user);
