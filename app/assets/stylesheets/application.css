@@ -118,6 +118,13 @@ input#resume_file {
   width: 5em;
 }
 
+
+table.prospects th, table.prospects td  {
+  min-width: 70px;
+}
+
+
+
 /* configuration page */
 .mover { width: 5% }
 .toggler { float: right }
