@@ -6,7 +6,9 @@ feature 'Comment Confirmation page' do
     fixture = prospects(:all_valid)
     all_valid = fixture.attributes
     all_valid[:enumeration_ids] = fixture.enumerations.map(&:id)
-
+    
+    all_valid[:addresses] = fixture.addresses
+    
     page.set_rack_session("prospect_params": all_valid)
     page.set_rack_session("prospect_step": 'comments_confirmation')
 
