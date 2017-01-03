@@ -62,7 +62,7 @@ module ApplicationHelper
                 form.collection_check_boxes :day_times, ["#{day.last}-#{hour}"],
                                             :to_s, :to_s, include_hidden: false, multiple: true do |cb|
                   content_tag(:td, id: "avail-#{day.last}-#{hour}", class: "#{avail_table_cell_status(form, cb.object)} avail-cell") do
-                    cb.label { cb.check_box }
+                    cb.label { cb.check_box disabled: !@current_user.nil? }
                   end
                 end
               end

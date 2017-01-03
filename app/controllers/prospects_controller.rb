@@ -44,9 +44,9 @@ class ProspectsController < ApplicationController
   end
 
   def update
-    @prospect = Prospect.find(params[:id])
+    @prospect = Prospect.includes( :enumerations, :available_times, :skills ).find(params[:id])
     if @prospect.update(prospect_params)
-      redirect_to prospect_path(@prospect), notice: 'Your application has been updated'
+      redirect_to prospects_path, notice: 'Your application has been updated'
     end
   end
 
@@ -112,7 +112,7 @@ class ProspectsController < ApplicationController
       attrs = %i(
         current_step commit in_federal_study directory_id first_name last_name
         email class_status graduation_year additional_comments available_hours_per_week
-        resume_id user_confirmation user_signature class_status
+        resume_id user_confirmation user_signature class_status hired hr_comments
       )
       # these are has_many relationships that point to other pre-existing records
       has_many_ids = { enumeration_ids: [], day_times: [], skill_ids: [], library_ids: [] }
