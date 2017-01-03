@@ -76,10 +76,10 @@ class Prospect < ActiveRecord::Base
     validates attr, presence: true, if: ->(p) { p.current_step == 'contact_info' }
   end
 
-  has_many :work_experiences
+  has_many :work_experiences, dependent: :destroy
   accepts_nested_attributes_for :work_experiences, allow_destroy: true
 
-  has_many :available_times
+  has_many :available_times, dependent: :destroy
   accepts_nested_attributes_for :available_times, allow_destroy: true
 
   # the number of available hours per week should =< number of available_times
@@ -113,10 +113,10 @@ class Prospect < ActiveRecord::Base
     @day_times = available_times.map(&:day_time)
   end
 
-  has_many :phone_numbers, inverse_of: :prospect
+  has_many :phone_numbers, inverse_of: :prospect, dependent: :destroy
   accepts_nested_attributes_for :phone_numbers
 
-  has_many :addresses, inverse_of: :prospect
+  has_many :addresses, inverse_of: :prospect, dependent: :destroy
   accepts_nested_attributes_for :addresses, allow_destroy: true
   #  validates_associated :addresses, if: ->(o) { o.current_step == "contact_info" }
 
@@ -136,7 +136,7 @@ class Prospect < ActiveRecord::Base
   has_one :permanent_address, -> { where(address_type: 'permanent') }, class_name: Address
   accepts_nested_attributes_for :permanent_address, allow_destroy: true
 
-  has_and_belongs_to_many :skills
+  has_and_belongs_to_many :skills, dependent: :nullify
   accepts_nested_attributes_for :skills
 
   def special_skills

@@ -1,6 +1,7 @@
 require_relative '../seeds'
 
 Prospect.delete_all
+Skill.where( promoted: false ).delete_all
 700.times do
   hash = {
     directory_id: Faker::Internet.email.split('@').first,

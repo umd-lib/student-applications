@@ -47,12 +47,13 @@ gem 'country_select'
 gem 'bootstrap-toggle-rails'
 
 gem 'paperclip', '~> 5.0.0'
+ 
+gem 'faker'
 
 group :development, :test do
   # Call 'byebug' anywhere in the code to stop execution and get a debugger console
   gem 'byebug'
   gem 'pry-rails'
-  gem 'faker'
 end
 
 group :development do
