@@ -4,13 +4,14 @@ module QueryingProspects
     helper_method :sort_column, :sort_direction
   end
 
+  # this is pretty hacky. would be nice to refactor with arel.
   def sort_order
     col = sort_column 
     return "#{col} #{sort_direction}" unless col.include?("enumerations")
     klass, method = col.split(".")
     values = klass.singularize.capitalize.constantize.send(method.intern).order("value #{ sort_direction  } ").pluck("value")
     order_query = values.each_with_index.inject("CASE ") do |memo,( val,i )|
-      memo << "WHEN  'enumerations'.'value' = '#{val}' THEN #{i} "
+      memo << "WHEN( enumerations.value = '#{val}') THEN #{i} "
       memo
     end
     "#{order_query} ELSE #{values.length} END" 
@@ -57,22 +58,25 @@ module QueryingProspects
       %w[asc desc].include?(params[:direction]) ? params[:direction] : "asc"
   end
 
-  def text_search_statement
-    q = params[:text_search].inject([]) do |memo, (k,v ) | 
-      next if v.empty? 
-      memo << Prospect.arel_table[k.intern].matches( "#{v}%" )
-    end
-    q ? q.inject(&:and) : {}
-  end
+  def text_search_statement                                                                                                                                                          
+    query = params[:text_search].inject([]) do |memo, (k,val ) |                                                                                                                     
+      unless  val.empty?                                                                                                                                                             
+        memo << Prospect.arel_table[k.intern].matches( "#{val}%" )                                                                                                                   
+      end                                                                                                                                                                            
+      memo                                                                                                                                                                           
+    end                                                                                                                                                                              
+    !query.blank? ? query.inject(&:and) : {}                                                                                                                                           end 
 
   def search_statement
-    q = params[:search].inject([]) do |memo, ( k,val ) |
-      next if val.empty?
-      # not sure we really need to reflect on associations but just in case we
-      # make some weird data model change
-      memo << Arel::Table.new( Prospect.reflect_on_association(k.intern).table_name )[:id].in( Array.wrap( val ) ) 
+    query = params[:search].inject([]) do |memo, ( k,val ) |
+      unless val.empty?
+	      # not sure we really need to reflect on associations but just in case we
+	      # make some weird data model change
+	      memo << Arel::Table.new( Prospect.reflect_on_association(k.intern).table_name )[:id].in( Array.wrap( val ) ) 
+      end 
+      memo 
     end
-    q ? q.inject(&:and) : {} 
+    !query.blank? ? query.inject(&:and) : {} 
   end
 
 end
