@@ -15,7 +15,7 @@ class Prospect < ActiveRecord::Base
   # this makes sure we have a local address and that has_family_member is set
   # correctly
   def after_initialize
-    local_address # we call this to make sure we have one.
+    local_address unless persisted? # we call this to make sure we have one.
   end
 
   # Custom Validations
@@ -125,6 +125,7 @@ class Prospect < ActiveRecord::Base
 
   alias_method_chain :local_address, :default
   validates :local_address, presence: true, if: ->(o) { o.current_step == 'contact_info' }
+  validates_associated :local_address, if: ->(o) { o.current_step == "contact_info" }
 
   has_one :permanent_address, -> { where(address_type: 'permanent') }, class_name: Address
   accepts_nested_attributes_for :permanent_address, allow_destroy: true

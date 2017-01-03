@@ -1,4 +1,7 @@
 class ProspectsController < ApplicationController
+
+  include OrderingProspects 
+  
   before_action :set_session_and_prospect, only: [:new, :create]
   before_action :ensure_auth, only: [:index, :update, :show, :deactivate]
 
@@ -34,7 +37,10 @@ class ProspectsController < ApplicationController
   end
 
   def index
-    @prospects = Prospect.includes(:enumerations, :available_times, :skills).active.paginate(page: params[:page])
+    @prospect_ids = Prospect.joins( join_table ).select(select_statement).active.order( sort_order )
+                  .pluck("prospects.id").uniq 
+                  .paginate( page: params[:page], per_page: 30 ) 
+    @prospects = Prospect.includes( :enumerations, :available_times, :skills).find(@prospect_ids).index_by(&:id).values_at(*@prospect_ids)
   end
 
   def update
@@ -136,4 +142,7 @@ class ProspectsController < ApplicationController
       end
       session[:prospect_step] = @prospect.current_step
     end
+
+
+
 end

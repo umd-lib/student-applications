@@ -81,4 +81,17 @@ module ApplicationHelper
       '<b>Staff Sign-In</b>'.html_safe
     end
   end
+
+  # this defines the sortable columsn
+  # you pass in the column we will sort on and the title in the header.
+  # columns should use the dot notation e.g. 'enumerations.graduation_year_values' 
+  def sortable(column, title)
+    css_class = column == sort_column ? "current #{sort_direction}" : nil
+    direction = column == sort_column && sort_direction == "asc" ? "desc" : "asc"
+    link_to title, { sort:  column, direction: direction}, { class: css_class}
+  end
+
+
+
+
 end

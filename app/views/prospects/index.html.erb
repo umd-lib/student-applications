@@ -11,26 +11,26 @@
     <% if  @current_user.admin? %> 
       <tr>
         <th><input id="prospect-select-all" type="checkbox"/></th>
-        <th>Name</th>
-        <th>UID</th>
-        <th>Federal Work Study</th>
-        <th>Class Status</th>
+        <th><%= sortable( "prospects.last_name", "Name") %></th>
+        <th><%= sortable( "prospects.id", "ID") %></th>
+        <th><%= sortable( "prospects.in_federal_study", "Federal Work Study" ) %></th>
+        <th><%= sortable( "enumerations.class_status_values", "Class Status" ) %></th>
         <th>Skills</th>
-        <th>Hired</th>
-        <th>Semester</th>
+        <th><%= sortable( "prospects.hired", "Hired") %></th>
+        <th><%= sortable( "enumerations.semester_values", "Semester") %></th>
       </tr> 
     <% else %>
       <tr>
-        <th>Name</th>
-        <th>Federal Work Study</th>
-        <th>Class Status</th>
-        <th>Expected Graduation Year</th>
+        <th><%= sortable( "prospects.last_name", "Name") %></th>
+        <th><%= sortable( "prospects.in_federal_study", "In Federal Study") %></th>
+        <th><%= sortable( "enumerations.class_status_values", "Class Status" ) %></th>
+        <th><%= sortable( "enumerations.graduation_year_values", "Expected Graduation Year" ) %></th>
         <th>Skills</th>
-        <th>Hours Per Week</th>
+        <th><%= sortable( "prospects.available_hours_per_week", "Hours Per Week") %></th>
         <th>Availability</th>
-        <th>Preferred Library</th>
-        <th>Hired</th>
-        <th>Semester</th>
+        <th>Preferred Libraries</th>
+        <th><%= sortable( "prospects.hired", "Hired") %></th>
+        <th><%= sortable( "enumerations.semester_values", "Semester") %></th>
       </tr> 
     <% end %> 
   </thead>
@@ -68,6 +68,6 @@
     <% end %>
   </tbody>
 </table>
-<%= will_paginate @prospects %>
+<%= will_paginate @prospect_ids %>
 <%= render "availability_modal" %>
 <%= render "deactivate_modal" %>
