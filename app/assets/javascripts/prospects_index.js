@@ -11,8 +11,8 @@ $(function() {
 
        // toggles if the button is clickable or not
         var $btn = $("#deactivate-prospects");
-        $( $this, "input" ).change( function(){
-          if ( $( 'input:checked').length == 0  ) { $btn.attr("disabled", "disabled"); }
+        $( $this, "input.deactivate" ).change( function(){
+          if ( $( 'input.deactivate:checked').length == 0  ) { $btn.attr("disabled", "disabled"); }
           else { $btn.removeAttr('disabled'); }
         });
               
@@ -49,6 +49,10 @@ $(function() {
  
        $this.addClass("initialised");  
      })
+  
+     $("#submit-filter").click( function() { $("#filter-prospects-form").submit(); }); 
+ 
+  
   }
   
 

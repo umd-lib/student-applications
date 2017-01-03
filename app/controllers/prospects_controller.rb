@@ -1,6 +1,6 @@
 class ProspectsController < ApplicationController
 
-  include OrderingProspects 
+  include QueryingProspects 
   
   before_action :set_session_and_prospect, only: [:new, :create]
   before_action :ensure_auth, only: [:index, :update, :show, :deactivate]
@@ -37,7 +37,13 @@ class ProspectsController < ApplicationController
   end
 
   def index
-    @prospect_ids = Prospect.joins( join_table ).select(select_statement).active.order( sort_order )
+    
+    default_search_params 
+    
+    @prospect_ids = Prospect.joins( join_table ).select(select_statement)
+                  .where( text_search_statement ) 
+                  .where( search_statement ) 
+                  .active.order( sort_order )
                   .pluck("prospects.id").uniq 
                   .paginate( page: params[:page], per_page: 30 ) 
     @prospects = Prospect.includes( :enumerations, :available_times, :skills).find(@prospect_ids).index_by(&:id).values_at(*@prospect_ids)

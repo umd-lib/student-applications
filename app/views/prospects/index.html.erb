@@ -1,12 +1,15 @@
 <%= flash_messages %>
 <table class="table table-striped prospects">
-  <% if  @current_user.admin? %> 
-    <caption>
+  <caption>
+    <% if  @current_user.admin? %> 
       <button type="button" class="btn btn-danger" id='deactivate-prospects' disabled='disabled' data-toggle="modal"  data-target="#deactivate-modal"  aria-haspopup="true" aria-expanded="false">
         Delete
       </button>
-    </caption> 
-  <% end %>   
+    <% end %>   
+    <button type="button" class="btn btn-info" id='filter-prospects' data-toggle="modal"  data-target="#filter-modal"  aria-haspopup="true" aria-expanded="false">
+        Filter
+    </button>
+  </caption> 
   <thead>
     <% if  @current_user.admin? %> 
       <tr>
@@ -71,3 +74,4 @@
 <%= will_paginate @prospect_ids %>
 <%= render "availability_modal" %>
 <%= render "deactivate_modal" %>
+<%= render "filter_modal" %>

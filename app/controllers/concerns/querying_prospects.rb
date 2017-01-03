@@ -1,4 +1,4 @@
-module OrderingProspects
+module QueryingProspects
   extend ActiveSupport::Concern
   included do 
     helper_method :sort_column, :sort_direction
@@ -17,9 +17,25 @@ module OrderingProspects
   end
 
   private
-    
+
+  def default_search_params
+    params[:text_search] ||= {}  
+    params[:search] ||= { }
+    %i( prospect enumerations skills ).each do |k|
+      params[:search][k] ||= [] 
+    end
+  end
+
   def join_table
-    Prospect.reflections.keys.include?( sort_column.split(".").first  ) ? [ sort_column.split(".").first.intern ] : []
+    join_tables = []  
+    if Prospect.reflections.keys.include?( sort_column.split(".").first  )
+      join_tables <<  sort_column.split(".").first.intern 
+    end
+    params[:search].each do |key,v| 
+      next if v.empty? 
+      join_tables << key if Prospect.reflections.keys.include?(key)
+    end
+    join_tables.map(&:intern) 
   end
 
   def select_statement
@@ -41,5 +57,22 @@ module OrderingProspects
       %w[asc desc].include?(params[:direction]) ? params[:direction] : "asc"
   end
 
+  def text_search_statement
+    q = params[:text_search].inject([]) do |memo, (k,v ) | 
+      next if v.empty? 
+      memo << Prospect.arel_table[k.intern].matches( "#{v}%" )
+    end
+    q ? q.inject(&:and) : {}
+  end
+
+  def search_statement
+    q = params[:search].inject([]) do |memo, ( k,val ) |
+      next if val.empty?
+      # not sure we really need to reflect on associations but just in case we
+      # make some weird data model change
+      memo << Arel::Table.new( Prospect.reflect_on_association(k.intern).table_name )[:id].in( Array.wrap( val ) ) 
+    end
+    q ? q.inject(&:and) : {} 
+  end
 
 end
