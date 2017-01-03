@@ -113,7 +113,7 @@ class ProspectsController < ApplicationController
         current_step commit in_federal_study directory_id first_name last_name
         email class_status graduation_year additional_comments available_hours_per_week
         resume_id user_confirmation user_signature class_status hired hr_comments
-        suppressed
+        suppressed major
       )
       # these are has_many relationships that point to other pre-existing records
       has_many_ids = { enumeration_ids: [], day_times: [], skill_ids: [], library_ids: [] }

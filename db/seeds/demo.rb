@@ -7,6 +7,7 @@ Prospect.delete_all
     email: Faker::Internet.email,
     first_name: Faker::Name.first_name,
     last_name: Faker::Name.last_name,
+    major: Faker::Educator.course, 
     in_federal_study: [true, false].sample
   }
 

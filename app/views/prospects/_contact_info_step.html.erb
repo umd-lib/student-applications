@@ -7,6 +7,7 @@
       <%= form.input :last_name,  required: true %>
       <%= form.input :email, required: true %>
       <%= form.input :directory_id, required: true  %>
+      <%= form.input :major  %>
 
       <%= form.association :enumerations, collection: Enumeration.active_class_statuses.map { |e| [ e.value, e.id ] },
         label: "Class Status", required: true,   input_html: { multiple: false, id: "class_status", name: "prospect[enumeration_ids][]" },
