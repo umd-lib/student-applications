@@ -69,6 +69,10 @@
     <th>Semester applying for</th>
     <td><%= @prospect.semester.value.gsub('_', ' ').capitalize %></td>
   </tr>
+  <tr>
+    <th>How did you hear about us?</th>
+    <td><%= @prospect.how_did_you_hear_about_us %></td>
+  </tr>
 </table>
 <h3>Work Experience <%= link_to "Change Work Experience", new_prospect_path( step: "work_experience" ), class: 'btn btn-info pull-right' unless @current_user %></h3>
 <% unless @prospect.work_experiences.empty? %>
@@ -124,7 +128,6 @@
 <% else %>
   <p><i>(None)</i></p>
 <% end %>
-
 <h2>Additional Comments</h2>
 <%= form.input :additional_comments, label: "Enter below:", disabled: !@current_user.nil? %>
 <h2>Confirmation</h2>

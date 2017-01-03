@@ -1,7 +1,7 @@
 class Enumeration < ActiveRecord::Base
   has_and_belongs_to_many :prospects, join_table: 'prospects_enumerations'
   
-  ENUMERATION_LISTS = %w(class_status graduation_year library semester)
+  ENUMERATION_LISTS = %w(class_status graduation_year library semester how_did_you_hear_about_us)
 
   enum list: ENUMERATION_LISTS.map(&:intern)
 
@@ -17,7 +17,7 @@ class Enumeration < ActiveRecord::Base
       end
       
       define_method( :"#{list}_values" ) do
-        where(list: lists[list]).select(:value).distinct
+        where(list: lists[list]).select(:value)
       end
     
     end    

@@ -58,6 +58,12 @@ class Prospect < ActiveRecord::Base
   def libraries
     enumerations.select { |e| e['list'] == Enumeration.lists['library'] } || []
   end
+  
+  attr_accessor :how_did_you_hear_about_us
+  def how_did_you_hear_about_us
+    enumerations.find { |e| e['list'] == Enumeration.lists['how_did_you_hear_about_us'] } || []
+  end
+
 
   # this validates if the user has clicked "All information is correct" on last
   # step

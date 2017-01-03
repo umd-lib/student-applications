@@ -98,3 +98,12 @@
     </div>   
   </div>
 </div>
+<div class='panel panel-default'>
+  <div class="panel-heading"><span>How Did You Hear About Us?</span></div>
+  <div class="panel-body" id="how-did-you-hear">
+    <%= form.association :enumerations, collection: Enumeration.active_how_did_you_hear_about_us.map { |e| [ e.value, e.id ] },
+        label: "Select One",   input_html: { multiple: false, id: "how_did_you_hear_about_us", name: "prospect[enumeration_ids][]" },
+        wrapper_html: { class: "prospect_how_did_you_hear_about_us" } 
+      %>
+  </div>
+</div>
