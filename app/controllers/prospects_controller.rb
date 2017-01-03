@@ -1,6 +1,9 @@
 class ProspectsController < ApplicationController
+
+  include QueryingProspects 
+  
   before_action :set_session_and_prospect, only: [:new, :create]
-  before_action :ensure_auth, only: [:index, :update, :show]
+  before_action :ensure_auth, only: [:index, :update, :show, :deactivate]
 
   def new
     choose_action if params[:step]
@@ -34,15 +37,36 @@ class ProspectsController < ApplicationController
   end
 
   def index
-    @prospects = Prospect.includes(:enumerations, :available_times, :skills).paginate(page: params[:page])
+    
+    default_search_params 
+    
+    @prospect_ids = Prospect.joins( join_table ).select(select_statement)
+                  .where( text_search_statement ) 
+                  .where( search_statement ) 
+                  .active.order( sort_order )
+                  .pluck("prospects.id").uniq 
+                  .paginate( page: params[:page], per_page: 30 ) 
+    @prospects = Prospect.includes( :enumerations, :available_times, :skills).find(@prospect_ids).index_by(&:id).values_at(*@prospect_ids)
   end
 
   def update
-    @prospect = Prospect.find(params[:id])
+    @prospect = Prospect.includes( :enumerations, :available_times, :skills ).find(params[:id])
     if @prospect.update(prospect_params)
-      redirect_to prospect_path(@prospect), notice: 'Your application has been updated'
+      redirect_to prospects_path, notice: "#{ @prospect.name } application has been updated"
     end
   end
+
+  # we don't actually want to destroy record, but just mark them as inactive
+  # accepts a hash of params 
+  def deactivate
+    ids = params[:ids] 
+    Prospect.where( id: ids  ).update_all( suppressed: true ) 
+    respond_to do |format|
+      format.html { redirect_to prospects_path, flash: { info: "Prospects ( #{ ids.join(',')  } ) deactivated." } } 
+      format.json { head :no_content } 
+    end
+  end
+
 
   private
 
@@ -94,7 +118,8 @@ class ProspectsController < ApplicationController
       attrs = %i(
         current_step commit in_federal_study directory_id first_name last_name
         email class_status graduation_year additional_comments available_hours_per_week
-        resume_id user_confirmation user_signature class_status
+        resume_id user_confirmation user_signature class_status hired hr_comments
+        suppressed major
       )
       # these are has_many relationships that point to other pre-existing records
       has_many_ids = { enumeration_ids: [], day_times: [], skill_ids: [], library_ids: [] }
@@ -124,4 +149,7 @@ class ProspectsController < ApplicationController
       end
       session[:prospect_step] = @prospect.current_step
     end
+
+
+
 end

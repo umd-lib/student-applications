@@ -99,6 +99,8 @@ var init = function() {
     xhr.send(formData);
   })
 
+  $('input[type="checkbox"]#prospect_hired').bootstrapToggle(); // assumes the checkboxes have the class "toggle"
+  $('input[type="checkbox"]#prospect_suppressed').bootstrapToggle(); // assumes the checkboxes have the class "toggle"
 
 
  }

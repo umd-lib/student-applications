@@ -7,11 +7,15 @@ class Prospect < ActiveRecord::Base
   after_initialize :after_initialize
 
   has_and_belongs_to_many :enumerations, join_table: 'prospects_enumerations'
+    
+  def self.active
+      where( suppressed: false )
+  end
 
   # this makes sure we have a local address and that has_family_member is set
   # correctly
   def after_initialize
-    local_address # we call this to make sure we have one.
+    local_address unless persisted? # we call this to make sure we have one.
   end
 
   # Custom Validations
@@ -54,6 +58,12 @@ class Prospect < ActiveRecord::Base
   def libraries
     enumerations.select { |e| e['list'] == Enumeration.lists['library'] } || []
   end
+  
+  attr_accessor :how_did_you_hear_about_us
+  def how_did_you_hear_about_us
+    enumerations.find { |e| e['list'] == Enumeration.lists['how_did_you_hear_about_us'] } || []
+  end
+
 
   # this validates if the user has clicked "All information is correct" on last
   # step
@@ -121,6 +131,7 @@ class Prospect < ActiveRecord::Base
 
   alias_method_chain :local_address, :default
   validates :local_address, presence: true, if: ->(o) { o.current_step == 'contact_info' }
+  validates_associated :local_address, if: ->(o) { o.current_step == "contact_info" }
 
   has_one :permanent_address, -> { where(address_type: 'permanent') }, class_name: Address
   accepts_nested_attributes_for :permanent_address, allow_destroy: true

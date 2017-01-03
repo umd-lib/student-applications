@@ -62,7 +62,7 @@ module ApplicationHelper
                 form.collection_check_boxes :day_times, ["#{day.last}-#{hour}"],
                                             :to_s, :to_s, include_hidden: false, multiple: true do |cb|
                   content_tag(:td, id: "avail-#{day.last}-#{hour}", class: "#{avail_table_cell_status(form, cb.object)} avail-cell") do
-                    cb.label { cb.check_box }
+                    cb.label { cb.check_box disabled: !@current_user.nil? }
                   end
                 end
               end
@@ -74,12 +74,6 @@ module ApplicationHelper
     content_tag(:table, class: "table table-bordered #{form.object.current_step}-availability-table", id: 'availability-table') { thead.concat(tbody) }
   end
 
-  def prospect_row_show_link(prospect)
-    link_to(prospect) do
-      "<i class='glyphicon glyphicon-eye-open'/>".html_safe
-    end
-  end
-
   def login_label
     if authenticated?
       '<b>Review Applications</b>'.html_safe
@@ -87,4 +81,17 @@ module ApplicationHelper
       '<b>Staff Sign-In</b>'.html_safe
     end
   end
+
+  # this defines the sortable columsn
+  # you pass in the column we will sort on and the title in the header.
+  # columns should use the dot notation e.g. 'enumerations.graduation_year_values' 
+  def sortable(column, title)
+    css_class = column == sort_column ? "current #{sort_direction}" : nil
+    direction = column == sort_column && sort_direction == "asc" ? "desc" : "asc"
+    link_to title, { sort:  column, direction: direction}, { class: css_class}
+  end
+
+
+
+
 end

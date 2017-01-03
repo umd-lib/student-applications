@@ -7,6 +7,7 @@
       <%= form.input :last_name,  required: true %>
       <%= form.input :email, required: true %>
       <%= form.input :directory_id, required: true  %>
+      <%= form.input :major  %>
 
       <%= form.association :enumerations, collection: Enumeration.active_class_statuses.map { |e| [ e.value, e.id ] },
         label: "Class Status", required: true,   input_html: { multiple: false, id: "class_status", name: "prospect[enumeration_ids][]" },
@@ -95,5 +96,14 @@
         </tbody>
       </table>
     </div>   
+  </div>
+</div>
+<div class='panel panel-default'>
+  <div class="panel-heading"><span>How Did You Hear About Us?</span></div>
+  <div class="panel-body" id="how-did-you-hear">
+    <%= form.association :enumerations, collection: Enumeration.active_how_did_you_hear_about_us.map { |e| [ e.value, e.id ] },
+        label: "Select One",   input_html: { multiple: false, id: "how_did_you_hear_about_us", name: "prospect[enumeration_ids][]" },
+        wrapper_html: { class: "prospect_how_did_you_hear_about_us" } 
+      %>
   </div>
 </div>

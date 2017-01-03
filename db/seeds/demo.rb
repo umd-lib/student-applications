@@ -7,6 +7,7 @@ Prospect.delete_all
     email: Faker::Internet.email,
     first_name: Faker::Name.first_name,
     last_name: Faker::Name.last_name,
+    major: Faker::Educator.course, 
     in_federal_study: [true, false].sample
   }
 
@@ -32,7 +33,7 @@ Prospect.delete_all
   end
 
   rand(0..3).times do
-    prospect.work_experiences << WorkExperience.new(name: Faker::Company.name, location: Faker::LordOfTheRings.location, dates_of_employment: Faker::Date.backward(rand(0..1_000_000)),
+    prospect.work_experiences << WorkExperience.new(name: Faker::Company.name, position_title: Faker::Name.title, location: Faker::LordOfTheRings.location, dates_of_employment: Faker::Date.backward(rand(0..1_000_000)),
                                                     duties: Faker::Lorem.words(rand(0..10)).join("\n"), library_related: [true, false].sample)
   end
 

@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20161214065805) do
+ActiveRecord::Schema.define(version: 20170103065805) do
 
   create_table "addresses", force: :cascade do |t|
     t.string  "street_address_1"
@@ -70,6 +70,7 @@ ActiveRecord::Schema.define(version: 20161214065805) do
     t.integer  "resume_id"
     t.string   "user_signature"
     t.integer  "semester"
+    t.boolean  "suppressed",               default: false
   end
 
   add_index "prospects", ["resume_id"], name: "index_prospects_on_resume_id"
@@ -129,6 +130,7 @@ ActiveRecord::Schema.define(version: 20161214065805) do
     t.string  "location"
     t.text    "duties"
     t.boolean "library_related"
+    t.string  "position_title"
   end
 
   add_index "work_experiences", ["prospect_id"], name: "index_work_experiences_on_prospect_id"

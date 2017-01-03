@@ -1,24 +1,26 @@
 class Enumeration < ActiveRecord::Base
   has_and_belongs_to_many :prospects, join_table: 'prospects_enumerations'
+  
+  ENUMERATION_LISTS = %w(class_status graduation_year library semester how_did_you_hear_about_us)
 
-  enum list: %i(class_status graduation_year library semester)
+  enum list: ENUMERATION_LISTS.map(&:intern)
 
   class << self
-    def active_class_statuses
-      where(list: lists['class_status'], active: true)
-    end
-
-    def active_graduation_years
-      where(list: lists['graduation_year'], active: true)
-    end
-
-    def active_libraries
-      where(list: lists['library'], active: true)
-    end
-
-    def active_semesters
-      where(list: lists['semester'], active: true)
-    end
+    
+    ENUMERATION_LISTS.each do |list|
+      define_method( :"active_#{list.pluralize}" ) do
+        where(list: lists[list], active: true)
+      end
+      
+      define_method( :"#{list.pluralize}" ) do
+        where(list: lists[list])
+      end
+      
+      define_method( :"#{list}_values" ) do
+        where(list: lists[list]).select(:value)
+      end
+    
+    end    
 
     # this takes an array of key values and updates the positions based on
     # their position in the array.

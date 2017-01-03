@@ -4,6 +4,13 @@ class ApplicationController < ActionController::Base
   protect_from_forgery with: :exception
   before_action :fix_cas_session
 
+  rescue_from ActionController::InvalidAuthenticityToken do |e|
+    reset_session
+    redirect_to root_url, flash: { notice: 'Application has been reset due to session inactivity.' }
+  end
+
+
+
   def fix_cas_session
     if session[:cas] && !session[:cas].is_a?(HashWithIndifferentAccess)
       session[:cas] = session[:cas].with_indifferent_access
