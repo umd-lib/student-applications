@@ -42,6 +42,7 @@ module ApplicationHelper
     form.object.day_times.include?(value) ? 'success' : 'warning'
   end
 
+  # rubocop:disable Metrics/AbcSize, Metrics/MethodLength
   def availablity_table(form)
     thead = content_tag(:thead) do
       content_tag(:tr) do
@@ -61,7 +62,8 @@ module ApplicationHelper
               form.input(:day_times, include_hidden: false, label: false, wrapper: false) do
                 form.collection_check_boxes :day_times, ["#{day.last}-#{hour}"],
                                             :to_s, :to_s, include_hidden: false, multiple: true do |cb|
-                  content_tag(:td, id: "avail-#{day.last}-#{hour}", class: "#{avail_table_cell_status(form, cb.object)} avail-cell") do
+                  content_tag(:td, id: "avail-#{day.last}-#{hour}",
+                                   class: "#{avail_table_cell_status(form, cb.object)} avail-cell") do
                     cb.label { cb.check_box disabled: !@current_user.nil? }
                   end
                 end
@@ -71,8 +73,11 @@ module ApplicationHelper
         end)
       end
     end
-    content_tag(:table, class: "table table-bordered #{form.object.current_step}-availability-table", id: 'availability-table') { thead.concat(tbody) }
+    content_tag(:table,
+                class: "table table-bordered #{form.object.current_step}-availability-table",
+                id: 'availability-table') { thead.concat(tbody) }
   end
+  # rubocop:enable Metrics/AbcSize, Metrics/MethodLength
 
   def login_label
     if authenticated?
@@ -84,21 +89,19 @@ module ApplicationHelper
 
   # this defines the sortable columsn
   # you pass in the column we will sort on and the title in the header.
-  # columns should use the dot notation e.g. 'enumerations.graduation_year_values' 
+  # columns should use the dot notation e.g. 'enumerations.graduation_year_values'
+  # rubocop:disable Metrics/AbcSize, Metrics/CyclomaticComplexity, Metrics/PerceivedComplexity
   def sortable(column, title)
     css_class = column == sort_column ? "current #{sort_direction}" : nil
-    direction = column == sort_column && sort_direction == "asc" ? "desc" : "asc"
-    link_to( { sort:  column, direction: direction }, { class: css_class}) do
+    direction = column == sort_column && sort_direction == 'asc' ? 'desc' : 'asc'
+    link_to({ sort: column, direction: direction }, class: css_class) do
       html = if column == sort_column && sort_direction
-         "<i class='glyphicon glyphicon-chevron-#{ sort_direction == "asc" ? "up" : "down"   }' ></i> #{title}"
-      else
-         "<i class='glyphicon' ></i> #{title}"
-      end
+               "<i class='glyphicon glyphicon-chevron-#{sort_direction == 'asc' ? 'up' : 'down'}' ></i> #{title}"
+             else
+               "<i class='glyphicon' ></i> #{title}"
+             end
       html.html_safe
     end
   end
-
-
-
-
+  # rubocop:enable Metrics/AbcSize, Metrics/CyclomaticComplexity, Metrics/PerceivedComplexity
 end

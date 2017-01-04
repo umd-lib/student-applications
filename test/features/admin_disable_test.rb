@@ -15,7 +15,9 @@ feature 'Should be able to login as admin and disable it temporarly' do
     click_link 'User Management'
     click_link 'Disable Admin'
 
-    assert page.has_content?('You have temporarly disabled admin functionality. Sign out and log back in to restore admin role.')
+    assert page.has_content?(
+      'You have temporarly disabled admin functionality. Sign out and log back in to restore admin role.'
+    )
     assert_equal 10, page.find_all('th').length
     refute page.has_content?('User Management')
   end
