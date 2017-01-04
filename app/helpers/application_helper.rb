@@ -79,14 +79,6 @@ module ApplicationHelper
   end
   # rubocop:enable Metrics/AbcSize, Metrics/MethodLength
 
-  def login_label
-    if authenticated?
-      '<b>Review Applications</b>'.html_safe
-    else
-      '<b>Staff Sign-In</b>'.html_safe
-    end
-  end
-
   # this defines the sortable columsn
   # you pass in the column we will sort on and the title in the header.
   # columns should use the dot notation e.g. 'enumerations.graduation_year_values'

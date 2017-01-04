@@ -4,8 +4,8 @@ feature 'Should be able to login as admin and deactivate applications' do
   scenario 'login as admin and deactivate applications', js: true do
     page.driver.resize_window(2048, 2048)
     User.create(cas_directory_id: 'admin', name: 'admin', admin: true)
-    visit root_path
-    click_link 'Staff Sign-In'
+    visit prospects_path
+    # Visiting prospects_path should redirect to CAS
     fill_in 'username', with: 'admin'
     fill_in 'password', with: 'any password'
     click_button 'Login'
