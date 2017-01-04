@@ -6,7 +6,7 @@
           <%= login_label %>
         <% end %>
       <% else %>  
-        <%= link_to( reset_url , data: { confirm: "Are you sure want to reset the form?\n\nThis will erase any information you have already entered." }) do  %>
+        <%= link_to( reset_url , id: 'navbar-reset-link', data: { confirm: "Are you sure want to reset the form?\n\nThis will erase any information you have already entered." }) do  %>
           <b>Reset</b> <span class="glyphicon glyphicon-remove-circle" ></span>
         <% end %>
       <% end %>     
