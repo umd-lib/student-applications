@@ -1,12 +1,14 @@
 <% content_for :navbar do %>
   <ul class="nav navbar-nav">
     <li>
-      <% if !session[:prospect_params] %> 
-        <%= link_to(  prospects_path, id: 'user-sign-in' ) do  %>
-          <%= login_label %>
+      <% if !session[:prospect_params] %>
+        <% if authenticated? %>
+          <%= link_to(  prospects_path, id: 'review-applications-link' ) do  %>
+            <b>Review Applications</b>
+          <% end %>
         <% end %>
       <% else %>  
-        <%= link_to( reset_url , data: { confirm: "Are you sure want to reset the form?\n\nThis will erase any information you have already entered." }) do  %>
+        <%= link_to( reset_url , id: 'navbar-reset-link', data: { confirm: "Are you sure want to reset the form?\n\nThis will erase any information you have already entered." }) do  %>
           <b>Reset</b> <span class="glyphicon glyphicon-remove-circle" ></span>
         <% end %>
       <% end %>     
