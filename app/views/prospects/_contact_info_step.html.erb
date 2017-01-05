@@ -1,0 +1,109 @@
+<h2>Contact Information</h2>
+
+<div class='panel panel-default'>
+  <div class="panel-heading"><span>Basic Information</span></div>
+  <div class="panel-body" id="basic-info">
+      <%= form.input :first_name, required: true %>
+      <%= form.input :last_name,  required: true %>
+      <%= form.input :email, required: true %>
+      <%= form.input :directory_id, required: true  %>
+      <%= form.input :major  %>
+
+      <%= form.association :enumerations, collection: Enumeration.active_class_statuses.map { |e| [ e.value, e.id ] },
+        label: "Class Status", required: true,   input_html: { multiple: false, id: "class_status", name: "prospect[enumeration_ids][]" },
+        wrapper_html: { class: "prospect_class_status #{ 'has-error' if form.object.errors.keys.include?(:class_status) }" } 
+      %> 
+      <%= form.error :class_status, id: "class_status_error", class: "#{ 'has-error' if form.object.errors.keys.include?(:class_status) }" %> 
+
+      <%= form.association :enumerations, collection: Enumeration.active_graduation_years.map { |e| [ e.value, e.id ] },
+        label: "Expected Graduation Year", required: true,  input_html: { id: "graduation_year", name: "prospect[enumeration_ids][]"  },
+        wrapper_html: { class: "prospect_graduation_year #{ 'has-error' if form.object.errors.keys.include?(:graduation_year) }" } 
+      %> 
+      <%= form.error :graduation_year, id: "graduation_year_error", class: "#{ 'has-error' if form.object.errors.keys.include?(:graduation_year) }" %> 
+  </div>
+</div>
+
+<div class='panel panel-default'>
+  <div class="panel-heading"><span>Addresses</span>
+    <span class='pull-right'>
+      <% unless @prospect.permanent_address %> 
+        <%= link_to_add_association(form, :addresses,
+                                    { class: "add-permanent-address", 
+                                       force_non_association_create: true,  
+                                      "data-association-insertion-node": "#addresses",
+                                      "data-association-insertion-method": 'append'}) do  %>
+          <i class='glyphicon glyphicon-plus-sign'></i>Add A Permanent Address 
+        <% end %> 
+      <% end %>   
+    </span>
+  </div>
+  <div class="panel-body" id="addresses">
+      <%= form.fields_for :addresses do |addr| %>
+        <%= render 'address_fields', f: addr %>
+      <% end %>
+  </div>
+</div>
+
+<div class='panel panel-default'>
+  <div class="panel-heading"><span>Phone Number</span>
+    <span class='pull-right'>
+        <%= link_to_add_association(form, :phone_numbers,
+                                    { class: "add-phone-number", 
+                                      "data-association-insertion-node": "#phone-numbers",
+                                      "data-association-insertion-method": 'append' } ) do  %>
+          <i class='glyphicon glyphicon-plus-sign'></i>Add A Phone Number 
+        <% end %> 
+    </span>
+  </div>
+  <div class="panel-body" id="phone-numbers">
+      <%= form.fields_for :phone_numbers, form.object.phone_numbers do |pn| %>
+          <%= render 'phone_number_fields', f: pn %>
+      <% end %>
+  </div>
+</div>
+
+<div class='panel panel-default'>
+  <div class="panel-heading"><span>Other Information</span></div>
+  <div class="panel-body" id="other-info">
+    <%= form.input :in_federal_study, as: :radio_buttons, collection: [["No", false], ["Yes", true]], 
+      required: true, label: "Are you in a Federal Work Study program?" %>
+    <%= form.association :enumerations, 
+      collection: Enumeration.active_semesters.map { |e| [ e.value, e.id ] },
+      wrapper_html: { class: "prospect_semester #{ 'has-error' if form.object.errors.keys.include?(:semester) }" }, 
+      required: true, input_html: { multiple:false, id: "semester", name: "prospect[enumeration_ids][]" },
+      label: 'Which semester are you applying for?' %>
+  </div>
+</div>
+
+<div class='panel panel-default'>
+  <div class="panel-heading"><span>Preferred Libraries:</span></div>
+  <div class="panel-body" id="preferred-libraries">
+    <div class='table-responsive'> 
+      <table class='table table-bordered'>
+        <tbody>
+          <% Enumeration.active_libraries.in_groups_of( 3 ) do |batch| %>
+            <tr>
+              <% batch.each do |lib| %> 
+                <td>
+                  <% unless lib.nil? %> 
+                    <%= form.check_box( :enumeration_ids,  { :multiple => true }, lib.id, nil  )  %>
+                    <%= form.label(  :enumeration_ids,  lib.value )  %>
+                  <% end %>   
+                </td>
+              <% end %> 
+            </tr>
+          <% end %>   
+        </tbody>
+      </table>
+    </div>   
+  </div>
+</div>
+<div class='panel panel-default'>
+  <div class="panel-heading"><span>How Did You Hear About Us?</span></div>
+  <div class="panel-body" id="how-did-you-hear">
+    <%= form.association :enumerations, collection: Enumeration.active_how_did_you_hear_about_us.map { |e| [ e.value, e.id ] },
+        label: "Select One",   input_html: { multiple: false, id: "how_did_you_hear_about_us", name: "prospect[enumeration_ids][]" },
+        wrapper_html: { class: "prospect_how_did_you_hear_about_us" } 
+      %>
+  </div>
+</div>

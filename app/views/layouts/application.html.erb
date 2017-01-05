@@ -1,0 +1,26 @@
+<% content_for :navbar do %>
+  <ul class="nav navbar-nav">
+    <li>
+      <% if !session[:prospect_params] %>
+        <% if authenticated? %>
+          <%= link_to(  prospects_path, id: 'review-applications-link' ) do  %>
+            <b>Review Applications</b>
+          <% end %>
+        <% end %>
+      <% else %>  
+        <%= link_to( reset_url , id: 'navbar-reset-link', data: { confirm: "Are you sure want to reset the form?\n\nThis will erase any information you have already entered." }) do  %>
+          <b>Reset</b> <span class="glyphicon glyphicon-remove-circle" ></span>
+        <% end %>
+      <% end %>     
+    </li>
+    <li><%= link_to_if( admin?, "<b>List Configuration</b>".html_safe, configuration_path ) {   } %></li>
+    <li><%= link_to_if( admin?, "<b>User Management</b>".html_safe, users_path ) {   } %></li>
+    <li> 
+        <% if @current_user %>
+          <%= link_to( "<b>Sign Out</b>".html_safe, logout_url( service: URI.encode(sign_out_url) )  )  %>
+        <% end %>
+    </li>     
+  </ul>
+<% end %>
+
+<%= render 'layouts/umd_lib' %>

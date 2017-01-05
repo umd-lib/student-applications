@@ -1,0 +1,141 @@
+<h3>Contact Info <%= link_to "Change Contact Info", new_prospect_path( step: "contact_info" ), class: 'btn btn-info pull-right' unless @current_user %></h3>
+<table class="table table-striped">
+  <tr>
+    <th>First name</th>
+    <td><%= @prospect.first_name %></td>
+  </tr>
+  <tr>
+    <th>Last name</th>
+    <td><%= @prospect.last_name %></td>
+  </tr>
+  <tr>
+    <th>Email</th>
+    <td><%= @prospect.email%></td>
+  </tr>
+  <tr>
+    <th>Directory ID</th>
+    <td><%= @prospect.directory_id%></td>
+  </tr>
+  <tr>
+    <th>Major</th>
+    <td><%= @prospect.major %></td>
+  </tr>
+  <tr>
+    <th>Class status</th>
+    <td><%= @prospect.class_status%></td>
+  </tr>
+  <tr>
+    <th>Graduation year</th>
+    <td><%= @prospect.graduation_year %></td>
+  </tr>
+  <% if !@prospect.persisted? || @current_user.admin? %> 
+    <% @prospect.addresses.each do |address| %>
+      <tr>
+        <th><%= address.address_type.capitalize %> Address</th>
+        <td>
+          <%= address.street_address_1 %><br/>
+          <% unless address.street_address_2.blank? %><%= address.street_address_2 %><br/><% end %>
+          <%= address.city %>, <%= address.state %> <%= address.postal_code %><br/>
+          <%= address.country %>
+        </td>
+      </tr>
+    <% end %>
+    <tr>
+      <th>Phone Numbers:</th>
+      <td> 
+        <ul>
+          <% @prospect.phone_numbers.each do |p| %>
+            <li><%= "#{p.number} ( #{p.phone_type} )"  %></li>
+          <% end %>
+        </ul> 
+      </td> 
+    </tr>
+  <% end %> 
+  <tr>
+    <th>Preferred Libraries</th>
+    <td>
+      <ul>
+        <% @prospect.libraries.each do |l| %>
+          <li><%= l.value %></li>
+        <% end %>
+      </ul>
+    </td>
+  </tr>
+  <tr>
+    <th>In federal work study</th>
+    <td><%= @prospect.in_federal_study ? 'Yes' : 'No' %></td>
+  </tr>
+  <tr>
+    <th>Semester applying for</th>
+    <td><%= @prospect.semester.value.gsub('_', ' ').capitalize %></td>
+  </tr>
+  <tr>
+    <th>How did you hear about us?</th>
+    <td><%= @prospect.how_did_you_hear_about_us %></td>
+  </tr>
+</table>
+<h3>Work Experience <%= link_to "Change Work Experience", new_prospect_path( step: "work_experience" ), class: 'btn btn-info pull-right' unless @current_user %></h3>
+<% unless @prospect.work_experiences.empty? %>
+  <% @prospect.work_experiences.each do |exp| %>
+    <table class="table table-striped">
+      <tr>
+        <th>Employer Name</th>
+        <th><%= exp.name %></th>
+      </tr>
+      <tr>
+        <th>Position Title</th>
+        <th><%= exp.position_title %></th>
+      </tr>
+      <tr>
+        <th>Dates</th>
+        <td><%= exp.dates_of_employment %></td>
+      </tr>
+      <tr>
+        <th>Location</th>
+        <td><%= exp.location %></td>
+      </tr>
+      <tr>
+        <th>Duties</th>
+        <td><%= exp.duties %></td>
+      </tr>
+      <tr>
+        <th>Library related</th>
+        <td><%= exp.library_related ? 'Yes' : 'No' %></td>
+      </tr>
+    </table>
+  <% end %>
+<% else %>
+  <p><i>(None)</i></p>
+<% end %>
+<h3>Skills <%= link_to "Change Skills", new_prospect_path( step: "skills" ), class: 'btn btn-info pull-right' unless @current_user %></h3>
+<% unless @prospect.skills.empty? %>
+  <ul>
+    <% @prospect.skills.each do |skill| %>
+      <li><%= skill.name %></li>
+    <% end %>
+  </ul>
+<% else %>
+  <p><i>(None)</i></p>
+<% end %>
+<h3>Availability <%= link_to "Change Availability", new_prospect_path( step: "availability" ), class: 'btn btn-info pull-right' unless @current_user %></h3>
+<%= form.input(:available_hours_per_week, disabled: true)  %>
+<div class="table-responsive">
+  <%= availablity_table(form) %>
+</div>
+<h3>Resume <%= link_to "Change Resume", new_prospect_path( step: "upload_resume" ), class: 'btn btn-info pull-right' unless @current_user %></h3>
+<% if @resume && @resume.file? %>
+  <%= link_to( "View #{ @resume.file_file_name}",  resume_path(@resume), target: "_self" ) %>
+<% else %>
+  <p><i>(None)</i></p>
+<% end %>
+<h2>Additional Comments</h2>
+<%= form.input :additional_comments, label: "Enter below:", disabled: !@current_user.nil? %>
+<h2>Confirmation</h2>
+<% unless @current_user %>
+  <%= form.label(  :user_confirmation, { class: "required" } ) do %>
+    <abbr title='required'>*</abbr> I certify that all information on this application is accurate and recognize it is subject to verification.
+  <% end %>
+  <%= form.check_box( :user_confirmation, { class: 'user_confirmation', required: true } )  %> Yes.
+<% end %>  
+<br/>
+<%= form.input( :user_signature, { class: 'user_signature', required: true , label: "Please type your name as it will serve as a digital signature:", disabled:  !@current_user.nil? } )  %>

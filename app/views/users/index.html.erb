@@ -1,0 +1,71 @@
+<% if @current_user.admin? %>
+<div id="admin_container" class="container" >
+  <div class="well text-center">
+    <h4>You are an admin user and you will see fields slightly different that other logged in users.</h4>
+    <h5>If you would like to temporarly switch this off, please click the link below:</h5> 
+      <%= link_to "Disable Admin", disable_admin_url, class: "btn btn-warning" %> 
+  </div>
+
+</div>
+<% end %>
+
+<div id="users_container" class="container" >
+  <table class="table table-strpied">
+    <thead>
+      <tr>
+        <th>
+          <%= link_to( "javascript:", id: "new_user", class: 'btn btn-success',  data: { toggle: "modal", target: "#newUserModal" } ) do %> 
+            <span class="glyphicon glyphicon-plus" />
+          <% end %> 
+        </th>
+        <th>User ID</th>
+        <th>User Name</th>
+        <th>Administrator Status</th>
+      </tr>
+    </thead>
+    <tbody> 
+    <% @users.each do |user| %>
+      <tr data-user-url='<%= user_path(user.id) %>' >
+        <td>
+          <%= button_to user, method: :delete, class: "btn btn-danger", data: { confirm: "Do you want to delete #{user.name }?" }, disabled: ( @current_user == user ) do %>
+            <span class="glyphicon glyphicon-remove" />
+           <% end %>
+        </td> 
+        <td><%= user.cas_directory_id %></td>
+        <td><%= user.name %></td>
+        <td><input class="admin-toggle" data-toggle="toggle" type="checkbox" <%= "checked" if user.admin? %> <%= "disabled" if user == @current_user %> ></td>
+      </tr> 
+   <% end %> 
+    </tbody>
+  </table> 
+
+</div>
+
+<div id="newUserModal" class="modal fade" role="dialog">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <%= simple_form_for User.new,  html: { class: 'form-horizontal' },
+        wrapper_mappings: {
+          check_boxes: :horizontal_radio_and_checkboxes,
+          radio_buttons: :horizontal_radio_and_checkboxes,
+          file: :horizontal_file_input,
+          boolean: :horizontal_boolean
+        } do |form| %>
+      
+          <div class="modal-header">
+            <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+            <h4 class="modal-title">New User</h4>
+          </div>
+          <div class="modal-body">
+            <%= form.input :cas_directory_id %>
+            <%= form.input :name %>
+          </div>
+          <div class="modal-footer">
+            <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+            <%= form.submit "Submit", class: "btn btn-primary" %>
+          </div>
+       
+        <% end %>
+      </div><!-- /.modal-content -->
+  </div><!-- /.modal-dialog -->
+</div><!-- /.modal -->

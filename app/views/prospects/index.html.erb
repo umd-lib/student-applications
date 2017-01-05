@@ -1,0 +1,77 @@
+<%= flash_messages %>
+<table class="table table-striped prospects">
+  <caption>
+    <% if  @current_user.admin? %> 
+      <button type="button" class="btn btn-danger" id='deactivate-prospects' disabled='disabled' data-toggle="modal"  data-target="#deactivate-modal"  aria-haspopup="true" aria-expanded="false">
+        Delete
+      </button>
+    <% end %>   
+    <button type="button" class="btn btn-info" id='filter-prospects' data-toggle="modal"  data-target="#filter-modal"  aria-haspopup="true" aria-expanded="false">
+        Filter
+    </button>
+  </caption> 
+  <thead>
+    <% if  @current_user.admin? %> 
+      <tr>
+        <th><input id="prospect-select-all" type="checkbox"/></th>
+        <th><%= sortable( "prospects.last_name", "Name") %></th>
+        <th><%= sortable( "prospects.id", "ID") %></th>
+        <th><%= sortable( "prospects.in_federal_study", "Federal Work Study" ) %></th>
+        <th><%= sortable( "enumerations.class_status_values", "Class Status" ) %></th>
+        <th>Skills</th>
+        <th><%= sortable( "prospects.hired", "Hired") %></th>
+        <th><%= sortable( "enumerations.semester_values", "Semester") %></th>
+      </tr> 
+    <% else %>
+      <tr>
+        <th><%= sortable( "prospects.last_name", "Name") %></th>
+        <th><%= sortable( "prospects.in_federal_study", "In Federal Study") %></th>
+        <th><%= sortable( "enumerations.class_status_values", "Class Status" ) %></th>
+        <th><%= sortable( "enumerations.graduation_year_values", "Expected Graduation Year" ) %></th>
+        <th>Skills</th>
+        <th><%= sortable( "prospects.available_hours_per_week", "Hours Per Week") %></th>
+        <th>Availability</th>
+        <th>Preferred Libraries</th>
+        <th><%= sortable( "prospects.hired", "Hired") %></th>
+        <th><%= sortable( "enumerations.semester_values", "Semester") %></th>
+      </tr> 
+    <% end %> 
+  </thead>
+  <tbody>
+    <% @prospects.each do |prospect| %>
+      <% if @current_user.admin? %> 
+        <tr>
+          <td><input name="ids[]"  class="deactivate" value="<%= prospect.id %>" type="checkbox"/></td>
+          <td><%= link_to( prospect.name, prospect) %></td> 
+          <td><%= prospect.id %></td>
+          <td><%= prospect.in_federal_study? %></td>
+          <td><%= prospect.class_status %></td>
+          <td><%= prospect.skills.map(&:name).join(" , ") %></td>
+          <td><%= prospect.hired? %></td>
+          <td><%= prospect.semester %></td>
+        </tr>
+      <% else %>
+        <tr>
+          <td><%= link_to( prospect.name, prospect) %></td> 
+          <td><%= prospect.in_federal_study? %></td>
+          <td><%= prospect.class_status %></td>
+          <td><%= prospect.graduation_year %></td>
+          <td><%= prospect.skills.map(&:name).join(" , ") %></td>
+          <td><%= prospect.available_hours_per_week %></td>
+          <td>
+            <%= link_to( "javascript:", class: 'btn btn-success',  data: { toggle: "modal", target: "#availabilityModal", dayTimes:  prospect.available_times.map(&:day_time)  } ) do %> 
+              <span class="glyphicon glyphicon-calendar" />
+            <% end %> 
+          </td>
+          <td><%= prospect.libraries.map(&:value).join(" , ") %></td>
+          <td><%= prospect.hired? %></td>
+          <td><%= prospect.semester %></td>
+        </tr>
+      <% end %>
+    <% end %>
+  </tbody>
+</table>
+<%= will_paginate @prospect_ids %>
+<%= render "availability_modal" %>
+<%= render "deactivate_modal" %>
+<%= render "filter_modal" %>

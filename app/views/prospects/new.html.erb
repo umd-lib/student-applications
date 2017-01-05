@@ -1,0 +1,20 @@
+<div class="page-header">
+  <h1>New Student Application</h1>
+</div>
+
+<%= render "resume_uploader" if @prospect.current_step == "upload_resume" %> 
+<%= simple_form_for @prospect,  html: { class: 'form-horizontal' },
+  wrapper_mappings: {
+    check_boxes: :horizontal_radio_and_checkboxes,
+    radio_buttons: :horizontal_radio_and_checkboxes,
+    file: :horizontal_file_input,
+    boolean: :horizontal_boolean
+  } do |form| %>
+  <%= form.error_notification %> 
+  <%= render "#{@prospect.current_step}_step", form: form %>
+  <p>
+    <%= form.submit "Back", name: "back_button", class: 'btn btn-default' unless @prospect.first_step? %>
+    <%= form.submit @prospect.last_step? ? "Submit" : "Continue", class: @prospect.last_step? ? 'btn btn-success' : 'btn btn-default' %>
+    <%= link_to "Reset", reset_url , data: { confirm: "Are you sure want to reset the form?\n\nThis will erase any information you have already entered." }, class: 'btn btn-danger' %>
+  </p>
+<% end %>

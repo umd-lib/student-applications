@@ -1,0 +1,140 @@
+/*
+ * This is a manifest file that'll be compiled into application.css, which will include all the files
+ * listed below.
+ *
+ * Any CSS and SCSS file within this directory, lib/assets/stylesheets, vendor/assets/stylesheets,
+ * or any plugin's vendor/assets/stylesheets directory can be referenced here using a relative path.
+ *
+ * You're free to add application-wide styles to this file and they'll appear at the bottom of the
+ * compiled file so the styles you add here take precedence over styles defined in any styles
+ * defined in the other CSS/SCSS files in this directory. It is generally better to create a new
+ * file per style scope.
+ *
+ *= require bootstrap-toggle
+ *= require_tree .
+ *= require 'umd_lib'
+ *= require_self
+ */
+
+
+body > .container { margin-top: 25px;  }
+.alert { margin-top: 15px; }
+
+#home-jumbo, #upload-jumbo { margin-top: 50px }
+
+label.required abbr {
+  color: #a94442;
+}
+
+
+.panel-heading { min-height: 53px }
+.panel-heading span { font-size: 22px  }
+.nested-fields+.nested-fields {
+  border-top: 1px solid #ddd;
+  margin: 15px 0px;
+}
+.skill.nested-fields {
+  border-top: none;
+}
+
+
+.help-block.has-error { color: #a94442 }
+
+.radio-question { padding-left: 50px; padding-right: 20px; vertical-align: middle; }
+.help-block.radio-question-help { vertical-align: middle; margin-bottom: 2px; display: inline-block; padding-left: 10px } 
+
+#availability-table > thead > tr > th, #availability-table > tbody > tr >  td {
+  text-align: center;  
+  width: 13.2%; 
+  padding: 8px 0px; 
+  border: 1px dotted #666666;
+}
+#availability-table th.time-label, #availability-table td.time-label {
+  text-align: right;
+  vertical-align: top;
+  width: 6.6%;
+  padding: 2px;
+}
+
+/* only for tables on the availability step */
+.availability-availability-table > tbody > tr >  td:not(.time-label) { cursor: pointer; }
+.availability-availability-table > tbody > tr >  td:not(.time-label):hover {
+  border-color: #5cb85c;
+  background: #dff0d8;
+}
+
+.upload { display: none;  }
+
+input#resume_file {
+ width: 0.1px;
+ height: 0.1px;
+ opacity: 0;
+ overflow: hidden;
+ position: absolute;
+ z-index: -1;
+}
+
+#prospect_first_name, #prospect_last_name, #prospect_email, #prospect_directory_id {
+  width: 20em;
+}
+#prospect_class_status, #prospect_graduation_year {
+  width: inherit;
+}
+.form-horizontal .form-group {
+  margin-left: 0;
+  margin-right: 0;
+}
+.prospect_addresses_address_type select,
+.prospect_phone_numbers_phone_type select {
+  width: inherit;
+}
+.prospect_phone_numbers_number input {
+  width: 10em;
+}
+.prospect_addresses_street_address_1, .prospect_addresses_street_address_2, .prospect_addresses_city {
+  width: 20em;
+}
+.prospect_addresses_state {
+  width: 5em;
+}
+.prospect_addresses_postal_code {
+  width: 10em;
+}
+.address select {
+  width: inherit;
+}
+.prospect_work_experiences_name,
+.prospect_work_experiences_dates_of_employment,
+.prospect_work_experiences_location {
+  width: 20em;
+}
+.prospect_work_experiences_duties,
+.prospect_skills_name {
+  width: 30em;
+}
+
+
+.prospect_available_hours_per_week input {
+  width: 5em;
+}
+
+
+table.prospects th, table.prospects td  {
+  min-width: 70px;
+}
+
+
+
+/* configuration page */
+.mover { width: 5% }
+.toggler { float: right }
+ul.list-group { list-style-type: none; } 
+.list-group-item { min-height: 56px } 
+.list-group-item div.form-group { margin-bottom: 0; display: inline-block }  
+.enumeration-value > div { width: 50% }  
+
+
+ .modal-dialog { width: 800px; }
+#deactivate-modal input { display: none; } 
+
+

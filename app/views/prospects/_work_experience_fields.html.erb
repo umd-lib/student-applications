@@ -1,0 +1,12 @@
+<div class='address nested-fields'>
+  <%= link_to_remove_association "remove", f, { class: 'pull-right' } %>
+  <%= f.input :name, label: "Name Of Employer" %>
+  <%= f.input :position_title %>
+  <%= f.input :dates_of_employment %>
+  <%= f.input :location %>
+  <%= f.input :duties %>
+  <%= f.label :library_related do %>
+    <%= f.input :library_related, as: :radio_buttons, collection: [["No", false], ["Yes", true]], 
+      label: "Is this position library related?"  %> 
+  <% end %>
+</div>

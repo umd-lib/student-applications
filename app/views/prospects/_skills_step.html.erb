@@ -1,0 +1,42 @@
+<h2>Skills</h2>
+<div class='panel panel-default'>
+  <div class="panel-heading"><span>Please Select:</span></div>
+  <div class="panel-body" id="skills-promoted">
+    <div class='table-responsive'> 
+      <table class='table table-bordered'>
+        <tbody>
+          <% Skill.promoted.in_groups_of(3) do |batch| %>
+            <tr>
+              <% batch.each do |skill| %> 
+                <td>
+                  <% unless skill.nil? %> 
+                    <%= form.check_box( :skill_ids,  { :multiple => true }, skill.id, nil  )  %>
+                    <%= form.label(  :skills,  skill.name )  %>
+                  <% end %>
+                </td>
+              <% end %> 
+            </tr>
+          <% end %>   
+        </tbody>
+      </table>
+    </div>   
+  </div>
+</div>
+
+<div class='panel panel-default'>
+  <div class="panel-heading">
+    <span>List Additional Skills:</span>
+    <span class='pull-right'>
+      <%= link_to_add_association(form, :skills,
+                                  { "data-association-insertion-node": "#skills",
+                                    "data-association-insertion-method": 'append'}) do  %>
+        <i class='glyphicon glyphicon-plus-sign'></i>Add Skill 
+      <% end %> 
+    </span>   
+  </div>
+  <div class="panel-body" id="skills">
+    <%= form.fields_for :skills, form.object.special_skills do |skill| %>
+        <%= render 'skill_fields', f: skill %>
+    <% end %>
+  </div>
+</div>

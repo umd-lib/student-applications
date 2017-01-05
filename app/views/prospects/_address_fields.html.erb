@@ -1,0 +1,11 @@
+<div class='address nested-fields'>
+  <%= link_to_remove_association("remove", f, { class: 'pull-right remove-permanent-address' }) unless f.object.address_type == 'local' %>
+  <%= f.input :address_type, collection: Address.address_types.map(&:first),  as: :select, required: true, disabled: true %>
+  <%= f.input :address_type,  as: :hidden, input_html: { value: f.object.address_type } %>
+  <%= f.input :street_address_1, required: true %>
+  <%= f.input :street_address_2 %>
+  <%= f.input :city, required: true %>
+  <%= f.input :state %>
+  <%= f.input :postal_code, required: true %>
+  <%= f.input :country, priority: ["US"] %>
+</div>

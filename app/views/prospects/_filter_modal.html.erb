@@ -1,0 +1,80 @@
+<div id="filter-modal" class="modal fade" role="dialog">
+  <div class="modal-dialog modal-lg">
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+        <h4 class="modal-title">Filter Applications</h4>
+      </div>
+      <div class="modal-body">
+        <div class="container"> 
+        <%= form_tag prospects_path, method: 'get', id: 'filter-prospects-form' do %> 
+            <div class="row">
+              <h4>Contact Information</h4> 
+              <div class="col-md-3"> 
+                <%= label_tag "text_search[last_name]", "Last Name" %> 
+                <%= text_field_tag "text_search[last_name]", params[:text_search][:last_name] || "", placeholder: "Use % for wildcard" %> 
+              </div>   
+              <div class="col-md-3"> 
+                <%= label_tag "text_search[first_name]", "First Name" %> 
+                <%= text_field_tag "text_search[first_name]", params[:text_search][:first_name] || "", placeholder: "Use % for wildcard" %> 
+              </div>   
+            </div> <!-- contact info row -->
+            
+            <div class="row">
+                <h4>Skills</h4> 
+                <% Skill.all.order(:promoted).in_groups_of( 2 ) do |batch| %>
+                  <div class="row">
+                    <% batch.each do |sk| %> 
+                      <div class="col-md-4">
+                        <% unless sk.nil? %> 
+                          <%= check_box_tag( "search[skills][]", sk.id, params[:search][:skills].include?(sk.id.to_s), { :multiple => true }  )  %>
+                          <%= label_tag(  "search[skills][id]",  sk.name )  %>
+                        <% end %>   
+                      </div>
+                    <% end %> 
+                  </div>
+                <% end %>   
+            </div>
+            
+            <div class="row">
+                <h4>Semester</h4> 
+                <% Enumeration.active_semesters.in_groups_of( 2 ) do |batch| %>
+                  <div class="row">
+                    <% batch.each do |sem| %> 
+                      <div class="col-md-4">
+                        <% unless sem.nil? %> 
+                          <%= check_box_tag( "search[enumerations][]", sem.id, params[:search][:enumerations].include?(sem.id.to_s), { :multiple => true }  )  %>
+                          <%= label_tag(  "search[enumerations][id]",  sem.value )  %>
+                        <% end %>   
+                      </div>
+                    <% end %> 
+                  </div>
+                <% end %>   
+            </div>
+            
+            <div class="row">
+                <h4>Preferred Libraries</h4> 
+                <% Enumeration.active_libraries.in_groups_of( 2 ) do |batch| %>
+                  <div class="row">
+                    <% batch.each do |lib| %> 
+                      <div class="col-md-4">
+                        <% unless lib.nil? %> 
+                          <%= check_box_tag( "search[enumerations][]", lib.id, params[:search][:enumerations].include?(lib.id.to_s), { :multiple => true }  )  %>
+                          <%= label_tag(  "search[enumerations][id]",  lib.value )  %>
+                        <% end %>   
+                      </div>
+                    <% end %> 
+                  </div>
+                <% end %>   
+            </div>
+          
+        <% end %> <!-- form tag -->
+        </div> <!-- container --> 
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-default" data-dismiss="modal">Cancel</button>
+        <button type="button" id="submit-filter" class="btn btn-success" >Filter</button>
+      </div>  
+    </div><!-- /.modal-content -->
+  </div><!-- /.modal-dialog -->
+</div><!-- /.modal -->
