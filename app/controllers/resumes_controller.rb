@@ -4,7 +4,7 @@ class ResumesController < ApplicationController
     if @resume.save
       render json: @resume.to_json
     else
-      render json: @resume.errors
+      render json: @resume.errors, status: :bad_request
     end
   end
 
@@ -15,7 +15,7 @@ class ResumesController < ApplicationController
     # if a user if logged in, they can see if.
     if @resume.prospect.nil? || logged_in?
       send_file(@resume.file.path, disposition: 'attachment', filename: @resume.file_file_name)
-    else 
+    else
       render(text: 'forbidden', status: 403, layout: false)
     end
   end
@@ -25,7 +25,7 @@ class ResumesController < ApplicationController
     if @resume.update(resume_params)
       render json: @resume.to_json
     else
-      render json: @resume.errors
+      render json: @resume.errors, status: :bad_request
     end
   end
 
