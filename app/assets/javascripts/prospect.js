@@ -65,12 +65,12 @@ var init = function() {
     var formData = new FormData();
 
     var file =  document.getElementById('resume_file').files[0];
-    
-    if ( !file.type.match('application/pdf')) {
+
+    if (!(/^application\/pdf$/.test(file.type) || /\.pdf$/i.test(file.name))) {
       alert("Not permitted format. Please upload a PDF.");
       return;
     }
-    
+
     formData.append("resume[file]", file, file.name);
 
 
