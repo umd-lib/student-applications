@@ -124,7 +124,9 @@ table.prospects th, table.prospects td  {
   min-width: 70px;
 }
 
-
+.uploadForm {
+  margin-bottom: 2em;
+}
 
 /* configuration page */
 .mover { width: 5% }
