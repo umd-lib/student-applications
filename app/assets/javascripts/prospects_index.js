@@ -1,3 +1,5 @@
+//= require bootstrap-slider
+
 $(function() {
   $.fn.init_prospects_table = function() { 
      $(this).each(function() {
@@ -50,8 +52,16 @@ $(function() {
        $this.addClass("initialised");  
      })
   
-     $("#submit-filter").click( function() { $("#filter-prospects-form").submit(); }); 
  
+     $("#available-hours-selector").slider({}); 
+
+     $("#submit-filter").click( function(e) { 
+        e.preventDefault(); 
+        var vals = $("#available-hours-selector").slider('getValue'); 
+        $("#availability-min").val( vals[0] );       
+        $("#availability-max ").val( vals[1] );       
+        $("#filter-prospects-form").submit();         
+      });
   
   }
   
