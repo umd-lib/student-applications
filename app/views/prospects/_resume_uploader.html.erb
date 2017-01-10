@@ -7,7 +7,7 @@
       Choose a file...
     <% end %>
     <%= resume_form.file_field :file %>
-    <%= resume_form.submit "Upload", class: "btn btn-lg btn-warning upload" %>
+    <%= resume_form.submit "Upload", name: "uploadResume", class: "btn btn-lg btn-warning upload" %>
     <% if @resume.file? %>
       <%= link_to( "View #{ @resume.file_file_name}",  resume_path(@resume), class: "show-link",  target: "_self" ) %>
     <% end %>

@@ -1,14 +1,14 @@
 require_relative '../seeds'
 
 Prospect.delete_all
-Skill.where( promoted: false ).delete_all
+Skill.where(promoted: false).delete_all
 700.times do
   hash = {
     directory_id: Faker::Internet.email.split('@').first,
     email: Faker::Internet.email,
     first_name: Faker::Name.first_name,
     last_name: Faker::Name.last_name,
-    major: Faker::Educator.course, 
+    major: Faker::Educator.course,
     in_federal_study: [true, false].sample
   }
 

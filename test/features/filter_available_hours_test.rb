@@ -5,8 +5,7 @@ feature 'Should be able filter prospects on available hours per week' do
     page.driver.resize_window(2048, 2048)
 
     User.create(cas_directory_id: 'filterer', name: 'filterer', admin: false)
-    visit root_path
-    click_link 'Staff Sign-In'
+    visit prospects_path
     fill_in 'username', with: 'filterer'
     fill_in 'password', with: 'any password'
     click_button 'Login'
