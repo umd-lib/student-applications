@@ -64,6 +64,10 @@ label.required abbr {
   background: #dff0d8;
 }
 
+.avail-cell.success:after {
+    content: '✓';
+}
+
 .upload { display: none;  }
 
 input#resume_file {
