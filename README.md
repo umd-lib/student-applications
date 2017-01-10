@@ -48,3 +48,19 @@ $ ./bin/bundle exec guard
 Testing uses [Minitest](https://github.com/seattlerb/minitest) and [Capybara](https://github.com/jnicklas/capybara).
 [Poltergeist](https://github.com/teampoltergeist/poltergeist) provides a headless Webkit driver for Capybara, which
 can be used for Feature tests that use lots of Javascript. 
+
+## Production Environment Configuration
+
+Requires:
+
+* Postgres client to be installed (on RedHat, the "postgresql" and 
+"postgresql-devel" packages)
+
+The application uses the "dotenv" gem to configure the production environment.
+The gem expects a ".env" file in the root directory to contain the environment
+variables that are provided to Ruby. A sample "env_example" file has been
+provided to assist with this process. Simply copy the "env_example" file to
+".env" and fill out the parameters as appropriate.
+
+The configured .env file should _not_ be checked into the Git repository, as it
+contains credential information.
