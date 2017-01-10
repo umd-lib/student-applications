@@ -27,8 +27,9 @@ feature 'Should be able filter prospects on available hours per week' do
     find(".min-slider-handle").native.drag_by(100, 0);
     find(".max-slider-handle").native.drag_by(-200, 0);
     find("#submit-filter").click
-    
+    sleep(2) 
     # But only Betty has hours in the  range 
+    
     assert page.has_content?("Student, Betty") 
     refute page.has_content?("Student, Alvin") 
     refute page.has_content?("Stone, Rolling") 
