@@ -14,10 +14,15 @@ class ResumesController < ApplicationController
     # only allow access to unsubmited resumes
     # if a user if logged in, they can see if.
     if @resume.prospect.nil? || logged_in?
-      send_file(@resume.file.path, disposition: 'attachment', filename: @resume.file_file_name)
+      send_file @resume.file.path, disposition: 'attachment', filename: @resume.file_file_name
     else
-      render(text: 'forbidden', status: 403, layout: false)
+      render text: 'forbidden', status: 403, layout: false
     end
+  end
+
+  def edit
+    render text: 'forbidden', status: 403, layout: false unless logged_in?
+    @resume = Resume.includes(:prospect).find(params[:id])
   end
 
   def update
