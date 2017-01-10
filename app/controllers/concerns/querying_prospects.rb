@@ -57,6 +57,12 @@ module QueryingProspects
   def sort_direction
       %w[asc desc].include?(params[:direction]) ? params[:direction] : "asc"
   end
+    
+  def available_range_statement
+      ["available_hours_per_week >= ? AND available_hours_per_week <= ?",
+        params[:available_hours_per_week_min] || 0 ,
+        params[:available_hours_per_week_max] || 999 ] 
+  end
 
   def text_search_statement                                                                                                                                                          
     query = params[:text_search].inject([]) do |memo, (k,val ) |                                                                                                                     
@@ -65,8 +71,9 @@ module QueryingProspects
       end                                                                                                                                                                            
       memo                                                                                                                                                                           
     end                                                                                                                                                                              
-    !query.blank? ? query.inject(&:and) : {}                                                                                                                                           end 
-
+    !query.blank? ? query.inject(&:and) : {}                                                                                                                                           
+  end 
+  
   def search_statement
     query = params[:search].inject([]) do |memo, ( k,val ) |
       unless val.empty?

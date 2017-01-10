@@ -43,6 +43,7 @@ class ProspectsController < ApplicationController
     @prospect_ids = Prospect.joins( join_table ).select(select_statement)
                   .where( text_search_statement ) 
                   .where( search_statement ) 
+                  .where( *available_range_statement )
                   .active.order( sort_order )
                   .pluck("prospects.id").uniq 
                   .paginate( page: params[:page], per_page: 30 ) 

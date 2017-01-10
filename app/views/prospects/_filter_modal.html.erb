@@ -21,19 +21,14 @@
             </div> <!-- contact info row -->
             
             <div class="row">
-                <h4>Skills</h4> 
-                <% Skill.all.order(:promoted).in_groups_of( 2 ) do |batch| %>
-                  <div class="row">
-                    <% batch.each do |sk| %> 
-                      <div class="col-md-4">
-                        <% unless sk.nil? %> 
-                          <%= check_box_tag( "search[skills][]", sk.id, params[:search][:skills].include?(sk.id.to_s), { :multiple => true }  )  %>
-                          <%= label_tag(  "search[skills][id]",  sk.name )  %>
-                        <% end %>   
-                      </div>
-                    <% end %> 
-                  </div>
-                <% end %>   
+                <h4>Available Hours</h4> 
+                <div class="col-md-8 availability-select"> 
+                 <input id="available-hours-selector" type="text" class="span2" value="" data-slider-min="0" 
+                  data-slider-max="50" data-slider-step="1"
+                  data-slider-value="[<%= params[:available_hours_per_week_min] || 0 %>,<%= params[:available_hours_per_week_max] || 50 %>]"/> 
+                 <%= hidden_field_tag( "available_hours_per_week_min", params[:available_hours_per_week_min] || 0, { id: 'availability-min' } ) %> 
+                 <%= hidden_field_tag( "available_hours_per_week_max", params[:available_hours_per_week_max] || 50,{ id: 'availability-max' }) %> 
+                </div>
             </div>
             
             <div class="row">
@@ -45,6 +40,22 @@
                         <% unless sem.nil? %> 
                           <%= check_box_tag( "search[enumerations][]", sem.id, params[:search][:enumerations].include?(sem.id.to_s), { :multiple => true }  )  %>
                           <%= label_tag(  "search[enumerations][id]",  sem.value )  %>
+                        <% end %>   
+                      </div>
+                    <% end %> 
+                  </div>
+                <% end %>   
+            </div>
+            
+            <div class="row">
+                <h4>Skills</h4> 
+                <% Skill.promoted.in_groups_of( 2 ) do |batch| %>
+                  <div class="row">
+                    <% batch.each do |sk| %> 
+                      <div class="col-md-4">
+                        <% unless sk.nil? %> 
+                          <%= check_box_tag( "search[skills][]", sk.id, params[:search][:skills].include?(sk.id.to_s), { :multiple => true }  )  %>
+                          <%= label_tag(  "search[skills][id]",  sk.name )  %>
                         <% end %>   
                       </div>
                     <% end %> 
