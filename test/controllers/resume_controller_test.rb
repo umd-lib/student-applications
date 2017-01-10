@@ -8,16 +8,37 @@ class ResumesControllerTest < ActionController::TestCase
       post :create, resume: { file: file }
     end
   end
-  
+
   test 'should create a new resume ( even if the mime is weird )' do
     %w( application/force-download application/octet-stream application/pdf ).each do |mime|
       file = fixture_file_upload( "resume.pdf", mime )
       assert_difference( 'Resume.count' ) do
         post :create, resume: { file: file }
       end
-    end 
+    end
   end
- 
+
+  test 'should create a new resume (even if filename has spaces)' do
+    file = fixture_file_upload("resume spacey filename.pdf", 'application/pdf')
+    assert_difference( 'Resume.count' ) do
+      post :create, resume: { file: file }
+    end
+  end
+
+  test 'should create a new resume (even if filename has apostrophe)' do
+    file = fixture_file_upload("resume o'marr.pdf", 'application/pdf')
+    assert_difference( 'Resume.count' ) do
+      post :create, resume: { file: file }
+    end
+  end
+
+  test 'should create a new resume (even if filename has quotes)' do
+    file = fixture_file_upload('resume "quoted".pdf', 'application/pdf')
+    assert_difference( 'Resume.count' ) do
+      post :create, resume: { file: file }
+    end
+  end
+
   test "should not create a new resume if its not a pdf" do
     file = fixture_file_upload( "resume.pdf", 'text/html' )
     refute_difference( 'Resume.count' ) do
@@ -25,9 +46,9 @@ class ResumesControllerTest < ActionController::TestCase
     end
     assert_response(400)
   end
-  
+
   test 'should not create a new resume if nothing is attached' do
-    file = nil 
+    file = nil
     refute_difference( 'Resume.count' ) do
       post :create, resume: { file: file }
     end
@@ -39,18 +60,18 @@ class ResumesControllerTest < ActionController::TestCase
     get :show, id: resume.id
     assert_response :success
   end
-  
+
   test 'should not allow anyone to view a submitted resume' do
-    prospect = prospects(:all_valid) 
+    prospect = prospects(:all_valid)
     prospect.build_resume( file: File.new('test/fixtures/resume.pdf', 'r'))
     prospect.save
 
     get :show, id: prospect.resume_id
     assert_response(403)
   end
-  
+
   test 'should allow authed users to view a submitted resume' do
-    prospect = prospects(:all_valid) 
+    prospect = prospects(:all_valid)
     prospect.build_resume( file: File.new('test/fixtures/resume.pdf', 'r'))
     prospect.save
 
