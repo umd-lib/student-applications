@@ -4,12 +4,10 @@ class ApplicationController < ActionController::Base
   protect_from_forgery with: :exception
   before_action :fix_cas_session
 
-  rescue_from ActionController::InvalidAuthenticityToken do |e|
+  rescue_from ActionController::InvalidAuthenticityToken do |_e|
     reset_session
     redirect_to root_url, flash: { notice: 'Application has been reset due to session inactivity.' }
   end
-
-
 
   def fix_cas_session
     if session[:cas] && !session[:cas].is_a?(HashWithIndifferentAccess)
@@ -21,10 +19,10 @@ class ApplicationController < ActionController::Base
   # if not logged in
   def logged_in?
     return false if session[:cas].nil? || session[:cas][:user].nil?
-    return User.exists?( cas_directory_id: session[:cas][:user] )  
+    User.exists?(cas_directory_id: session[:cas][:user])
   end
 
-  # this logs the user in. 
+  # this logs the user in.
   def ensure_auth
     if session[:prospect_params]
       # we have an application going so we've probably just refreshed the

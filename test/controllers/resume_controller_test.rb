@@ -3,9 +3,35 @@ require 'test_helper'
 class ResumesControllerTest < ActionController::TestCase
 
   test 'should create a new resume' do
+    file = fixture_file_upload( "resume.pdf", 'application/pdf' )
     assert_difference( 'Resume.count' ) do
-      post :create, resume: { file_file_name: "test-pdf" }
+      post :create, resume: { file: file }
     end
+  end
+  
+  test 'should create a new resume ( even if the mime is weird )' do
+    %w( application/force-download application/octet-stream application/pdf ).each do |mime|
+      file = fixture_file_upload( "resume.pdf", mime )
+      assert_difference( 'Resume.count' ) do
+        post :create, resume: { file: file }
+      end
+    end 
+  end
+ 
+  test "should not create a new resume if its not a pdf" do
+    file = fixture_file_upload( "resume.pdf", 'text/html' )
+    refute_difference( 'Resume.count' ) do
+        post :create, resume: { file: file }
+    end
+    assert_response(400)
+  end
+  
+  test 'should not create a new resume if nothing is attached' do
+    file = nil 
+    refute_difference( 'Resume.count' ) do
+      post :create, resume: { file: file }
+    end
+    assert_response(400)
   end
 
   test 'should allow anyone to view an unsubmitted resume' do

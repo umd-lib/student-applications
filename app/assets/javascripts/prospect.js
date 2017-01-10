@@ -73,13 +73,15 @@ var init = function() {
 
     formData.append("resume[file]", file, file.name);
 
-
-    var token = $this.find("input[name='authenticity_token']")[0].value;
-    formData.append("authenticity_token", token);
-
-    var method = $this.find("input[name='_method']");
-    if ( method.length > 0  ) {
-      formData.append("_method", method[0].value );
+    // in test Rails doesn't do CSRF..
+    var $token = $this.find("input[name='authenticity_token']");
+    if ( $token.length > 0 ) { 
+      formData.append("authenticity_token", $token[0].value);
+    }
+    
+    var $method = $this.find("input[name='_method']");
+    if ( $method.length > 0  ) {
+      formData.append("_method", $method[0].value );
     } 
 
     var xhr = new XMLHttpRequest();

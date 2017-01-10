@@ -47,7 +47,7 @@ gem 'country_select'
 gem 'bootstrap-toggle-rails'
 
 gem 'paperclip', '~> 5.0.0'
- 
+
 gem 'faker'
 
 group :development, :test do
