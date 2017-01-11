@@ -42,10 +42,12 @@ class ProspectsController < ApplicationController
                             .where(text_search_statement)
                             .where(search_statement)
                             .where(*available_range_statement)
+                            .where(prospects_by_available_time)
                             .active.order(sort_order)
                             .pluck('prospects.id').uniq
                             .paginate(page: params[:page], per_page: 30)
     @prospects = Prospect.includes(:enumerations, :available_times, :skills).find(@prospect_ids).index_by(&:id).values_at(*@prospect_ids)
+    @weekdays = %w(Sunday Monday Tuesday Wednesday Thursday Friday Saturday)
   end
 
   def update

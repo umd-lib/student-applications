@@ -76,6 +76,21 @@ module QueryingProspects
     !query.blank? ? query.inject(&:and) : {}
   end
 
+  def day_times_sql
+    dt_params = (params[:available_time] || []).select { |dt| dt.include? '-' }
+    dt_values = dt_params.map do |dt|
+      dt.split('-').map(&:to_i)
+    end
+    sql = Array.new(dt_params.size)
+      .fill('SELECT prospect_id FROM available_times WHERE day = ? AND time = ?')
+      .join(' INTERSECT ')
+    [ sql, *dt_values.flatten ]
+  end
+
+  def prospects_by_available_time
+    params[:available_time] ? { 'prospects.id' => AvailableTime.find_by_sql(day_times_sql).map(&:prospect_id) } : {}
+  end
+
   def search_statement
     query = params[:search].inject([]) do |memo, ( k,val ) |
       unless val.empty?
