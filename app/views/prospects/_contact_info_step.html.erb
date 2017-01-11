@@ -20,6 +20,15 @@
         wrapper_html: { class: "prospect_graduation_year #{ 'has-error' if form.object.errors.keys.include?(:graduation_year) }" } 
       %> 
       <%= form.error :graduation_year, id: "graduation_year_error", class: "#{ 'has-error' if form.object.errors.keys.include?(:graduation_year) }" %> 
+
+      <%= form.input :in_federal_study, as: :radio_buttons, collection: [["No", false], ["Yes", true]], 
+        required: true, label: "Are you in a Federal Work Study program?" %>
+        
+      <%= form.association :enumerations, 
+        collection: Enumeration.active_semesters.map { |e| [ e.value, e.id ] },
+        wrapper_html: { class: "prospect_semester #{ 'has-error' if form.object.errors.keys.include?(:semester) }" }, 
+        required: true, input_html: { multiple:false, id: "semester", name: "prospect[enumeration_ids][]" },
+        label: 'Which semester are you applying for?' %>
   </div>
 </div>
 
@@ -59,19 +68,6 @@
       <%= form.fields_for :phone_numbers, form.object.phone_numbers do |pn| %>
           <%= render 'phone_number_fields', f: pn %>
       <% end %>
-  </div>
-</div>
-
-<div class='panel panel-default'>
-  <div class="panel-heading"><span>Other Information</span></div>
-  <div class="panel-body" id="other-info">
-    <%= form.input :in_federal_study, as: :radio_buttons, collection: [["No", false], ["Yes", true]], 
-      required: true, label: "Are you in a Federal Work Study program?" %>
-    <%= form.association :enumerations, 
-      collection: Enumeration.active_semesters.map { |e| [ e.value, e.id ] },
-      wrapper_html: { class: "prospect_semester #{ 'has-error' if form.object.errors.keys.include?(:semester) }" }, 
-      required: true, input_html: { multiple:false, id: "semester", name: "prospect[enumeration_ids][]" },
-      label: 'Which semester are you applying for?' %>
   </div>
 </div>
 
