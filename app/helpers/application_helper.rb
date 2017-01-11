@@ -86,7 +86,7 @@ module ApplicationHelper
   def sortable(column, title)
     css_class = column == sort_column ? "current #{sort_direction}" : nil
     direction = column == sort_column && sort_direction == 'asc' ? 'desc' : 'asc'
-    link_to({ sort: column, direction: direction }, class: css_class) do
+    link_to request.query_parameters.merge({ sort: column, direction: direction }), class: css_class do
       html = if column == sort_column && sort_direction
                "<i class='glyphicon glyphicon-chevron-#{sort_direction == 'asc' ? 'up' : 'down'}' ></i> #{title}"
              else
