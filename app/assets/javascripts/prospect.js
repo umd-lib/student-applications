@@ -1,6 +1,6 @@
 var init = function() { 
 
-  if ( !$('.container.prospects').length ) { return  }
+  if ( !$('.container.prospects, .container.resumes').length ) { return  }
 
   // this is for adding permanent_addresses. we just want one
   $("#addresses").on('cocoon:after-insert', function() {
@@ -61,6 +61,7 @@ var init = function() {
     var formData = new FormData();
 
     var file =  document.getElementById('resume_file').files[0];
+    var prospect =  document.getElementById('prospect').value;
 
     if (!(/^application\/pdf$/.test(file.type) || /\.pdf$/i.test(file.name))) {
       alert("Not permitted format. Please upload a PDF.");
@@ -68,6 +69,7 @@ var init = function() {
     }
 
     formData.append("resume[file]", file, file.name);
+    formData.append("prospect", prospect);
 
     // in test Rails doesn't do CSRF..
     var $token = $this.find("input[name='authenticity_token']");
