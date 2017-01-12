@@ -1,9 +1,9 @@
 GIT
   remote: https://github.com/umd-lib/umd_lib_style.git
-  revision: 0b9763ba7cd3db8cfc654d4508167c6e610db972
-  branch: develop
+  revision: f97253cf0d0249e15a0b1fa46ae4fe74bc3a2904
+  ref: 0.2.0
   specs:
-    umd_lib_style (0.1.0)
+    umd_lib_style (0.2.0)
       rails (~> 4.2.6)
 
 GEM
