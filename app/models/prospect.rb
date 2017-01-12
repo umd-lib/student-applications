@@ -7,15 +7,15 @@ class Prospect < ActiveRecord::Base
   after_initialize :after_initialize
 
   has_and_belongs_to_many :enumerations, join_table: 'prospects_enumerations'
-    
+
   def self.active
       where( suppressed: false )
   end
 
-  # this makes sure we have a local address and that has_family_member is set
-  # correctly
+  # this makes sure we have a local address and contact phone number
   def after_initialize
     local_address unless persisted? # we call this to make sure we have one.
+    contact_phone unless persisted?
   end
 
   # Custom Validations
@@ -58,7 +58,7 @@ class Prospect < ActiveRecord::Base
   def libraries
     enumerations.select { |e| e['list'] == Enumeration.lists['library'] } || []
   end
-  
+
   attr_accessor :how_did_you_hear_about_us
   def how_did_you_hear_about_us
     enumerations.find { |e| e['list'] == Enumeration.lists['how_did_you_hear_about_us'] } || []
@@ -114,7 +114,19 @@ class Prospect < ActiveRecord::Base
   end
 
   has_many :phone_numbers, inverse_of: :prospect, dependent: :destroy
-  accepts_nested_attributes_for :phone_numbers
+  accepts_nested_attributes_for :phone_numbers, allow_destroy: true
+
+  # by default we want to have one contact_phone, either a new one we've built
+  # or an phone number that has been provided
+  def contact_phone_with_default
+    phone_numbers.first || phone_numbers.build
+  end
+  has_one :contact_phone, class_name: PhoneNumber
+  accepts_nested_attributes_for :contact_phone, allow_destroy: true
+
+  alias_method_chain :contact_phone, :default
+  validates :contact_phone, presence: true, if: ->(o) { o.current_step == 'contact_info' }
+  validates_associated :contact_phone, if: ->(o) { o.current_step == "contact_info" }
 
   has_many :addresses, inverse_of: :prospect, dependent: :destroy
   accepts_nested_attributes_for :addresses, allow_destroy: true
