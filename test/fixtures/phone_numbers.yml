@@ -1,0 +1,8 @@
+contact_info_dummy:
+  prospect: contact_info 
+  number: 301-555-0123
+  phone_type: local
+all_valid_dummy:
+  prospect: all_valid
+  number: 301-555-0123
+  phone_type: local

@@ -49,6 +49,8 @@ class ProspectTest < ActiveSupport::TestCase
 
   test "it should be invalid if it's on the contact_info step and it has no address" do
     homeless = prospects(:homeless)
+    homeless.contact_phone.phone_type = 'local'
+    homeless.contact_phone.number = '301-555-0123'
     # not valid bc no address
     refute homeless.valid?
     # but if we ae on another step, it should be ok
@@ -60,6 +62,18 @@ class ProspectTest < ActiveSupport::TestCase
       homeless.local_address.send(attr, SecureRandom.hex)
     end
     assert homeless.valid?, homeless.errors
+  end
+
+  test 'should create a contact_phone on init' do
+    prospect = Prospect.new
+    assert prospect.phone_numbers.length == 1
+    assert_includes prospect.phone_numbers, prospect.contact_phone
+  end
+
+  test 'should keep the contact phone if created with one' do
+    prospect = Prospect.new(phone_numbers: [PhoneNumber.new(phone_type: 'local', number: '301-555-0123')])
+    assert_equal prospect.phone_numbers.length, 1
+    assert_equal prospect.phone_numbers.first.number, prospect.contact_phone.number
   end
 
   test 'it should be able to create available_times via the day_times shortcut' do
