@@ -1,5 +1,7 @@
 # This is a model for a application
 # It includes the steps that are used to submit one
+# rubocop:disable Rails/HasAndBelongsToMany
+# rubocop:disable Metrics/ClassLength
 class Prospect < ActiveRecord::Base
   include Walkable
 
@@ -9,7 +11,7 @@ class Prospect < ActiveRecord::Base
   has_and_belongs_to_many :enumerations, join_table: 'prospects_enumerations'
 
   def self.active
-      where( suppressed: false )
+    where(suppressed: false)
   end
 
   # this makes sure we have a local address and contact phone number
@@ -21,6 +23,7 @@ class Prospect < ActiveRecord::Base
   # Custom Validations
   validate :must_have_class_status, :must_have_graduation_year, :must_have_semester
 
+  # rubocop:disable Style/GuardClause
   def must_have_class_status
     if current_step == 'contact_info' && class_status.nil?
       errors.add(:class_status, 'You must have one ( and only one ) Class Status selected.')
@@ -38,6 +41,7 @@ class Prospect < ActiveRecord::Base
       errors.add(:semester, 'Please indicate which semester you are applying for.')
     end
   end
+  # rubocop:enable Style/GuardClause
 
   attr_accessor :class_status
   def class_status
@@ -64,7 +68,6 @@ class Prospect < ActiveRecord::Base
     enumerations.find { |e| e['list'] == Enumeration.lists['how_did_you_hear_about_us'] } || []
   end
 
-
   # this validates if the user has clicked "All information is correct" on last
   # step
   validates :user_confirmation, acceptance: true, if: ->(p) { p.last_step? }
@@ -86,11 +89,13 @@ class Prospect < ActiveRecord::Base
   validate :available_hours_per_week_gt_available_times
   validates :available_hours_per_week, numericality: { greater_than_or_equal_to: 0 }
 
+  # rubocop:disable Style/GuardClause
   def available_hours_per_week_gt_available_times
     if available_hours_per_week > available_times.size
       errors.add(:available_hours_per_week, "can't be greater than the number of available times provided.")
     end
   end
+  # rubocop:enable Style/GuardClause
 
   def name
     "#{last_name}, #{first_name}"
@@ -126,7 +131,7 @@ class Prospect < ActiveRecord::Base
 
   alias_method_chain :contact_phone, :default
   validates :contact_phone, presence: true, if: ->(o) { o.current_step == 'contact_info' }
-  validates_associated :contact_phone, if: ->(o) { o.current_step == "contact_info" }
+  validates_associated :contact_phone, if: ->(o) { o.current_step == 'contact_info' }
 
   has_many :addresses, inverse_of: :prospect, dependent: :destroy
   accepts_nested_attributes_for :addresses, allow_destroy: true
@@ -143,7 +148,7 @@ class Prospect < ActiveRecord::Base
 
   alias_method_chain :local_address, :default
   validates :local_address, presence: true, if: ->(o) { o.current_step == 'contact_info' }
-  validates_associated :local_address, if: ->(o) { o.current_step == "contact_info" }
+  validates_associated :local_address, if: ->(o) { o.current_step == 'contact_info' }
 
   has_one :permanent_address, -> { where(address_type: 'permanent') }, class_name: Address
   accepts_nested_attributes_for :permanent_address, allow_destroy: true
