@@ -9,6 +9,7 @@ feature 'Add some Available Times' do
     all_valid.reject! { |a| %w(id created_at updated_at).include? a }
 
     all_valid['addresses_attributes'] = [addresses(:all_valid_springfield).attributes.reject { |a| a == 'id' }]
+    all_valid['phone_numbers_attributes'] = [phone_numbers(:all_valid_dummy).attributes.reject { |a| a == 'id' }]
     all_valid['available_times_attributes'] = [available_times(:all_valid_sunday).attributes.reject { |a| a == 'id' }]
     page.set_rack_session("prospect_params": all_valid)
 
@@ -52,6 +53,7 @@ feature 'Add some Available Times' do
     all_valid.reject! { |a| %w(id created_at updated_at).include? a }
 
     all_valid['addresses_attributes'] = [addresses(:all_valid_springfield).attributes.reject { |a| a == 'id' }]
+    all_valid['phone_numbers_attributes'] = [phone_numbers(:all_valid_dummy).attributes.reject { |a| a == 'id' }]
     all_valid['available_times_attributes'] = [available_times(:all_valid_sunday).attributes.reject { |a| a == 'id' }]
     page.set_rack_session("prospect_params": all_valid)
 
