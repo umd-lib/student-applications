@@ -2,7 +2,7 @@ class ProspectsController < ApplicationController
   include QueryingProspects
 
   before_action :set_session_and_prospect, only: [:new, :create]
-  before_action :ensure_auth, only: [:index, :update, :show, :deactivate]
+  before_action :ensure_auth, only: [:index, :edit, :update, :show, :deactivate]
 
   def new
     choose_action if params[:step]
@@ -45,13 +45,24 @@ class ProspectsController < ApplicationController
                             .active.order(sort_order)
                             .pluck('prospects.id').uniq
                             .paginate(page: params[:page], per_page: 30)
-    @prospects = Prospect.includes(:enumerations, :available_times, :skills).find(@prospect_ids).index_by(&:id).values_at(*@prospect_ids)
+    @prospects = Prospect.includes(:enumerations, :available_times, :skills).find(@prospect_ids).index_by(&:id)
+                         .values_at(*@prospect_ids)
+  end
+
+  def edit
+    @prospect = Prospect.find(params[:id])
+    @resume = @prospect.resume
   end
 
   def update
     @prospect = Prospect.includes(:enumerations, :available_times, :skills).find(params[:id])
     if @prospect.update(prospect_params)
       redirect_to prospects_path, notice: "#{@prospect.name} application has been updated"
+    else
+      respond_to do |format|
+        format.html { redirect_to edit_prospect_path(@prospect), flash: { errors: @prospect.errors } }
+        format.json { render json: { errors: @prospect.errors } }
+      end
     end
   end
 
@@ -76,7 +87,7 @@ class ProspectsController < ApplicationController
 
     def prospect_from_session
       Prospect.new(ActionController::Parameters.new(session[:prospect_params]).permit!)
-    rescue => e
+    rescue
       # a nice place to debug..
       # byebug
       reset_session
@@ -91,7 +102,9 @@ class ProspectsController < ApplicationController
       session[:prospect_params].keys.select { |a| a =~ /_attributes$/ }.each do |attr|
         session[:prospect_params][attr] = params[:prospect][attr] unless params[:prospect][attr].blank?
       end
-      session[:prospect_params].each { |k, v| session[:prospect_params][k] = v.to_hash if v.is_a?(ActionController::Parameters) }
+      session[:prospect_params].each do |k, v|
+        session[:prospect_params][k] = v.to_hash if v.is_a?(ActionController::Parameters)
+      end
       @prospect = Prospect.new(ActionController::Parameters.new(session[:prospect_params]).permit!)
       if @prospect.nil? || !@prospect.is_a?(Prospect)
         reset_session

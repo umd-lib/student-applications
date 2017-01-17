@@ -37,14 +37,16 @@ var init = function() {
   // this hides the checkboxes on the availability table. 
   $("#availability-table > tbody > tr > td  input").hide();
 
-  $(".availability-availability-table > tbody > tr > td:not(.time-label) ").on("click", function(event) {
-    var $this = $(this); 
-    $this.toggleClass("success");
-    $this.toggleClass("warning"); 
+  if ($('.container.prospects.create, .container.prospects.new, .container.prospects.edit').length) {
+    $("#availability-table > tbody > tr > td:not(.time-label) ").on("click", function(event) {
+      var $this = $(this); 
+      $this.toggleClass("success");
+      $this.toggleClass("warning"); 
 
-    var checkbox =  $this.find("input");
-    checkbox.prop("checked", !checkbox.prop("checked"));
-  })
+      var checkbox =  $this.find("input");
+      checkbox.prop("checked", !checkbox.prop("checked"));
+    })
+  }
 
   // For the file upload bits
   $("input#resume_file").on("change", function(e) { 
