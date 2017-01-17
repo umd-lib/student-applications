@@ -1,7 +1,6 @@
-
-
 var init = function() { 
 
+  if ( !$('.container.prospects').length ) { return  }
 
   // this is for adding permanent_addresses. we just want one
   $("#addresses").on('cocoon:after-insert', function() {
@@ -34,7 +33,8 @@ var init = function() {
     
     } 
   });  
-  
+ 
+  // this hides the checkboxes on the availability table. 
   $("#availability-table > tbody > tr > td  input").hide();
 
   $(".availability-availability-table > tbody > tr > td:not(.time-label) ").on("click", function(event) {
@@ -53,10 +53,6 @@ var init = function() {
     $uploader.show();
     $(".show-link").hide();
   });
-
-
-
-
 
   $("form.uploadForm").submit( function(e){
     e.preventDefault();
@@ -83,32 +79,23 @@ var init = function() {
     if ( $method.length > 0  ) {
       formData.append("_method", $method[0].value );
     } 
-
-    var xhr = new XMLHttpRequest();
-    xhr.open('POST', $(this).attr("action"), true);
-    xhr.onload = function() {
-      if (xhr.status === 200) {
-        var resume = JSON.parse( xhr.response );
-        $("#prospect_resume_id").attr( "value", resume.id );
-        $upload = $(".upload"); 
-        $upload.removeClass("btn-warning").addClass("btn-success")
-        $upload.attr("value", "Success!").attr("disabled", "disabled") 
-      } else {
-        alert("Sorry, we have encountered an error..."); 
-      }
+   
+    var success = function(data) {
+      $("#prospect_resume_id").attr( "value", data.id );
+      $upload = $(".upload"); 
+      $upload.removeClass("btn-warning").addClass("btn-success")
+      $upload.attr("value", "Success!").attr("disabled", "disabled") 
     }
     
-    xhr.send(formData);
+    var failure = function() { alert("Sorry, we have encountered and error."); } 
+    var url = $this.attr("action");
+    
+    App.postData( url, formData ).done( success ).fail( failure );
   })
 
   $('input[type="checkbox"]#prospect_hired').bootstrapToggle(); // assumes the checkboxes have the class "toggle"
   $('input[type="checkbox"]#prospect_suppressed').bootstrapToggle(); // assumes the checkboxes have the class "toggle"
 
+}
 
- }
-
-$(document).ready(function() {
-  init();
-});
-
-$(document).on("turbolinks:load", init);
+App.plugins.push(init);

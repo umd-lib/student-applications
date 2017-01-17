@@ -1,39 +1,27 @@
-//= require_tree .
 //= require html.sortable
 //= require bootstrap-toggle
 
+var init  = function() {
 
-var sendData = function(data, cb) { 
+  // we return if we don't run on this page
+  if ( document.getElementById("new_enumeration") == null ) { return  }
+
+  // this is the forms action we'll be sending to.
   var url = $("form#new_enumeration").attr("action");
-  $.ajax({
-    url: url,
-    type: 'post',
-    dataType: 'json',
-    success: function (data) {
-      if ( cb != undefined ) { cb(data) }; 
-    },
-    data: data
-  });
-}
-
-
-var getId = function(str) { 
- return str.substr(str.indexOf('_') + 1 ) 
-}
-
-var init = function() {
-  // pretty cheesy but we just want this to run on enumeration. 
-  var el = document.getElementById("new_enumeration"); 
-  if ( el == null ) { return  }
-
   $('input[type="checkbox"].active-toggle').bootstrapToggle(); // assumes the checkboxes have the class "toggle"
+  
+ 
+  // helper function to get the id from the id att 
+  var getId = function(str) { 
+   return str.substr(str.indexOf('_') + 1 ) 
+  }
   
   // For the row mover 
   $('.list-group').each( function() {
     sortable(this, { items: ':not(.new-enumeration)' })[0].addEventListener('sortupdate', function(e) {
       var ids = $.map($(e.detail.endparent).find("li"), function( e ) { if ( !/^new_/.test(e.id)  ) { return getId(e.id) } });   
       var data = { "_update_positions" : true, "ids": ids };
-      sendData(data); 
+      App.postData(url, data); 
     });
   }); 
 
@@ -43,7 +31,7 @@ var init = function() {
     var enumeration_id = getId($this.closest("li")[0].id); 
     var active = $this.prop("checked"); 
     var data = { "_toggle_active" : active, "enumeration_id": enumeration_id  } 
-    sendData(data); 
+    App.postData(url, data); 
   });
 
 
@@ -70,14 +58,13 @@ var init = function() {
 
       }
       
-      sendData(data, callback);
+      App.postData(url, data).done( callback );
       return false;
     } 
   
   
   });
-
 }
 
-$(document).ready(init);
-$(document).on('turbolinks:load', init);
+
+App.plugins.push(init);
