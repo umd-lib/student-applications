@@ -14,5 +14,9 @@
 //= require jquery_ujs
 //= require turbolinks
 //= require cocoon
-//= require_tree .
 //= require umd_lib
+//= require app
+//= require configuration
+//= require prospect
+//= require prospects_index
+//= require user
