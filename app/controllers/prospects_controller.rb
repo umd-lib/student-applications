@@ -123,10 +123,16 @@ class ProspectsController < ApplicationController
       has_many_ids = { enumeration_ids: [], day_times: [], skill_ids: [], library_ids: [] }
       # these are has_many relationships that point to newly created records
       # (accepts_nested_attributes )
-      attrs << has_many_ids.merge(addresses_attributes: sanitize_model_attrs(Address), permanent_address_attributes: sanitize_model_attrs(Address),
-                                  local_address_attributes: sanitize_model_attrs(Address), phone_numbers_attributes: sanitize_model_attrs(PhoneNumber),
-                                  work_experiences_attributes: sanitize_model_attrs(WorkExperience), available_times_attributes: sanitize_model_attrs(AvailableTime),
-                                  skills_attributes: sanitize_model_attrs(Skill))
+      attrs << has_many_ids.merge(
+        addresses_attributes: sanitize_model_attrs(Address),
+        permanent_address_attributes: sanitize_model_attrs(Address),
+        local_address_attributes: sanitize_model_attrs(Address),
+        phone_numbers_attributes: sanitize_model_attrs(PhoneNumber),
+        contact_phone_attributes: sanitize_model_attrs(PhoneNumber),
+        work_experiences_attributes: sanitize_model_attrs(WorkExperience),
+        available_times_attributes: sanitize_model_attrs(AvailableTime),
+        skills_attributes: sanitize_model_attrs(Skill)
+      )
     end
 
     # This takes a model and pops out the prospect_id which is not needed

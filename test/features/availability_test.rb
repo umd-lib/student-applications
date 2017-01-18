@@ -11,6 +11,7 @@ feature 'Add some Available Times' do
     all_valid['addresses_attributes'] = [addresses(:all_valid_springfield).attributes.reject { |a| a == 'id' }]
     all_valid['available_times_attributes'] = []
     all_valid['available_hours_per_week'] = 0
+    all_valid['phone_numbers_attributes'] = [phone_numbers(:all_valid_dummy).attributes.reject { |a| a == 'id' }]
     page.set_rack_session("prospect_params": all_valid)
 
     visit new_prospect_path
@@ -20,14 +21,14 @@ feature 'Add some Available Times' do
       break if page.has_content?('Availability')
     end
     assert page.has_content?('Availability')
-   
-    
+
+
     # lets get 5 random date_times
     day_times = []
     5.times do
       dt = [ [*0..6].sample, [*0..23].sample ]
-      redo if day_times.include?(dt) 
-      day_times << dt 
+      redo if day_times.include?(dt)
+      day_times << dt
     end
     day_times.map! { |dt| "#{dt.first.to_s}-#{dt.last.to_s}" }
 
@@ -53,10 +54,11 @@ feature 'Add some Available Times' do
     all_valid = fixture.attributes
     all_valid[:enumeration_ids] = fixture.enumerations.map(&:id)
     all_valid.reject! { |a| %w(id created_at updated_at).include? a }
-    
+
     all_valid['available_times_attributes'] = []
     all_valid['available_hours_per_week'] = 0
     all_valid['addresses_attributes'] = [addresses(:all_valid_springfield).attributes.reject { |a| a == 'id' }]
+    all_valid['phone_numbers_attributes'] = [phone_numbers(:all_valid_dummy).attributes.reject { |a| a == 'id' }]
     page.set_rack_session("prospect_params": all_valid)
 
     visit new_prospect_path
@@ -71,11 +73,11 @@ feature 'Add some Available Times' do
     day_times = []
     5.times do
       dt = [ [*0..6].sample, [*0..23].sample ]
-      redo if day_times.include?(dt) 
-      day_times << dt 
+      redo if day_times.include?(dt)
+      day_times << dt
     end
     day_times.map! { |dt| "#{dt.first.to_s}-#{dt.last.to_s}" }
-    
+
     # lets click the 5 tds related to that checkbox
     day_times.each do |dt|
       find(:css, "input[value='#{dt}']", visible: false).first(:xpath, './/../..').trigger(:click)

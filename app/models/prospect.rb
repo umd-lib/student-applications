@@ -1,5 +1,7 @@
 # This is a model for a application
 # It includes the steps that are used to submit one
+# rubocop:disable Rails/HasAndBelongsToMany
+# rubocop:disable Metrics/ClassLength
 class Prospect < ActiveRecord::Base
   include Walkable
 
@@ -12,15 +14,16 @@ class Prospect < ActiveRecord::Base
     where(suppressed: false)
   end
 
-  # this makes sure we have a local address and that has_family_member is set
-  # correctly
+  # this makes sure we have a local address and contact phone number
   def after_initialize
     local_address unless persisted? # we call this to make sure we have one.
+    contact_phone unless persisted?
   end
 
   # Custom Validations
   validate :must_have_class_status, :must_have_graduation_year, :must_have_semester
 
+  # rubocop:disable Style/GuardClause
   def must_have_class_status
     if current_step == 'contact_info' && class_status.nil?
       errors.add(:class_status, 'You must have one ( and only one ) Class Status selected.')
@@ -38,6 +41,7 @@ class Prospect < ActiveRecord::Base
       errors.add(:semester, 'Please indicate which semester you are applying for.')
     end
   end
+  # rubocop:enable Style/GuardClause
 
   attr_accessor :class_status
   def class_status
@@ -85,11 +89,13 @@ class Prospect < ActiveRecord::Base
   validate :available_hours_per_week_gt_available_times
   validates :available_hours_per_week, numericality: { greater_than_or_equal_to: 0 }
 
+  # rubocop:disable Style/GuardClause
   def available_hours_per_week_gt_available_times
     if available_hours_per_week > available_times.size
       errors.add(:available_hours_per_week, "can't be greater than the number of available times provided.")
     end
   end
+  # rubocop:enable Style/GuardClause
 
   def name
     "#{last_name}, #{first_name}"
@@ -113,7 +119,19 @@ class Prospect < ActiveRecord::Base
   end
 
   has_many :phone_numbers, inverse_of: :prospect, dependent: :destroy
-  accepts_nested_attributes_for :phone_numbers
+  accepts_nested_attributes_for :phone_numbers, allow_destroy: true
+
+  # by default we want to have one contact_phone, either a new one we've built
+  # or an phone number that has been provided
+  def contact_phone_with_default
+    phone_numbers.first || phone_numbers.build
+  end
+  has_one :contact_phone, class_name: PhoneNumber
+  accepts_nested_attributes_for :contact_phone, allow_destroy: true
+
+  alias_method_chain :contact_phone, :default
+  validates :contact_phone, presence: true, if: ->(o) { o.current_step == 'contact_info' }
+  validates_associated :contact_phone, if: ->(o) { o.current_step == 'contact_info' }
 
   has_many :addresses, inverse_of: :prospect, dependent: :destroy
   accepts_nested_attributes_for :addresses, allow_destroy: true

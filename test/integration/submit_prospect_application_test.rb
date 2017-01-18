@@ -36,6 +36,9 @@ class SubmitProspectApplicationTest < ActionDispatch::IntegrationTest
       fill_in('prospect_addresses_attributes_0_state', with: 'HI')
       fill_in('prospect_addresses_attributes_0_postal_code', with: '12345')
 
+      fill_in('prospect_phone_numbers_attributes_0_number', with: '301-555-0123')
+      select('local', from: 'prospect_phone_numbers_attributes_0_phone_type')
+
       select(Enumeration.active_graduation_years.first.value, from: 'graduation_year')
       select(Enumeration.active_class_statuses.first.value, from: 'class_status')
       select(Enumeration.active_semesters.first.value, from: 'semester')
@@ -63,6 +66,9 @@ class SubmitProspectApplicationTest < ActionDispatch::IntegrationTest
       fill_in('prospect_addresses_attributes_0_state', with: 'HI')
       fill_in('prospect_addresses_attributes_0_postal_code', with: '12345')
 
+      fill_in('prospect_phone_numbers_attributes_0_number', with: '301-555-0123')
+      select('local', from: 'prospect_phone_numbers_attributes_0_phone_type')
+
       select(Enumeration.active_graduation_years.first.value, from: 'graduation_year')
       select(Enumeration.active_class_statuses.first.value, from: 'class_status')
       select(Enumeration.active_semesters.first.value, from: 'semester')
@@ -88,6 +94,8 @@ class SubmitProspectApplicationTest < ActionDispatch::IntegrationTest
       assert page.has_field?('prospect_addresses_attributes_0_postal_code', with: '12345')
       assert page.has_checked_field?("prospect_enumeration_ids_#{library.id}")
       assert page.has_field?('prospect_email', with: 'pj@umd.edu')
+      assert page.has_field?('prospect_phone_numbers_attributes_0_number', with: '301-555-0123')
+      assert page.has_field?('prospect_phone_numbers_attributes_0_phone_type', with: 'local')
       assert_equal Prospect.steps.first, page.get_rack_session_key('prospect_step')
     end
   end
