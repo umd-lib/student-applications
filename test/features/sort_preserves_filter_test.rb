@@ -24,12 +24,13 @@ feature 'Should preserve filter query when sorting' do
     assert page.has_content?('Filter Applications')
 
     # we tweak the slider...
-    find(".min-slider-handle").native.drag_by(100, 0);
-    find(".max-slider-handle").native.drag_by(-200, 0);
-    find("#submit-filter").click
+    min = drag_until('.min-slider-handle', by: 100) { |v| v > 1 }
+    max = drag_until('.max-slider-handle', by: -100) { |v| v < 40 }
+    # wait for the changes to update before submitting
     sleep(2)
-    # But only Betty has hours in the  range
+    find("#submit-filter").click
 
+    # But only Betty has hours in the  range
     assert page.has_content?("Student, Betty")
     refute page.has_content?("Student, Alvin")
     refute page.has_content?("Stone, Rolling")
