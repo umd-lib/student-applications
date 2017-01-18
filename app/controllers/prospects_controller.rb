@@ -1,7 +1,7 @@
 class ProspectsController < ApplicationController
 
-  include QueryingProspects 
-  
+  include QueryingProspects
+
   before_action :set_session_and_prospect, only: [:new, :create]
   before_action :ensure_auth, only: [:index, :update, :show, :deactivate]
 
@@ -37,15 +37,15 @@ class ProspectsController < ApplicationController
   end
 
   def index
-    
-    default_search_params 
-    
+
+    default_search_params
+
     @prospect_ids = Prospect.joins( join_table ).select(select_statement)
-                  .where( text_search_statement ) 
-                  .where( search_statement ) 
+                  .where( text_search_statement )
+                  .where( search_statement )
                   .active.order( sort_order )
-                  .pluck("prospects.id").uniq 
-                  .paginate( page: params[:page], per_page: 30 ) 
+                  .pluck("prospects.id").uniq
+                  .paginate( page: params[:page], per_page: 30 )
     @prospects = Prospect.includes( :enumerations, :available_times, :skills).find(@prospect_ids).index_by(&:id).values_at(*@prospect_ids)
   end
 
@@ -57,13 +57,13 @@ class ProspectsController < ApplicationController
   end
 
   # we don't actually want to destroy record, but just mark them as inactive
-  # accepts a hash of params 
+  # accepts a hash of params
   def deactivate
-    ids = params[:ids] 
-    Prospect.where( id: ids  ).update_all( suppressed: true ) 
+    ids = params[:ids]
+    Prospect.where( id: ids  ).update_all( suppressed: true )
     respond_to do |format|
-      format.html { redirect_to prospects_path, flash: { info: "Prospects ( #{ ids.join(',')  } ) deactivated." } } 
-      format.json { head :no_content } 
+      format.html { redirect_to prospects_path, flash: { info: "Prospects ( #{ ids.join(',')  } ) deactivated." } }
+      format.json { head :no_content }
     end
   end
 
@@ -125,10 +125,16 @@ class ProspectsController < ApplicationController
       has_many_ids = { enumeration_ids: [], day_times: [], skill_ids: [], library_ids: [] }
       # these are has_many relationships that point to newly created records
       # (accepts_nested_attributes )
-      attrs << has_many_ids.merge(addresses_attributes: sanitize_model_attrs(Address), permanent_address_attributes: sanitize_model_attrs(Address),
-                                  local_address_attributes: sanitize_model_attrs(Address), phone_numbers_attributes: sanitize_model_attrs(PhoneNumber),
-                                  work_experiences_attributes: sanitize_model_attrs(WorkExperience), available_times_attributes: sanitize_model_attrs(AvailableTime),
-                                  skills_attributes: sanitize_model_attrs(Skill))
+      attrs << has_many_ids.merge(
+        addresses_attributes: sanitize_model_attrs(Address),
+        permanent_address_attributes: sanitize_model_attrs(Address),
+        local_address_attributes: sanitize_model_attrs(Address),
+        phone_numbers_attributes: sanitize_model_attrs(PhoneNumber),
+        contact_phone_attributes: sanitize_model_attrs(PhoneNumber),
+        work_experiences_attributes: sanitize_model_attrs(WorkExperience),
+        available_times_attributes: sanitize_model_attrs(AvailableTime),
+        skills_attributes: sanitize_model_attrs(Skill)
+      )
     end
 
     # This takes a model and pops out the prospect_id which is not needed

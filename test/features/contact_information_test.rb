@@ -18,6 +18,9 @@ feature 'Enter contact information' do
     fill_in('prospect_addresses_attributes_0_state', with: 'HI')
     fill_in('prospect_addresses_attributes_0_postal_code', with: '12345')
 
+    fill_in('prospect_phone_numbers_attributes_0_number', with: '301-555-0123')
+    select('local', from: 'prospect_phone_numbers_attributes_0_phone_type')
+
     select(Enumeration.active_graduation_years.first.value, from: 'graduation_year')
     select(Enumeration.active_class_statuses.first.value, from: 'class_status')
     select(Enumeration.active_semesters.first.value, from: 'semester')
@@ -53,8 +56,8 @@ feature 'Enter contact information' do
     end
 
     2.times { click_link 'Add A Phone Number' }
-    assert_equal 2, find(:css, '#phone-numbers').all('.nested-fields').length
-    2.times do |i|
+    assert_equal 3, find(:css, '#phone-numbers').all('.nested-fields').length
+    3.times do |i|
       within("#phone-numbers .nested-fields:nth-child(#{i + 1})") do
         %w(_number).each do |attr|
           el_id = find("input[id$='#{attr}']")[:id]
