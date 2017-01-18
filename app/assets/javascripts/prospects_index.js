@@ -49,7 +49,7 @@ var init = function() {
 
   // we can clean up out sliders on each open/close
   $("#filter-modal").on('show.bs.modal', function(e){ 
-    $("#available-hours-selector").bootstrapSlider({}); 
+    $("#available-hours-selector").bootstrapSlider({tooltip: 'always'}); 
   });
   
   $("#filter-modal").on('hidden.bs.modal', function(e){ 

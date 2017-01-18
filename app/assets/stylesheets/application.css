@@ -147,6 +147,7 @@ ul.list-group { list-style-type: none; }
   background: #5bc0de;
 }
 
+#filter-modal b { padding: 0 15px; }
 #filter-modal .availability-select { text-align: center; }  
 #filter-modal .slider.slider-horizontal {
   width: 80%; 
