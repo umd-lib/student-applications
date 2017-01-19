@@ -123,7 +123,7 @@
 <h3>Resume
   <% if @current_user %>
     <% if @current_user.admin %>
-      <%= link_to "Change Resume", edit_resume_path(@resume), class: 'btn btn-info pull-right' %>
+      <%= link_to "Change Resume", @resume ? edit_resume_path(@resume) : new_resume_path(@resume, prospect: @prospect.id), class: 'btn btn-info pull-right' %>
     <% end %>
   <% else %>
     <%= link_to "Change Resume", new_prospect_path(step: "upload_resume"), class: 'btn btn-info pull-right' %>

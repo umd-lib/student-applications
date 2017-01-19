@@ -1,4 +1,5 @@
 <%= simple_form_for @resume,  html: { class: 'form-horizontal uploadForm' } do |resume_form| %>
+  <%= hidden_field_tag :prospect, @prospect.id if @prospect %>
   <%= resume_form.label :file, class: "btn btn-lg btn-info" do %>
     <span class="glyphicon glyphicon-upload" aria-hidden="true"></span>
     Choose a file...

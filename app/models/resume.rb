@@ -6,7 +6,7 @@ class Resume < ActiveRecord::Base
   # fix up the MIME type using server-side detection, to overcome browsers
   # sometimes sending incorrect Content-Type headers with PDF files
   # adapted from http://stackoverflow.com/a/7000208/5124907
-  GENERIC_CONTENT_TYPES = ['application/force-download', 'application/octet-stream'].freeze
+  GENERIC_CONTENT_TYPES = ['application/force-download', 'application/octet-stream', 'application/x-download'].freeze
 
   before_validation(on: [:create, :update]) do |resume|
     if GENERIC_CONTENT_TYPES.include?(resume.file_content_type)
