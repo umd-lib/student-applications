@@ -113,7 +113,7 @@
                   </div>
                   <% 0.upto(6) do |dow| %>
                     <div class="col-md-1">
-                      <%= check_box_tag 'available_time[]', "#{dow}-#{hour}", (params[:available_time] || []).include?("#{dow}-#{hour}"), id: "available_time-#{dow}-#{hour}" %>
+                      <%= check_box_tag 'available_time[]', "#{dow}-#{hour}", (params[:available_time] || []).include?("#{dow}-#{hour}"), id: "available_time-#{dow}-#{hour}", class: 'available_time' %>
                     </div>
                   <% end %>
                 </div>
