@@ -1,22 +1,71 @@
-<%= simple_form_for Enumeration.new, url: update_configuration_path, html: { class: 'form-horizontal' } do |form| %>
-  <% @enumerations.each do |list, values| %>
-    <h3><%= list.humanize.pluralize.upcase %></h3>
-    <ul class="list-group" data-list="<%= list %>" >
-      <% values.each do |value| %> 
-        <li class="list-group-item" id="enumeration_<%= value.id %>" data-position="<%= value.position %>"> 
-          <span class="glyphicon glyphicon-resize-vertical mover" aria-hidden="true"></span> 
-          <span class='enumeration-value'><%= value.value %></span>    
-          <span class="toggler">                                                                                                                                                                                      
-            <input class="active-toggle" type='checkbox' data-toggle="toggle" name="enumeration[<%= value.id %>][active]" <%= "checked" if value.active %> >                                                                
-          </span>      
-        </li>
-      <% end %>
-      <li class="list-group-item new-enumeration" id="new_<%= list %>" > 
-        <span class="glyphicon mover" aria-hidden="true"></span> 
-        <span class='enumeration-value'><%= form.input :value, placeholder: "Add A New Value", label: false,
-          input_html: { class: "new-enumeration-value", id: "enumeration_#{list}_value" } %></span> 
-        <span class="toggler"><input class="active-toggle" type='checkbox' data-toggle="toggle" disabled checked ></span>  
-      </li>
-    </ul>
-  <% end %>
-<%end %>
+<div class="panel-group" id="accordion" role="tablist" aria-multiselectable="true">  
+  
+  <%= simple_form_for Enumeration.new, url: update_configuration_path, html: { class: 'form-horizontal' } do |form| %>
+      
+  <div class="panel panel-default"> 
+    <div class="panel-heading" role="tab" id="skills-section"> 
+        <div class="col-md-4 skills-section-header"> 
+          <h3 class="panel-title">
+            <a  class="collapsed" role="button" data-toggle="collapse" data-parent="#accordion" href="#skills" aria-expanded="true" aria-controls="collapseOne">  
+              SKILLS 
+            </a> 
+          </h3>
+        </div> 
+    </div>
+    <div id="skills" class="panel-collapse collapse <%= 'in' unless params['skills_page'].blank? %>" role="tabpanel" aria-labelledby="headingOne"> 
+      <ul class="list-group" data-list="skills" >
+          <li class='list-group-item'>
+              <%= will_paginate @skills, param_name: "skills_page", renderer: BootstrapPagination::Rails %>
+          </li>
+        <% @skills.each do |skill| %>
+          <li class="list-group-item" id="skill_<%= skill.id %>" >
+            <span class='skill-name'><%= skill.name %></span>
+            <span class="toggler">
+              <input class="promoted-toggle" type='checkbox' data-toggle="toggle" name="skill[<%= skill.id %>][promoted]" <%= "checked" if skill.promoted?  %> > 
+            </span>
+          </li>
+        <% end %>
+          <li class="list-group-item new-skill" id="new_skill" > 
+            <span class='skill-value'><%= form.input :value, placeholder: "Add A New Skill", label: false,
+              input_html: { class: "new-skill-value", id: "new_skill_name" } %></span> 
+          </li>
+      </ul>
+    </div>
+  </div> 
+  
+
+    <% @enumerations.each do |list, values| %>
+      <div class="panel panel-default"> 
+        <div class="panel-heading" role="tab" id="enumeration-heading-<%= list %>"> 
+          <h3 class="panel-title">
+            <a  class="collapsed" role="button" data-toggle="collapse" data-parent="#accordion" href="#enumeration-<%= list %>" aria-expanded="true" aria-controls="collapseOne">  
+              <%= list.humanize.pluralize.upcase %>
+            </a> 
+          </h3>
+        </div>
+        <div id="enumeration-<%= list %>" class="panel-collapse collapse" role="tabpanel" aria-labelledby="headingOne"> 
+          <ul class="list-group" data-list="<%= list %>" >
+            <% values.each do |value| %> 
+              <li class="list-group-item" id="enumeration_<%= value.id %>" data-position="<%= value.position %>"> 
+                <span class="glyphicon glyphicon-resize-vertical mover" aria-hidden="true"></span> 
+                <span class='enumeration-value'><%= value.value %></span>    
+                <span class="toggler">                                                                                                                                                                                      
+                  <input class="active-toggle" type='checkbox' data-toggle="toggle" name="enumeration[<%= value.id %>][active]" <%= "checked" if value.active %> >                                                                
+                </span>      
+              </li>
+            <% end %>
+            <li class="list-group-item new-enumeration" id="new_<%= list %>" > 
+              <span class="glyphicon mover" aria-hidden="true"></span> 
+              <span class='enumeration-value'><%= form.input :value, placeholder: "Add A New Value", label: false,
+                input_html: { class: "new-enumeration-value", id: "enumeration_#{list}_value" } %></span> 
+              <span class="toggler"><input class="active-toggle" type='checkbox' data-toggle="toggle" disabled checked ></span>  
+            </li>
+          </ul>
+        </div>
+      </div>     
+    
+    <% end %> <!-- @enumerations.each --> 
+
+  <% end %> <!-- simple_form_for -->
+
+</div>

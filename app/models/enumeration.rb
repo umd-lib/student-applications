@@ -3,12 +3,15 @@ class Enumeration < ActiveRecord::Base
 
   ENUMERATION_LISTS = %w(class_status graduation_year library semester how_did_you_hear_about_us).map(&:intern).freeze
 
+  validates :value, presence: true
+  validates :list, presence: true
+  
   enum list: ENUMERATION_LISTS
 
   class << self
     ENUMERATION_LISTS.map(&:to_s).each do |list|
       define_method(:"active_#{list.pluralize}") do
-        where(list: lists[list], active: true)
+        where(list: lists[list], active: true).order(:position)
       end
 
       define_method(:"#{list.pluralize}") do

@@ -147,8 +147,20 @@ ul.list-group { list-style-type: none; }
   background: #5bc0de;
 }
 
+#filter-modal b { padding: 0 15px; }
 #filter-modal .availability-select { text-align: center; }  
 #filter-modal .slider.slider-horizontal {
   width: 80%; 
 }
+.container.configuration.show h3 { padding-top: 2px }
 
+#skills-section .skills-section-header { padding-left: 0; }
+#skills .pagination  {
+  position: absolute;
+  right: 25%;
+  top: -15%;
+}
+#new_skill_name { width: 250px; }
+
+
+#skills .pagination span { font-size: 14px }
