@@ -16,23 +16,23 @@ feature 'Should be able filter prospects on available hours per week' do
     Prospect.find_by( first_name: "Rolling" ).update_attribute( :available_hours_per_week,  40 )
 
     # We should have all of our students present
-    assert page.has_content?("Student, Betty") 
-    assert page.has_content?("Student, Alvin") 
-    assert page.has_content?("Stone, Rolling") 
+    assert page.has_content?("Student, Betty")
+    assert page.has_content?("Student, Alvin")
+    assert page.has_content?("Stone, Rolling")
 
     find("#filter-prospects").click
     assert page.has_content?('Filter Applications')
-  
+
     # we tweak the slider...
-    find(".min-slider-handle").native.drag_by(100, 0);
-    find(".max-slider-handle").native.drag_by(-200, 0);
+    min = drag_until('.min-slider-handle', by: 100) { |v| v > 1 }
+    max = drag_until('.max-slider-handle', by: -100) { |v| v < 40 }
+    sleep(2)
     find("#submit-filter").click
-    sleep(2) 
-    # But only Betty has hours in the  range 
-    
-    assert page.has_content?("Student, Betty") 
-    refute page.has_content?("Student, Alvin") 
-    refute page.has_content?("Stone, Rolling") 
+
+    # But only Betty has hours in the  range
+    assert page.has_content?("Student, Betty")
+    refute page.has_content?("Student, Alvin")
+    refute page.has_content?("Stone, Rolling")
 
   end
 end
