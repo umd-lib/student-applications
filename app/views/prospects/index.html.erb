@@ -70,7 +70,7 @@
     <% end %>
   </tbody>
 </table>
-<%= will_paginate @prospect_ids %>
+<%= will_paginate @prospect_ids, renderer: BootstrapPagination::Rails %>
 <%= render "availability_modal" %>
 <%= render "deactivate_modal" %>
 <%= render "filter_modal" %>

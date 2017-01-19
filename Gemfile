@@ -48,6 +48,8 @@ gem 'simple_form'
 gem 'cocoon'
 gem 'country_select'
 gem 'bootstrap-toggle-rails'
+gem 'will_paginate-bootstrap'
+
 
 gem 'paperclip', '~> 5.0.0'
 

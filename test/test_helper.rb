@@ -3,7 +3,6 @@ require 'database_cleaner'
 
 SimpleCov.start
 
-DatabaseCleaner.strategy = :truncation, { only: %w(prospects) }
 
 require 'securerandom'
 
@@ -39,6 +38,8 @@ require 'capybara-screenshot/minitest'
 
 Capybara.javascript_driver = :poltergeist
 require 'rack_session_access/capybara'
+
+DatabaseCleaner.strategy = :truncation, { only: %w(prospects) }
 
 class ActiveSupport::TestCase
   # Setup all fixtures in test/fixtures/*.yml for all tests in alphabetical order.
