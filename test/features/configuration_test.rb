@@ -53,6 +53,7 @@ feature 'Should be able to configuration that application' do
     refute enum.reload.active? 
     find(:css, "#enumeration_#{enum.id} .toggle").trigger(:click)
     page.must_have_selector  "#enumeration_#{enum.id} .toggle:not(.off)"
+    sleep(1) 
     assert enum.reload.active? 
   end
   

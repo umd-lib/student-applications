@@ -110,12 +110,15 @@ class Prospect < ActiveRecord::Base
   end
 
   def day_times=(dts)
-    available_times.destroy_all
+    unless dts == @day_times 
+      instance_variable_set(:@changed_attributes, { day_times: @day_times }) 
+    end 
+    available_times.each { |at| at.mark_for_destruction } 
     dts.each do |dt|
       day, time = dt.split('-').map(&:to_i)
-      available_times.find_or_initialize_by(day: day, time: time)
+      available_times.build(day: day, time: time)
     end
-    @day_times = available_times.map(&:day_time)
+    @day_times = available_times.map { |at| at.day_time unless at.marked_for_destruction? }.compact
   end
 
   has_many :phone_numbers, inverse_of: :prospect, dependent: :destroy

@@ -83,6 +83,17 @@ class ProspectTest < ActiveSupport::TestCase
       assert_includes prospect.day_times, a.day_time
     end
   end
+  
+  test 'it should be able to modify available_times via the day_times shortcut' do
+    prospect = prospects(:all_valid) 
+    dts = prospect.day_times
+    assert_equal prospect.available_times.length, dts.length
+    new_dts=  [ "0-13", "1-14", "2-15", "3-16", "4-17", "5-18", "6-19" ] 
+    prospect.day_times = new_dts 
+    assert prospect.changed? 
+    assert prospect.save!
+    assert_equal prospect.day_times, new_dts
+  end
 
   test 'it ensure the total available hours is not more than the available_times selected' do
     assert_equal @all_valid.available_hours_per_week, 1
