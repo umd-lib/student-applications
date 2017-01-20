@@ -94,6 +94,32 @@
                   </div>
                 <% end %>   
             </div>
+
+            <div class="row">
+              <h4>Available Times</h4>
+              <div class="row">
+                <div class="col-md-1"></div>
+                <% 0.upto(6) do |dow| %>
+                  <div class="col-md-1">
+                    <%= @weekdays[dow] %>
+                  </div>
+                <% end %>
+              </div>
+              <% 0.upto(24) do |hour| %>
+                <% time = Time.new(2000, 1, 1, hour, 0, 0) %>
+                <div class="row">
+                  <div class="col-md-1">
+                    <%= time.strftime('%-l%P') %>–<%= (time + 3600).strftime('%-l%P') %>
+                  </div>
+                  <% 0.upto(6) do |dow| %>
+                    <div class="col-md-1">
+                      <%= check_box_tag 'available_time[]', "#{dow}-#{hour}", (params[:available_time] || []).include?("#{dow}-#{hour}"), id: "available_time-#{dow}-#{hour}", class: 'available_time' %>
+                    </div>
+                  <% end %>
+                </div>
+              <% end %>
+            </div>
+
           
         <% end %> <!-- form tag -->
         </div> <!-- container --> 

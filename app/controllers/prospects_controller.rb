@@ -1,7 +1,10 @@
 class ProspectsController < ApplicationController
   include QueryingProspects
 
-  before_action :set_session_and_prospect, only: [:new, :create]
+  @error_message = "We're sorry, but something has gone wrong. Please try again."
+
+  before_action :set_session, only: [:new, :create]
+  before_action :set_prospect, only: [:new, :create]
   before_action :ensure_auth, only: [:index, :update, :show, :deactivate]
 
   def new
@@ -37,23 +40,18 @@ class ProspectsController < ApplicationController
 
   def index
     default_search_params
-
-    @prospect_ids = Prospect.joins(join_table).select(select_statement)
-                            .where(text_search_statement)
-                            .where(search_statement)
-                            .where(*available_range_statement)
-                            .active.order(sort_order)
-                            .pluck('prospects.id').uniq
-                            .paginate(page: params[:page], per_page: 30)
-    @prospects = Prospect.includes(:enumerations, :available_times, :skills).find(@prospect_ids).index_by(&:id).values_at(*@prospect_ids)
+    find_prospects
+    @weekdays = %w(Sunday Monday Tuesday Wednesday Thursday Friday Saturday)
   end
 
+  # rubocop:disable Style/GuardClause
   def update
     @prospect = Prospect.includes(:enumerations, :available_times, :skills).find(params[:id])
     if @prospect.update(prospect_params)
       redirect_to prospects_path, notice: "#{@prospect.name} application has been updated"
     end
   end
+  # rubocop:enable Style/GuardClause
 
   # we don't actually want to destroy record, but just mark them as inactive
   # accepts a hash of params
@@ -76,26 +74,31 @@ class ProspectsController < ApplicationController
 
     def prospect_from_session
       Prospect.new(ActionController::Parameters.new(session[:prospect_params]).permit!)
-    rescue => e
+    rescue
       # a nice place to debug..
       # byebug
       reset_session
-      redirect_to root_path, flash: { error: "We're sorry, but something has gone wrong. Please try again." }
+      redirect_to root_path, flash: { error: @error_message }
     end
 
     # match the value stored in the session with the incoming values in the
     # param
-    def set_session_and_prospect
+    def set_session
       session[:prospect_params] ||= {}.with_indifferent_access
       session[:prospect_params].deep_merge!(prospect_params)
       session[:prospect_params].keys.select { |a| a =~ /_attributes$/ }.each do |attr|
         session[:prospect_params][attr] = params[:prospect][attr] unless params[:prospect][attr].blank?
       end
-      session[:prospect_params].each { |k, v| session[:prospect_params][k] = v.to_hash if v.is_a?(ActionController::Parameters) }
+      session[:prospect_params].each do |k, v|
+        session[:prospect_params][k] = v.to_hash if v.is_a?(ActionController::Parameters)
+      end
+    end
+
+    def set_prospect
       @prospect = Prospect.new(ActionController::Parameters.new(session[:prospect_params]).permit!)
       if @prospect.nil? || !@prospect.is_a?(Prospect)
         reset_session
-        redirect_to(root_path, flash: { error: "We're sorry, but something has gone wrong. Please try again." }) && raise(false)
+        redirect_to(root_path, flash: { error: @error_message }) && raise(false)
       else
         @resume = @prospect.resume ? @prospect.resume : @prospect.build_resume
       end
@@ -152,5 +155,19 @@ class ProspectsController < ApplicationController
         @prospect.next_step
       end
       session[:prospect_step] = @prospect.current_step
+    end
+
+    def find_prospects
+      @prospect_ids = Prospect.joins(join_table).select(select_statement)
+                              .where(text_search_statement)
+                              .where(search_statement)
+                              .where(*available_range_statement)
+                              .where(prospects_by_available_time)
+                              .active.order(sort_order)
+                              .pluck('prospects.id').uniq
+                              .paginate(page: params[:page], per_page: 30)
+      @prospects = Prospect.includes(:enumerations, :available_times, :skills).find(@prospect_ids)
+                           .index_by(&:id)
+                           .values_at(*@prospect_ids)
     end
 end
