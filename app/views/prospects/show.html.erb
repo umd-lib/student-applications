@@ -1,4 +1,7 @@
 <%= simple_form_for @prospect,  html: { class: 'form-horizontal' } do |form| %>
   <%= render partial: "summary", locals: { form: form } %>
+  <div class="well">
+    <%= link_to 'Edit Submission', edit_prospect_path(@prospect), class: 'btn btn-info' %>
+  </div>
   <%= render(partial: "admin_section", locals: { form: form }) if @current_user.admin? %>
 <% end %>

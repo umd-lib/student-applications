@@ -44,11 +44,22 @@ class ProspectsController < ApplicationController
     @weekdays = %w(Sunday Monday Tuesday Wednesday Thursday Friday Saturday)
   end
 
+  def edit
+    @prospect = Prospect.find(params[:id])
+    @resume = @prospect.resume
+  end
+
   # rubocop:disable Style/GuardClause
   def update
     @prospect = Prospect.includes(:enumerations, :available_times, :skills).find(params[:id])
-    if @prospect.update(prospect_params)
+    @prospect.update(prospect_params) 
+    if @prospect.save!
       redirect_to prospects_path, notice: "#{@prospect.name} application has been updated"
+    else
+      respond_to do |format|
+        format.html { redirect_to edit_prospect_path(@prospect), flash: { errors: @prospect.errors } }
+        format.json { render json: { errors: @prospect.errors } }
+      end
     end
   end
   # rubocop:enable Style/GuardClause
