@@ -110,9 +110,6 @@ class Prospect < ActiveRecord::Base
   end
 
   def day_times=(dts)
-    unless dts == @day_times 
-      instance_variable_set(:@changed_attributes, { day_times: @day_times }) 
-    end 
     available_times.each { |at| at.mark_for_destruction } 
     dts.each do |dt|
       day, time = dt.split('-').map(&:to_i)

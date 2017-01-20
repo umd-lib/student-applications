@@ -58,10 +58,14 @@ label.required abbr {
 }
 
 /* only for tables on the availability step */
-.availability-availability-table > tbody > tr >  td:not(.time-label) { cursor: pointer; }
-.availability-availability-table > tbody > tr >  td:not(.time-label):hover {
-  border-color: #5cb85c;
-  background: #dff0d8;
+.container.prospects {
+  &.new, &.create, &.edit {
+    #availability-table > tbody > tr >  td:not(.time-label) { cursor: pointer; }
+    #availability-table > tbody > tr >  td:not(.time-label):hover {
+      border-color: #5cb85c;
+      background: #dff0d8;
+    }
+  }
 }
 
 .avail-cell.success:after {
