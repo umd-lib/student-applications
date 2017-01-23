@@ -64,3 +64,14 @@ provided to assist with this process. Simply copy the "env_example" file to
 
 The configured .env file should _not_ be checked into the Git repository, as it
 contains credential information.
+
+### Adding users
+
+You can add users via a rake task: 
+### Adding users
+
+You can add users via a rake task: 
+
+rake db:add_admin_cas_user[cas_directory_id,full_name]  # Add an admin user
+rake db:add_cas_user[cas_directory_id,full_name]        # Add a non-admin user
+rake db:bulk_add_users[csv_file]  # user a csv file with full_name, directory_id rows 
