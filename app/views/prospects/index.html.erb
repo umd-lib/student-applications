@@ -39,7 +39,7 @@
   <tbody>
     <% @prospects.each do |prospect| %>
       <% if @current_user.admin? %> 
-        <tr>
+        <tr id="prospect_<%= prospect.id %>">
           <td><input name="ids[]"  class="deactivate" value="<%= prospect.id %>" type="checkbox"/></td>
           <td><%= link_to( prospect.name, prospect) %></td> 
           <td><%= prospect.id %></td>
@@ -50,7 +50,7 @@
           <td><%= prospect.semester %></td>
         </tr>
       <% else %>
-        <tr>
+        <tr id="prospect_<%= prospect.id %>">
           <td><%= link_to( prospect.name, prospect) %></td> 
           <td><%= prospect.in_federal_study? %></td>
           <td><%= prospect.class_status %></td>

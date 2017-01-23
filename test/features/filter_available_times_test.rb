@@ -17,39 +17,44 @@ feature 'Should be able filter prospects on available times' do
     Prospect.find_by(first_name: 'Alvin').update_attribute(:day_times, ['0-8', '0-9'])
     Prospect.find_by(first_name: 'Rolling').update_attribute(:day_times, ['1-8', '1-9', '1-10'])
     # rubocop:ensable Rails/SkipsModelValidations
+    
+    students = Prospect.all.group_by(&:first_name).map { |k,v| [k, v.first] }.to_h
 
     # We should have all of our students present
-    assert page.has_content?('Student, Betty')
-    assert page.has_content?('Student, Alvin')
-    assert page.has_content?('Stone, Rolling')
+    # We should have all of our students present
+    page.must_have_selector("#prospect_#{ students["Betty"].id  }") 
+    page.must_have_selector("#prospect_#{ students["Alvin"].id  }") 
+    page.must_have_selector("#prospect_#{ students["Rolling"].id  }") 
 
     find('#filter-prospects').click
-    assert page.has_content?('Filter Applications')
+    assert page.find( "#filter-modal" ).visible? 
 
-    find('#available_time-0-9').click
-    sleep(2)
-    assert_equal 1, all('.available_time').select(&:checked?).length
-    assert find('#available_time-0-9').checked?
-    find('#submit-filter').click
-
+    find('#available_time-0-9').trigger(:click)
+    assert find("input#available_time-0-9")["checked"]
+    
+    find('#submit-filter').trigger(:click)
+    page.wont_have_selector( "#filter-modal" ) 
+    
     # check for prospects with the first time; should be two out of three
-    assert page.has_content?('Student, Betty')
-    assert page.has_content?('Student, Alvin')
-    refute page.has_content?('Stone, Rolling')
+    page.must_have_selector("#prospect_#{ students["Betty"].id  }") 
+    page.must_have_selector("#prospect_#{ students["Alvin"].id  }") 
+    page.wont_have_selector("#prospect_#{ students["Rolling"].id  }") 
 
     find('#filter-prospects').click
-    assert page.has_content?('Filter Applications')
+    page.must_have_selector( "#filter-modal" ) 
 
     # check for prospects with both times; should only be one
-    find('#available_time-0-10').click
-    sleep(2)
+    find('#available_time-0-10').trigger(:click)
+    assert find("input#available_time-0-9")["checked"]
+    assert find("input#available_time-0-10")["checked"]
     assert_equal 2, all('.available_time').select(&:checked?).length
-    assert find('#available_time-0-9').checked?
-    assert find('#available_time-0-10').checked?
+    
     find('#submit-filter').click
+    page.wont_have_selector( "#filter-modal" ) 
+    
+    page.must_have_selector("#prospect_#{ students["Betty"].id  }") 
+    page.wont_have_selector("#prospect_#{ students["Rolling"].id  }") 
+    page.wont_have_selector("#prospect_#{ students["Alvin"].id  }") 
 
-    assert page.has_content?('Student, Betty')
-    refute page.has_content?('Student, Alvin')
-    refute page.has_content?('Stone, Rolling')
   end
 end

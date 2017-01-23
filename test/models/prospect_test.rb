@@ -90,7 +90,6 @@ class ProspectTest < ActiveSupport::TestCase
     assert_equal prospect.available_times.length, dts.length
     new_dts=  [ "0-13", "1-14", "2-15", "3-16", "4-17", "5-18", "6-19" ] 
     prospect.day_times = new_dts 
-    assert prospect.changed? 
     assert prospect.save!
     assert_equal prospect.day_times, new_dts
   end
