@@ -1,3 +1,4 @@
+require 'csv'
 # lib/tasks/add_cas_user.rake
 namespace :db do
   desc 'Add an admin user'
@@ -37,4 +38,18 @@ namespace :db do
       puts "User #{cas_directory_id} now admin: #{user.admin?}"
     end
   end
+
+  desc "Bulk add users from CSV file"
+  task :bulk_add_users, [:csv_file] => :environment do |_t, args|
+    file = args[:csv_file]
+    if !File.exists?(file)
+      puts  "Cannot open file at #{file}"
+    else 
+      CSV.foreach(file) do |row|
+        User.find_or_create_by!(cas_directory_id: row[1], name: row[0], admin: false)
+        puts "Creating user id: #{row[1]} name: #{row[0]}" 
+      end
+    end 
+  end
+
 end
