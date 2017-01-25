@@ -4,6 +4,8 @@ class Skill < ActiveRecord::Base
 
   scope :promoted, -> { where(promoted: true) }
 
+  validates :name, presence: true
+
   def unpromoted
     !promoted?
   end

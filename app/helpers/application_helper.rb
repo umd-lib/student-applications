@@ -23,6 +23,7 @@ module ApplicationHelper
     @current_user && @current_user.admin?
   end
 
+  # rubocop:disable Rails/TimeZone
   # takes an 24 hour integer and formcats it into "HHam/pm".
   # like 13 => 1pm
   def hour_integer_to_humanized(time)
@@ -36,6 +37,7 @@ module ApplicationHelper
     endt = Time.strptime((time + 1).to_s, '%H').strftime('%l:%M %P')
     "#{startt}#{endt}"
   end
+  # rubocop:enable Rails/TimeZone
 
   # this returns the css class used in the cell of the avail table
   def avail_table_cell_status(form, value)
@@ -86,13 +88,13 @@ module ApplicationHelper
   def sortable(column, title)
     css_class = column == sort_column ? "current #{sort_direction}" : nil
     direction = column == sort_column && sort_direction == 'asc' ? 'desc' : 'asc'
-    link_to({ sort: column, direction: direction }, class: css_class) do
-      html = if column == sort_column && sort_direction
-               "<i class='glyphicon glyphicon-chevron-#{sort_direction == 'asc' ? 'up' : 'down'}' ></i> #{title}"
+    link_to request.query_parameters.merge(sort: column, direction: direction), class: css_class do
+      icon = if column == sort_column && sort_direction
+               content_tag :i, '', class: "glyphicon glyphicon-chevron-#{sort_direction == 'asc' ? 'up' : 'down'}"
              else
-               "<i class='glyphicon' ></i> #{title}"
+               content_tag :i, '', class: 'glyphicon'
              end
-      html.html_safe
+      safe_join([icon, ' ', title])
     end
   end
   # rubocop:enable Metrics/AbcSize, Metrics/CyclomaticComplexity, Metrics/PerceivedComplexity

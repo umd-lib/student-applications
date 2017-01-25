@@ -1,0 +1,12 @@
+<%= simple_form_for @resume,  html: { class: 'form-horizontal uploadForm' } do |resume_form| %>
+  <%= hidden_field_tag :prospect, @prospect.id if @prospect %>
+  <%= resume_form.label :file, class: "btn btn-lg btn-info" do %>
+    <span class="glyphicon glyphicon-upload" aria-hidden="true"></span>
+    Choose a file...
+  <% end %>
+  <%= resume_form.file_field :file %>
+  <%= resume_form.submit "Upload", name: "uploadResume", class: "btn btn-lg btn-warning upload" %>
+  <% if @resume.file? %>
+    <%= link_to "View #{@resume.file_file_name}", resume_path(@resume), class: "show-link", target: "_self" %>
+  <% end %>
+<% end %>

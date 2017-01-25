@@ -1,5 +1,8 @@
 source 'https://rubygems.org'
 
+# use HTTPS for github repos (see https://bundler.io/git.html#security)
+git_source(:github){ |repo_name| "https://github.com/#{repo_name}.git" }
+
 # Bundle edge Rails instead: gem 'rails', github: 'rails/rails'
 gem 'rails', '4.2.6'
 # Use sqlite3 as the database for Active Record
@@ -38,16 +41,18 @@ gem 'dotenv-rails', '~> 2.1.1'
 gem 'capistrano-rails', group: :development
 gem 'figaro'
 
-gem 'umd_lib_style', git: 'https://github.com/umd-lib/umd_lib_style.git', branch: 'develop'
+gem 'umd_lib_style', github: 'umd-lib/umd_lib_style', ref: '0.2.0'
 gem 'rack-cas'
 
 gem 'simple_form'
 gem 'cocoon'
 gem 'country_select'
 gem 'bootstrap-toggle-rails'
+gem 'will_paginate-bootstrap'
+
 
 gem 'paperclip', '~> 5.0.0'
- 
+
 gem 'faker'
 
 group :development, :test do

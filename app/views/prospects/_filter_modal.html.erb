@@ -21,19 +21,14 @@
             </div> <!-- contact info row -->
             
             <div class="row">
-                <h4>Skills</h4> 
-                <% Skill.all.order(:promoted).in_groups_of( 2 ) do |batch| %>
-                  <div class="row">
-                    <% batch.each do |sk| %> 
-                      <div class="col-md-4">
-                        <% unless sk.nil? %> 
-                          <%= check_box_tag( "search[skills][]", sk.id, params[:search][:skills].include?(sk.id.to_s), { :multiple => true }  )  %>
-                          <%= label_tag(  "search[skills][id]",  sk.name )  %>
-                        <% end %>   
-                      </div>
-                    <% end %> 
-                  </div>
-                <% end %>   
+                <h4>Available Hours</h4> 
+                <div class="col-md-8 availability-select"> 
+                  <b>0</b><input id="available-hours-selector" type="text" class="span2" value="" data-slider-min="0" 
+                  data-slider-max="50" data-slider-step="1"
+                  data-slider-value="[<%= params[:available_hours_per_week_min] || 0 %>,<%= params[:available_hours_per_week_max] || 50 %>]"/><b>50</b>
+                 <%= hidden_field_tag( "available_hours_per_week_min", params[:available_hours_per_week_min] || 0, { id: 'availability-min' } ) %> 
+                 <%= hidden_field_tag( "available_hours_per_week_max", params[:available_hours_per_week_max] || 50,{ id: 'availability-max' }) %> 
+                </div>
             </div>
             
             <div class="row">
@@ -43,8 +38,40 @@
                     <% batch.each do |sem| %> 
                       <div class="col-md-4">
                         <% unless sem.nil? %> 
-                          <%= check_box_tag( "search[enumerations][]", sem.id, params[:search][:enumerations].include?(sem.id.to_s), { :multiple => true }  )  %>
+                          <%= check_box_tag( "search[enumerations][]", sem.id, params[:search][:enumerations].include?(sem.id.to_s), { :multiple => true, id: "semeser_#{sem.id}" } )  %>
                           <%= label_tag(  "search[enumerations][id]",  sem.value )  %>
+                        <% end %>   
+                      </div>
+                    <% end %> 
+                  </div>
+                <% end %>   
+            </div>
+            
+            <div class="row">
+                <h4>Class Status</h4> 
+                <% Enumeration.active_class_statuses.in_groups_of( 2 ) do |batch| %>
+                  <div class="row">
+                    <% batch.each do |sem| %> 
+                      <div class="col-md-4">
+                        <% unless sem.nil? %> 
+                          <%= check_box_tag( "search[enumerations][]", sem.id, params[:search][:enumerations].include?(sem.id.to_s), { :multiple => true, id: "class_status_#{sem.id}" }  )  %>
+                          <%= label_tag(  "search[enumerations][id]",  sem.value )  %>
+                        <% end %>   
+                      </div>
+                    <% end %> 
+                  </div>
+                <% end %>   
+            </div>
+            
+            <div class="row">
+                <h4>Skills</h4> 
+                <% Skill.promoted.in_groups_of( 2 ) do |batch| %>
+                  <div class="row">
+                    <% batch.each do |sk| %> 
+                      <div class="col-md-4">
+                        <% unless sk.nil? %> 
+                          <%= check_box_tag( "search[skills][]", sk.id, params[:search][:skills].include?(sk.id.to_s), { :multiple => true }  )  %>
+                          <%= label_tag(  "search[skills][id]",  sk.name )  %>
                         <% end %>   
                       </div>
                     <% end %> 
@@ -67,6 +94,32 @@
                   </div>
                 <% end %>   
             </div>
+
+            <div class="row">
+              <h4>Available Times</h4>
+              <div class="row">
+                <div class="col-md-1"></div>
+                <% 0.upto(6) do |dow| %>
+                  <div class="col-md-1">
+                    <%= @weekdays[dow] %>
+                  </div>
+                <% end %>
+              </div>
+              <% 0.upto(24) do |hour| %>
+                <% time = Time.new(2000, 1, 1, hour, 0, 0) %>
+                <div class="row">
+                  <div class="col-md-1">
+                    <%= time.strftime('%-l%P') %>–<%= (time + 3600).strftime('%-l%P') %>
+                  </div>
+                  <% 0.upto(6) do |dow| %>
+                    <div class="col-md-1">
+                      <%= check_box_tag 'available_time[]', "#{dow}-#{hour}", (params[:available_time] || []).include?("#{dow}-#{hour}"), id: "available_time-#{dow}-#{hour}", class: 'available_time' %>
+                    </div>
+                  <% end %>
+                </div>
+              <% end %>
+            </div>
+
           
         <% end %> <!-- form tag -->
         </div> <!-- container --> 

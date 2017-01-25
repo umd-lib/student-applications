@@ -3,7 +3,6 @@ require 'database_cleaner'
 
 SimpleCov.start
 
-DatabaseCleaner.strategy = :truncation, { only: %w(prospects) }
 
 require 'securerandom'
 
@@ -40,6 +39,8 @@ require 'capybara-screenshot/minitest'
 Capybara.javascript_driver = :poltergeist
 require 'rack_session_access/capybara'
 
+DatabaseCleaner.strategy = :truncation, { only: %w(prospects) }
+
 class ActiveSupport::TestCase
   # Setup all fixtures in test/fixtures/*.yml for all tests in alphabetical order.
   fixtures :all
@@ -75,3 +76,9 @@ class ActiveRecord::Base
   end
 end
 ActiveRecord::Base.shared_connection = ActiveRecord::Base.connection
+
+def drag_until(locator, options = {}, &block)
+  slider = find(locator)
+  slider.native.drag_by(options[:by], 0) until block.call(slider['aria-valuenow'].to_i)
+  slider
+end

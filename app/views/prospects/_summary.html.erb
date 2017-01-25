@@ -28,29 +28,27 @@
     <th>Graduation year</th>
     <td><%= @prospect.graduation_year %></td>
   </tr>
-  <% if !@prospect.persisted? || @current_user.admin? %> 
-    <% @prospect.addresses.each do |address| %>
-      <tr>
-        <th><%= address.address_type.capitalize %> Address</th>
-        <td>
-          <%= address.street_address_1 %><br/>
-          <% unless address.street_address_2.blank? %><%= address.street_address_2 %><br/><% end %>
-          <%= address.city %>, <%= address.state %> <%= address.postal_code %><br/>
-          <%= address.country %>
-        </td>
-      </tr>
-    <% end %>
+  <% @prospect.addresses.each do |address| %>
     <tr>
-      <th>Phone Numbers:</th>
-      <td> 
-        <ul>
-          <% @prospect.phone_numbers.each do |p| %>
-            <li><%= "#{p.number} ( #{p.phone_type} )"  %></li>
-          <% end %>
-        </ul> 
-      </td> 
+      <th><%= address.address_type.capitalize %> Address</th>
+      <td>
+        <%= address.street_address_1 %><br/>
+        <% unless address.street_address_2.blank? %><%= address.street_address_2 %><br/><% end %>
+        <%= address.city %>, <%= address.state %> <%= address.postal_code %><br/>
+        <%= address.country %>
+      </td>
     </tr>
-  <% end %> 
+  <% end %>
+  <tr>
+    <th>Phone Numbers:</th>
+    <td> 
+      <ul>
+        <% @prospect.phone_numbers.each do |p| %>
+          <li><%= "#{p.number} ( #{p.phone_type} )"  %></li>
+        <% end %>
+      </ul> 
+    </td> 
+  </tr>
   <tr>
     <th>Preferred Libraries</th>
     <td>
@@ -122,9 +120,17 @@
 <div class="table-responsive">
   <%= availablity_table(form) %>
 </div>
-<h3>Resume <%= link_to "Change Resume", new_prospect_path( step: "upload_resume" ), class: 'btn btn-info pull-right' unless @current_user %></h3>
+<h3>Resume
+  <% if @current_user %>
+    <% if @current_user.admin %>
+      <%= link_to "Change Resume", @resume ? edit_resume_path(@resume) : new_resume_path(@resume, prospect: @prospect.id), class: 'btn btn-info pull-right' %>
+    <% end %>
+  <% else %>
+    <%= link_to "Change Resume", new_prospect_path(step: "upload_resume"), class: 'btn btn-info pull-right' %>
+  <% end %>
+</h3>
 <% if @resume && @resume.file? %>
-  <%= link_to( "View #{ @resume.file_file_name}",  resume_path(@resume), target: "_self" ) %>
+  <%= link_to( "View #{ @resume.file_file_name}",  resume_path(@resume), target: "_self", class: 'download-resume' ) %>
 <% else %>
   <p><i>(None)</i></p>
 <% end %>

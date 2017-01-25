@@ -1,31 +1,45 @@
 class ResumesController < ApplicationController
+  def new
+    render text: 'forbidden', status: 403, layout: false unless logged_in?
+    @prospect = Prospect.find(params[:prospect])
+    @resume = Resume.new(prospect: @prospect)
+  end
+
   def create
-    @resume = Resume.new(resume_params)
+    @resume = Resume.new(resume_params.merge(upload_session_id: upload_session_id))
+
     if @resume.save
-      render json: @resume.to_json
+      save_prospect if logged_in? && params[:prospect]
+      render json: @resume.to_json(except: :upload_session_id)
     else
-      render json: @resume.errors
+      render json: @resume.errors, status: :bad_request
     end
   end
 
   def show
     @resume = Resume.includes(:prospect).find(params[:id])
 
-    # only allow access to unsubmited resumes
+    # only allow access to unsubmited resumes to same session that uploaded.
     # if a user if logged in, they can see if.
-    if @resume.prospect.nil? || logged_in?
+    if same_session? || logged_in?
       send_file(@resume.file.path, disposition: 'attachment', filename: @resume.file_file_name)
-    else 
-      render(text: 'forbidden', status: 403, layout: false)
+    else
+      render text: 'forbidden', status: 403, layout: false
     end
+  end
+
+  def edit
+    render text: 'forbidden', status: 403, layout: false unless logged_in?
+    @resume = Resume.includes(:prospect).find(params[:id])
+    @prospect = Prospect.find_by(resume: @resume)
   end
 
   def update
     @resume = Resume.includes(:prospect).find(params[:id])
     if @resume.update(resume_params)
-      render json: @resume.to_json
+      render json: @resume.to_json(except: :upload_session_id)
     else
-      render json: @resume.errors
+      render json: @resume.errors, status: :bad_request
     end
   end
 
@@ -33,5 +47,19 @@ class ResumesController < ApplicationController
 
     def resume_params
       params.require(:resume).permit(:file)
+    end
+
+    def same_session?
+      @resume.upload_session_id == session.id && !@resume.upload_session_id.blank?
+    end
+
+    def save_prospect
+      @prospect = Prospect.find(params[:prospect])
+      @prospect.resume = @resume
+      @prospect.save
+    end
+
+    def upload_session_id
+      session.id || SecureRandom.hex(16).encode(Encoding::UTF_8)
     end
 end

@@ -11,6 +11,7 @@
  * file per style scope.
  *
  *= require bootstrap-toggle
+ *= require bootstrap-slider
  *= require_tree .
  *= require 'umd_lib'
  *= require_self
@@ -57,10 +58,18 @@ label.required abbr {
 }
 
 /* only for tables on the availability step */
-.availability-availability-table > tbody > tr >  td:not(.time-label) { cursor: pointer; }
-.availability-availability-table > tbody > tr >  td:not(.time-label):hover {
-  border-color: #5cb85c;
-  background: #dff0d8;
+.container.prospects {
+  &.new, &.create, &.edit {
+    #availability-table > tbody > tr >  td:not(.time-label) { cursor: pointer; }
+    #availability-table > tbody > tr >  td:not(.time-label):hover {
+      border-color: #5cb85c;
+      background: #dff0d8;
+    }
+  }
+}
+
+.avail-cell.success:after {
+    content: '✓';
 }
 
 .upload { display: none;  }
@@ -123,7 +132,9 @@ table.prospects th, table.prospects td  {
   min-width: 70px;
 }
 
-
+.uploadForm {
+  margin-bottom: 2em;
+}
 
 /* configuration page */
 .mover { width: 5% }
@@ -134,7 +145,26 @@ ul.list-group { list-style-type: none; }
 .enumeration-value > div { width: 50% }  
 
 
- .modal-dialog { width: 800px; }
+.modal-dialog { width: 800px; }
 #deactivate-modal input { display: none; } 
+.slider-selection {
+  background: #5bc0de;
+}
+
+#filter-modal b { padding: 0 15px; }
+#filter-modal .availability-select { text-align: center; }  
+#filter-modal .slider.slider-horizontal {
+  width: 80%; 
+}
+.container.configuration.show h3 { padding-top: 2px }
+
+#skills-section .skills-section-header { padding-left: 0; }
+#skills .pagination  {
+  position: absolute;
+  right: 25%;
+  top: -15%;
+}
+#new_skill_name { width: 250px; }
 
 
+#skills .pagination span { font-size: 14px }
