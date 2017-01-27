@@ -29,6 +29,7 @@ module OnlineStudentApplications
     config.rack_cas.server_url = 'https://login.umd.edu/cas' 
     config.rack_cas.session_store = RackCAS::ActiveRecordStore 
 
+    config.active_job.queue_adapter = :delayed_job
 
   end
 end
