@@ -168,3 +168,10 @@ ul.list-group { list-style-type: none; }
 
 
 #skills .pagination span { font-size: 14px }
+.prospects .pagination { 
+  margin: 0;
+  small { 
+    padding-bottom: 25px;
+    vertical-align: middle;
+  }
+}

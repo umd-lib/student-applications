@@ -8,6 +8,7 @@
     <button type="button" class="btn btn-info" id='filter-prospects' data-toggle="modal"  data-target="#filter-modal"  aria-haspopup="true" aria-expanded="false">
         Filter
     </button>
+    <%= render "pagination" %>
   </caption> 
   <thead>
     <% if  @current_user.admin? %> 
@@ -70,7 +71,7 @@
     <% end %>
   </tbody>
 </table>
-<%= will_paginate @prospect_ids, renderer: BootstrapPagination::Rails %>
+<%= render "pagination" %>
 <%= render "availability_modal" %>
 <%= render "deactivate_modal" %>
 <%= render "filter_modal" %>
