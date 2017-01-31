@@ -53,6 +53,10 @@ gem 'will_paginate-bootstrap'
 
 gem 'paperclip', '~> 5.0.0'
 
+gem 'delayed_job_active_record'
+gem "delayed_job_web"
+gem "daemons"
+
 gem 'faker'
 
 group :development, :test do

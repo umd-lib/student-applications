@@ -31,7 +31,7 @@ class ProspectsController < ApplicationController
       render 'new'
     elsif @prospect
       begin 
-        SubmittedMailer.default_email(@prospect).deliver_now
+        SubmittedMailer.default_email(@prospect).deliver_later
      	rescue  EOFError,
 							IOError,
 							TimeoutError,

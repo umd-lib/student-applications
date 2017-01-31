@@ -65,10 +65,28 @@ provided to assist with this process. Simply copy the "env_example" file to
 The configured .env file should _not_ be checked into the Git repository, as it
 contains credential information.
 
+### Delayed Jobs and Mailers
+
+An application submission sends an email to applicants. This email is handled
+by ActionMailer, using a [delayed_job](https://github.com/collectiveidea/delayed_job) queue.
+To run a delayed_job worker, you can start/stop the daemon process using :
+
+```
+$ ./bin/delayed_job start RAILS_ENV=production 
+$ ./bin/delayed_job stop RAILS_ENV=production 
+```
+
+To view the delayed_job queue status, you can visit /delayed_job in the
+application. This requires an admin user to be logged in ( first visit
+/prospects to login. )
+
+
 ### Adding users
 
 You can add users via a rake task: 
 
-rake db:add_admin_cas_user[cas_directory_id,full_name]  # Add an admin user
-rake db:add_cas_user[cas_directory_id,full_name]        # Add a non-admin user
-rake db:bulk_add_users[csv_file]  # use csv file with full_name, directory_id rows 
+```
+$ ./bin/rake db:add_admin_cas_user[cas_directory_id,full_name]  # Add an admin user
+$ ./bin/rake db:add_cas_user[cas_directory_id,full_name]        # Add a non-admin user
+$ ./bin/rake db:bulk_add_users[csv_file]  # use csv file with full_name, directory_id rows 
+```
