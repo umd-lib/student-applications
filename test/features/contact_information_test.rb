@@ -6,8 +6,11 @@ feature 'Enter contact information' do
     # test..just to get the ball rollin'
     visit root_path
     click_link 'Apply!'
-
+      
     fill_in('Directory', with: 'myIdentifier')
+    choose(Enumeration.active_semesters.first.value)
+    click_button 'Continue'
+
     fill_in('prospect_first_name', with: 'Polly')
     fill_in('prospect_last_name', with: 'Jane')
     fill_in('prospect_email', with: 'pj@umd.edu')
@@ -22,26 +25,27 @@ feature 'Enter contact information' do
 
     select(Enumeration.active_graduation_years.first.value, from: 'graduation_year')
     select(Enumeration.active_class_statuses.first.value, from: 'class_status')
-    select(Enumeration.active_semesters.first.value, from: 'semester')
 
     choose('prospect_in_federal_study_true')
     click_button 'Continue'
     assert page.has_content?('Work Experience')
-    assert_equal Prospect.steps.second, page.get_rack_session_key('prospect_step')
+    assert_equal Prospect.steps[2], page.get_rack_session_key('prospect_step')
   end
 
   scenario 'user wants to add multiple addresses in the contact_information page', js: true do
     visit root_path
     click_link 'Apply!'
-
+    
     fill_in('Directory', with: 'myIdentifier')
+    choose(Enumeration.active_semesters.first.value)
+    click_button 'Continue'
+
     fill_in('prospect_first_name', with: 'Polly')
     fill_in('prospect_last_name', with: 'Jane')
     fill_in('prospect_email', with: 'pj@umd.edu')
 
     select(Enumeration.active_graduation_years.first.value, from: 'graduation_year')
     select(Enumeration.active_class_statuses.first.value, from: 'class_status')
-    select(Enumeration.active_semesters.first.value, from: 'semester')
 
     click_link 'Add A Permanent Address'
     assert_equal 2, find(:css, '#addresses').all('.nested-fields').length

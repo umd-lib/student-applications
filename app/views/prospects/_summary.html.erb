@@ -1,3 +1,15 @@
+<h3>Applicant Info <%= link_to "Change Applicant Info", new_prospect_path( step: "id_and_semester" ), class: 'btn btn-info pull-right' unless @current_user %></h3>
+<table class="table table-striped">
+  <tr>
+    <th>Directory ID</th>
+    <td><%= @prospect.directory_id%></td>
+  </tr>
+  <tr>
+    <th>Semester Applying For</th>
+    <td><%= @prospect.semester.value.gsub('_', ' ').capitalize %></td>
+  </tr>
+</table>
+
 <h3>Contact Info <%= link_to "Change Contact Info", new_prospect_path( step: "contact_info" ), class: 'btn btn-info pull-right' unless @current_user %></h3>
 <table class="table table-striped">
   <tr>
@@ -11,10 +23,6 @@
   <tr>
     <th>Email</th>
     <td><%= @prospect.email%></td>
-  </tr>
-  <tr>
-    <th>Directory ID</th>
-    <td><%= @prospect.directory_id%></td>
   </tr>
   <tr>
     <th>Major</th>
@@ -62,10 +70,6 @@
   <tr>
     <th>In federal work study</th>
     <td><%= @prospect.in_federal_study ? 'Yes' : 'No' %></td>
-  </tr>
-  <tr>
-    <th>Semester applying for</th>
-    <td><%= @prospect.semester.value.gsub('_', ' ').capitalize %></td>
   </tr>
   <tr>
     <th>How did you hear about us?</th>

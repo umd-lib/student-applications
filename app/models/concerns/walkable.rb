@@ -23,6 +23,7 @@ module Walkable
       self.current_step = steps[steps.index(current_step) - 1]
     end
 
+
     def first_step?
       current_step == steps.first
     end
@@ -41,7 +42,16 @@ module Walkable
 
   class_methods do
     def steps
-      %w(contact_info work_experience skills availability upload_resume comments_confirmation)
+      %w( id_and_semester contact_info work_experience skills availability upload_resume comments_confirmation)
     end
+    
+    def first_step
+      self.steps.first
+    end
+    
+    def last_step
+      self.steps.last
+    end
+  
   end
 end

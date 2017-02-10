@@ -18,10 +18,23 @@ class Prospect < ActiveRecord::Base
   def after_initialize
     local_address unless persisted? # we call this to make sure we have one.
     contact_phone unless persisted?
+    if semester 
+      enumerations << semester
+    else
+      @semester = enumerations.find { |e| e['list'] == Enumeration.lists['semester'] }
+    end 
   end
 
   # Custom Validations
-  validate :must_have_class_status, :must_have_graduation_year, :must_have_semester
+  validate :only_one_id_per_semester, :must_have_class_status, :must_have_graduation_year, :must_have_semester
+  
+  def only_one_id_per_semester
+    if current_step == 'id_and_semester' && !persisted? 
+      if Prospect.joins(:enumerations).where( suppressed: false, directory_id: directory_id, enumerations: { list: Enumeration.lists["semester"] } ).exists?
+        errors.add(:semester, 'Please note that this directory ID has already submitted an application. You are only allowed​ one application submission per semester. If you need to edit your submission please contact Lisa Warner at [301-405-9245](tel:3014059245) or [lwarner@umd.edu](lwarner@umd.edu) for assistance.')
+      end
+    end
+  end
 
   # rubocop:disable Style/GuardClause
   def must_have_class_status
@@ -37,7 +50,7 @@ class Prospect < ActiveRecord::Base
   end
 
   def must_have_semester
-    if current_step == 'contact_info' && semester.nil?
+    if current_step == 'id_and_semester' && semester.nil?
       errors.add(:semester, 'Please indicate which semester you are applying for.')
     end
   end
@@ -54,8 +67,21 @@ class Prospect < ActiveRecord::Base
   end
 
   attr_accessor :semester
-  def semester
-    enumerations.find { |e| e['list'] == Enumeration.lists['semester'] }
+  #def semester
+  #  enumerations.find { |e| e['list'] == Enumeration.lists['semester'] }
+  #end
+  
+  def semester=(value)
+    return if value.nil? 
+    
+    current = @semester.nil? ? enumerations.find { |e| e['list'] == Enumeration.lists['semester'] } : @semester
+
+    enum =  value.is_a?(Enumeration) ? value :  Enumeration.active_semesters.find { |e| e['value'] == value }
+    raise ArgumentError.new( "#{value} is not a valid semester value ( #{Enumeration.active_semesters.map(&:value).join(',')} )" ) unless enum 
+    
+    enumerations.delete(current) unless current.nil?
+    enumerations << enum
+    @semester = enum
   end
 
   attr_accessor :libraries
@@ -72,6 +98,11 @@ class Prospect < ActiveRecord::Base
   # step
   validates :user_confirmation, acceptance: true, if: ->(p) { p.last_step? }
   validates :user_signature, presence: true, if: ->(p) { p.last_step? }
+
+  # directory_id and semester
+  %i( directory_id  ).each do |attr|
+    validates attr, presence: true, if: ->(p) { p.current_step == 'id_and_semester' }
+  end
 
   # these are the validations for the contact_information step
   validates :in_federal_study, inclusion: { in: [true, false], if: ->(p) { p.current_step == 'contact_info' } }
