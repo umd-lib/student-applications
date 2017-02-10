@@ -21,8 +21,8 @@ class ProspectsControllerTest < ActionController::TestCase
     Rails.logger.expects(:error).with("Uh-Oh!").at_least_once 
     Prospect.any_instance.stubs(:save).raises( InvalidShoeSize, "Uh-Oh!" ) 
     
-    
-    fixture = prospects(:all_valid)
+   
+    fixture = dup_fixture
     all_valid = JSON.parse(fixture.to_json).to_hash
     assert fixture.all_valid?
 

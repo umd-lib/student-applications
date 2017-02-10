@@ -6,29 +6,23 @@
       <%= form.input :first_name, required: true %>
       <%= form.input :last_name,  required: true %>
       <%= form.input :email, required: true %>
-      <%= form.input :directory_id, required: true  %>
       <%= form.input :major  %>
 
       <%= form.association :enumerations, collection: Enumeration.active_class_statuses.map { |e| [ e.value, e.id ] },
-        label: "Class Status", required: true,   input_html: { multiple: false, id: "class_status", name: "prospect[enumeration_ids][]" },
-        wrapper_html: { class: "prospect_class_status #{ 'has-error' if form.object.errors.keys.include?(:class_status) }" } 
-      %> 
-      <%= form.error :class_status, id: "class_status_error", class: "#{ 'has-error' if form.object.errors.keys.include?(:class_status) }" %> 
+          label: "Class Status", required: true,   input_html: { multiple: false, id: "class_status", name: "prospect[enumeration_ids][]" },
+          wrapper_html: { class: "prospect_class_status #{ 'has-error' if form.object.errors.keys.include?(:class_status) }" } 
+        %> 
+        <%= form.error :class_status, id: "class_status_error", class: "#{ 'has-error' if form.object.errors.keys.include?(:class_status) }" %> 
 
-      <%= form.association :enumerations, collection: Enumeration.active_graduation_years.map { |e| [ e.value, e.id ] },
-        label: "Expected Graduation Year", required: true,  input_html: { id: "graduation_year", name: "prospect[enumeration_ids][]"  },
-        wrapper_html: { class: "prospect_graduation_year #{ 'has-error' if form.object.errors.keys.include?(:graduation_year) }" } 
-      %> 
-      <%= form.error :graduation_year, id: "graduation_year_error", class: "#{ 'has-error' if form.object.errors.keys.include?(:graduation_year) }" %> 
+        <%= form.association :enumerations, collection: Enumeration.active_graduation_years.map { |e| [ e.value, e.id ] },
+          label: "Expected Graduation Year", required: true,  input_html: { id: "graduation_year", name: "prospect[enumeration_ids][]"  },
+          wrapper_html: { class: "prospect_graduation_year #{ 'has-error' if form.object.errors.keys.include?(:graduation_year) }" } 
+        %> 
+        <%= form.error :graduation_year, id: "graduation_year_error", class: "#{ 'has-error' if form.object.errors.keys.include?(:graduation_year) }" %> 
 
-      <%= form.input :in_federal_study, as: :radio_buttons, collection: [["No", false], ["Yes", true]], 
-        required: true, label: "Are you in a Federal Work Study program?" %>
+        <%= form.input :in_federal_study, as: :radio_buttons, collection: [["No", false], ["Yes", true]], 
+          required: true, label: "Are you in a Federal Work Study program?" %>
         
-      <%= form.association :enumerations, 
-        collection: Enumeration.active_semesters.map { |e| [ e.value, e.id ] },
-        wrapper_html: { class: "prospect_semester #{ 'has-error' if form.object.errors.keys.include?(:semester) }" }, 
-        required: true, input_html: { multiple:false, id: "semester", name: "prospect[enumeration_ids][]" },
-        label: 'Which semester are you applying for?' %>
   </div>
 </div>
 

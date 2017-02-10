@@ -54,6 +54,16 @@ class ActiveSupport::TestCase
   def teardown
     DatabaseCleaner.clean
   end
+
+  # this returns a hash of a fixture with an existing fixture with a random
+  # directory_id to pass validations
+  def dup_fixture( name = :all_valid )
+    fixture = prospects(:all_valid)
+    fixture.directory_id = SecureRandom.hex
+    fixture
+  end
+  
+
 end
 
 class ActionDispatch::IntegrationTest
