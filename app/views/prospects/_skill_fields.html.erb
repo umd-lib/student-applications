@@ -1,3 +1,6 @@
 <div class='skill nested-fields'>
   <%= f.input :name, label: false %>
+  <% unless f.object.new_record? %>
+        <%=  hidden_field_tag "prospect[skill_ids][]", f.object.id %>
+  <% end %> 
 </div>

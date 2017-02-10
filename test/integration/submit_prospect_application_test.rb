@@ -6,14 +6,31 @@ class SubmitProspectApplicationTest < ActionDispatch::IntegrationTest
     Capybara.using_session('bad contact info') do
       visit '/'
       click_link 'Apply!'
-      assert page.has_content?('Contact Information')
+      assert page.has_content?('Please enter your Student ID and Semester You are Applying For')
     end
   end
 
+  test "won't go past directory id and semester information if the values are not present" do
+    Capybara.using_session('bad contact info') do
+      visit '/'
+      click_link 'Apply!'
+      assert page.has_content?('Please enter your Student ID and Semester You are Applying For')
+      click_button 'Continue'
+      assert page.has_content?('Please enter your Student ID and Semester You are Applying For')
+      assert page.has_content?("can't be blank")
+      assert_equal Prospect.steps.first, page.get_rack_session_key('prospect_params')['current_step']
+    end
+  end
+  
   test "won't go past contact information if the values are not present" do
     Capybara.using_session('bad contact info') do
       visit '/'
       click_link 'Apply!'
+      
+      fill_in('Directory', with: 'myIdentifier')
+      choose(Enumeration.active_semesters.first.value)
+
+      click_button 'Continue'
       assert page.has_content?('Contact Information')
       click_button 'Continue'
       assert page.has_content?('Contact Information')
@@ -26,8 +43,12 @@ class SubmitProspectApplicationTest < ActionDispatch::IntegrationTest
     Capybara.using_session('good contact info') do
       visit '/'
       click_link 'Apply!'
-
+      
       fill_in('Directory', with: 'myIdentifier')
+      choose(Enumeration.active_semesters.first.value)
+      
+      click_button 'Continue'
+
       fill_in('prospect_first_name', with: 'Polly')
       fill_in('prospect_last_name', with: 'Jane')
 
@@ -41,14 +62,13 @@ class SubmitProspectApplicationTest < ActionDispatch::IntegrationTest
 
       select(Enumeration.active_graduation_years.first.value, from: 'graduation_year')
       select(Enumeration.active_class_statuses.first.value, from: 'class_status')
-      select(Enumeration.active_semesters.first.value, from: 'semester')
 
       fill_in('prospect_email', with: 'pj@umd.edu')
       choose('prospect_in_federal_study_true')
 
       click_button 'Continue'
       assert page.has_content?('Work Experience')
-      assert_equal Prospect.steps.second, page.get_rack_session_key('prospect_step')
+      assert_equal Prospect.steps[2], page.get_rack_session_key('prospect_step')
     end
   end
 
@@ -56,8 +76,11 @@ class SubmitProspectApplicationTest < ActionDispatch::IntegrationTest
     Capybara.using_session('more good contact info') do
       visit '/'
       click_link 'Apply!'
-
+      
       fill_in('Directory', with: 'myIdentifier')
+      choose(Enumeration.active_semesters.first.value)
+      click_button 'Continue'
+
       fill_in('prospect_first_name', with: 'Polly')
       fill_in('prospect_last_name', with: 'Jane')
 
@@ -71,7 +94,6 @@ class SubmitProspectApplicationTest < ActionDispatch::IntegrationTest
 
       select(Enumeration.active_graduation_years.first.value, from: 'graduation_year')
       select(Enumeration.active_class_statuses.first.value, from: 'class_status')
-      select(Enumeration.active_semesters.first.value, from: 'semester')
 
       fill_in('prospect_email', with: 'pj@umd.edu')
 
@@ -84,7 +106,6 @@ class SubmitProspectApplicationTest < ActionDispatch::IntegrationTest
       assert page.has_content?('Work Experience')
       click_button 'Back'
 
-      assert page.has_field?('Directory', with: 'myIdentifier')
       assert page.has_field?('prospect_first_name', with: 'Polly')
       assert page.has_field?('prospect_last_name', with: 'Jane')
 
@@ -96,7 +117,7 @@ class SubmitProspectApplicationTest < ActionDispatch::IntegrationTest
       assert page.has_field?('prospect_email', with: 'pj@umd.edu')
       assert page.has_field?('prospect_phone_numbers_attributes_0_number', with: '301-555-0123')
       assert page.has_field?('prospect_phone_numbers_attributes_0_phone_type', with: 'local')
-      assert_equal Prospect.steps.first, page.get_rack_session_key('prospect_step')
+      assert_equal Prospect.steps[1], page.get_rack_session_key('prospect_step')
     end
   end
 end
