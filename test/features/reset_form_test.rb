@@ -5,14 +5,16 @@ feature 'Verify "Reset" button functionality' do
     page.driver.resize_window(2048, 2048)
     visit root_path
     click_link 'Apply!'
+    
+    fill_in('Directory', with: 'myIdentifier')
+    choose(Enumeration.active_semesters.first.value)
+    click_button 'Continue'
 
     assert page.has_link?('navbar-reset-link')
-    fill_in('Directory', with: 'myIdentifier')
     fill_in('prospect_first_name', with: 'Polly')
     fill_in('prospect_last_name', with: 'Jane')
     fill_in('prospect_email', with: 'pj@umd.edu')
 
-    assert page.has_field?('Directory', with: 'myIdentifier')
     assert page.has_field?('prospect_first_name', with: 'Polly')
     assert page.has_field?('prospect_last_name', with: 'Jane')
     assert page.has_field?('prospect_email', with: 'pj@umd.edu')
@@ -26,8 +28,6 @@ feature 'Verify "Reset" button functionality' do
     # fields.
     click_link 'Apply!'
     assert page.has_field?('Directory', with: '')
-    assert page.has_field?('prospect_first_name', with: '')
-    assert page.has_field?('prospect_last_name', with: '')
-    assert page.has_field?('prospect_email', with: '')
+  
   end
 end

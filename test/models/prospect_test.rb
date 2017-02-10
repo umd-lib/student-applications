@@ -7,19 +7,24 @@ class ProspectTest < ActiveSupport::TestCase
     @all_valid = prospects(:all_valid)
   end
 
+
   test 'should be valid if the contact info is completed on the contact_info step' do
+    assert @contact_info.current_step == Prospect.first_step
+    @contact_info.next_step
     assert @contact_info.current_step == 'contact_info'
     assert @contact_info.valid?
   end
 
   test 'should be invalid on the contact_info step if the contact info is not present' do
-    prospect = Prospect.new
+    prospect = Prospect.new( directory_id: "123", semester: Enumeration.active_semesters.first.value  )
+    prospect.next_step
     assert_equal prospect.current_step, 'contact_info'
     refute prospect.valid?
   end
 
   test 'should be valid on a non-contact_info step if the contact info is not present' do
     prospect = Prospect.new
+    prospect.next_step
     prospect.next_step
     refute_equal prospect.current_step, 'contact_info'
     assert prospect.valid?
@@ -49,6 +54,7 @@ class ProspectTest < ActiveSupport::TestCase
 
   test "it should be invalid if it's on the contact_info step and it has no address" do
     homeless = prospects(:homeless)
+    homeless.next_step
     homeless.contact_phone.phone_type = 'local'
     homeless.contact_phone.number = '301-555-0123'
     # not valid bc no address
@@ -109,5 +115,20 @@ class ProspectTest < ActiveSupport::TestCase
     assert_equal prospect.skills.length, 2
     assert_equal prospect.special_skills.length, 1
     assert_equal prospect.special_skills.first.name, 'fightin'
+  end
+  
+  test 'it can set the semester' do
+    prospect = Prospect.new
+    
+    values = Enumeration.active_semesters
+
+    prospect.semester = values.first.value
+
+    assert_includes prospect.enumerations, values.first 
+    
+    prospect.semester = values.last.value
+    refute_includes prospect.enumerations, values.first 
+    assert_includes prospect.enumerations, values.last
+
   end
 end

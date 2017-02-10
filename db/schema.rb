@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20170127130407) do
+ActiveRecord::Schema.define(version: 20170207065805) do
 
   create_table "addresses", force: :cascade do |t|
     t.string  "street_address_1"
@@ -89,6 +89,7 @@ ActiveRecord::Schema.define(version: 20170127130407) do
     t.boolean  "suppressed",               default: false
   end
 
+  add_index "prospects", ["directory_id", nil, "suppress"], name: "index_prospects_on_directory_id_and_semester_id_and_suppress", unique: true
   add_index "prospects", ["resume_id"], name: "index_prospects_on_resume_id"
 
   create_table "prospects_enumerations", id: false, force: :cascade do |t|

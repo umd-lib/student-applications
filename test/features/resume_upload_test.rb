@@ -7,9 +7,7 @@ feature 'Upload a resume' do
     Capybara.using_session('bad contact info') do
       # we can fast-forward to the available_times step
 
-      digest= Digest::SHA256.file "test/fixtures/resume.pdf"
-
-      fixture = prospects(:all_valid)
+      fixture = dup_fixture
       all_valid = fixture.attributes
       all_valid[:enumeration_ids] = fixture.enumerations.map(&:id)
       all_valid.reject! { |a| %w(id created_at updated_at).include? a }
@@ -52,10 +50,10 @@ feature 'Upload a resume' do
     end
   end
 
-  scenario 'an applicant cannot upload a none pdf', js: true do
+  scenario 'an applicant cannot upload a non-pdf', js: true do
     # we can fast-forward to the available_times step
 
-    fixture = prospects(:all_valid)
+    fixture = dup_fixture
     all_valid = fixture.attributes
     all_valid[:enumeration_ids] = fixture.enumerations.map(&:id)
     all_valid.reject! { |a| %w(id created_at updated_at).include? a }

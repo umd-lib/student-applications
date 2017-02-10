@@ -52,6 +52,12 @@ Skill.where(promoted: false).delete_all
   if [true, false].sample
     prospect.resume = Resume.new(file: File.new('test/fixtures/resume.pdf', 'r'))
   end
+  
+  begin
+    prospect.save
+  rescue ActiveRecord::RecordNotUnique
+    prospect.directory_id = Faker::Internet.email.split('@').first
+    prospect.save
+  end
 
-  prospect.save
 end

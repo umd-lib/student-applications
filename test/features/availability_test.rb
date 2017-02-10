@@ -3,7 +3,7 @@ require 'test_helper'
 feature 'Add some Available Times' do
   scenario 'add some availability to the prospect', js: true do
     # we can fast-forward to the available_times step
-    fixture = prospects(:all_valid)
+    fixture = dup_fixture
     all_valid = fixture.attributes
     all_valid[:enumeration_ids] = fixture.enumerations.map(&:id)
     all_valid.reject! { |a| %w(id created_at updated_at).include? a }
@@ -50,7 +50,7 @@ feature 'Add some Available Times' do
 
   scenario 'make sure our total times is in line with the times available', js: true do
     # we can fast-forward to the available_times step
-    fixture = prospects(:all_valid)
+    fixture = dup_fixture
     all_valid = fixture.attributes
     all_valid[:enumeration_ids] = fixture.enumerations.map(&:id)
     all_valid.reject! { |a| %w(id created_at updated_at).include? a }

@@ -6,6 +6,7 @@
     boolean: :horizontal_boolean
   } do |form| %>
   <%= form.error_notification %> 
+  <%= render 'id_and_semester_step', form: form %>
   <%= render 'contact_info_step', form: form %>
   <%= render 'work_experience_step', form: form %>
   <%= render 'skills_step', form: form %>
