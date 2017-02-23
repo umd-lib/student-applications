@@ -21,6 +21,23 @@ class ProspectTest < ActiveSupport::TestCase
     assert_equal prospect.current_step, 'contact_info'
     refute prospect.valid?
   end
+  
+  test 'should be invalid the directory_id has already been used for a semester' do
+    assert @all_valid.all_valid?
+    prospect = Prospect.new( directory_id: @all_valid.directory_id, semester: @all_valid.semester )
+    refute prospect.valid?
+ 
+    prospect.directory_id = SecureRandom.hex
+    assert prospect.valid?
+    
+    prospect = Prospect.new( directory_id: @all_valid.directory_id, semester: @all_valid.semester )
+    refute prospect.valid?
+    
+    prospect.semester = Enumeration.active_semesters.last
+    assert prospect.valid?
+  
+  end
+
 
   test 'should be valid on a non-contact_info step if the contact info is not present' do
     prospect = Prospect.new

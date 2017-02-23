@@ -13,43 +13,43 @@ class ProspectsController < ApplicationController
 
   def create
     if params[:reset]
-      redirect_to reset_url 
+      redirect_to reset_url
     else
       @prospect.current_step = session[:prospect_step] || Prospect.steps.first
-      begin 
+      begin
         choose_action if @prospect.valid? || params[:back_button]
-      rescue ActiveRecord::ActiveRecordError 
+      rescue ActiveRecord::ActiveRecordError
         flash[:error] = "We're sorry, but something has gone wrong. Please try again."
         @prospect = nil
         redirect_to reset_url
       end
     end
 
-    if @prospect && @prospect.new_record? 
+    if @prospect && @prospect.new_record?
       render 'new'
     elsif @prospect
-      begin 
-        SubmittedMailer.default_email(@prospect).deliver_later
-     	rescue  EOFError,
-							IOError,
-							TimeoutError,
-							Errno::ECONNRESET,
-							Errno::ECONNABORTED,
-							Errno::EPIPE,
-							Errno::ETIMEDOUT,
-							Net::SMTPAuthenticationError,
-							Net::SMTPServerBusy,
-							Net::SMTPSyntaxError,
-							Net::SMTPUnknownError,
-            	OpenSSL::SSL::SSLError => e 
-					
-						log_exception( e, @prospect )					
-				end        
-        
-        reset_session
-        flash[:notice] = 'Submitted!'
-        redirect_to action: 'thank_you', id: @prospect.id
-    
+      begin
+          SubmittedMailer.default_email(@prospect).deliver_later
+        rescue EOFError,
+               IOError,
+               TimeoutError,
+               Errno::ECONNRESET,
+               Errno::ECONNABORTED,
+               Errno::EPIPE,
+               Errno::ETIMEDOUT,
+               Net::SMTPAuthenticationError,
+               Net::SMTPServerBusy,
+               Net::SMTPSyntaxError,
+               Net::SMTPUnknownError,
+               OpenSSL::SSL::SSLError => e
+
+          log_exception(e, @prospect)
+        end
+
+      reset_session
+      flash[:notice] = 'Submitted!'
+      redirect_to action: 'thank_you', id: @prospect.id
+
     end
   end
 
@@ -72,11 +72,9 @@ class ProspectsController < ApplicationController
     @prospect = Prospect.find(params[:id])
     @resume = @prospect.resume
   end
-
-  # rubocop:disable Style/GuardClause
   def update
     @prospect = Prospect.includes(:enumerations, :available_times, :skills).find(params[:id])
-    if @prospect.update(prospect_params) 
+    if @prospect.update(prospect_params)
       redirect_to prospects_path, notice: "#{@prospect.name} application has been updated"
     else
       respond_to do |format|
@@ -100,14 +98,13 @@ class ProspectsController < ApplicationController
 
   private
 
-    def log_exception( exception, prospect = nil)
-        logger.error "~" * 100 
-        logger.error "Application Submission Failure!"
-        logger.error "Prospect: #{prospect.inspect} Errors: #{prospect.errors}" if prospect
-        logger.error "#{exception.message}" 
-        logger.error "~" * 100
+    def log_exception(exception, prospect = nil)
+      logger.error '~' * 100
+      logger.error 'Application Submission Failure!'
+      logger.error "Prospect: #{prospect.inspect} Errors: #{prospect.errors}" if prospect
+      logger.error exception.message.to_s
+      logger.error '~' * 100
     end
-
 
     def start_new
       reset_session
@@ -188,32 +185,30 @@ class ProspectsController < ApplicationController
 
     # decide which step to move to depending on which button was clicked and which step we are already on
     def choose_action
-      begin  
-        if params[:back_button]
-          @prospect.previous_step
-        elsif params[:step]
-          @prospect.current_step = params[:step]
-        elsif @prospect.last_step?
-          @prospect.save if @prospect.all_valid?
-        else
-          @prospect.next_step
-        end
-        session[:prospect_step] = @prospect.current_step
-      rescue  ActiveRecord::ActiveRecordError => e
-       	log_exception(e, @prospect)
-		    raise e	
-      end 
+      if params[:back_button]
+        @prospect.previous_step
+      elsif params[:step]
+        @prospect.current_step = params[:step]
+      elsif @prospect.last_step?
+        @prospect.save if @prospect.all_valid?
+      else
+        @prospect.next_step
+      end
+      session[:prospect_step] = @prospect.current_step
+    rescue ActiveRecord::ActiveRecordError => e
+      log_exception(e, @prospect)
+      raise e
     end
 
     def find_prospects
       @all_results = Prospect.joins(join_table).select(select_statement)
-                              .where(text_search_statement)
-                              .where(search_statement)
-                              .where(*available_range_statement)
-                              .where(prospects_by_available_time)
-                              .active.order(sort_order)
-                              .pluck('prospects.id').uniq
-                              
+                             .where(text_search_statement)
+                             .where(search_statement)
+                             .where(*available_range_statement)
+                             .where(prospects_by_available_time)
+                             .active.order(sort_order)
+                             .pluck('prospects.id').uniq
+
       @prospect_ids = @all_results.paginate(page: params[:page], per_page: 30)
       @prospects = Prospect.includes(:enumerations, :available_times, :skills).find(@prospect_ids)
                            .index_by(&:id)

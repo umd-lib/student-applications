@@ -18,20 +18,20 @@ class Prospect < ActiveRecord::Base
   def after_initialize
     local_address unless persisted? # we call this to make sure we have one.
     contact_phone unless persisted?
-    if semester 
+    if semester
       enumerations << semester
     else
       @semester = enumerations.find { |e| e['list'] == Enumeration.lists['semester'] }
-    end 
+    end
   end
 
   # Custom Validations
-  validate :only_one_id_per_semester, :must_have_class_status, :must_have_graduation_year, :must_have_semester
-  
+  validate :must_have_class_status, :must_have_graduation_year, :must_have_semester, :only_one_id_per_semester
+
   def only_one_id_per_semester
-    if current_step == 'id_and_semester' && !persisted? 
-      if Prospect.joins(:enumerations).where( suppressed: false, directory_id: directory_id, enumerations: { list: Enumeration.lists["semester"] } ).exists?
-        errors.add(:semester, 'Please note that this directory ID has already submitted an application. You are only allowed​ one application submission per semester. If you need to edit your submission please contact Lisa Warner at [301-405-9245](tel:3014059245) or [lwarner@umd.edu](lwarner@umd.edu) for assistance.')
+    if current_step == 'id_and_semester' && !persisted? && semester
+      if Prospect.joins(:enumerations).where(suppressed: false, directory_id: directory_id, enumerations: { id: semester.id }).exists?
+        errors.add(:semester, "Please note that this directory ID has already submitted an application. You are only allowed one application submission per semester. If you need to edit your submission please contact Lisa Warner at <a href='tel:3014059245'>301-405-9245</a> or <a href='mailto:lwarner@umd.edu'>lwarner@umd.edu</a> for assistance.".html_safe)
       end
     end
   end
@@ -67,18 +67,18 @@ class Prospect < ActiveRecord::Base
   end
 
   attr_accessor :semester
-  #def semester
+  # def semester
   #  enumerations.find { |e| e['list'] == Enumeration.lists['semester'] }
-  #end
-  
+  # end
+
   def semester=(value)
-    return if value.nil? 
-    
+    return if value.nil?
+
     current = @semester.nil? ? enumerations.find { |e| e['list'] == Enumeration.lists['semester'] } : @semester
 
-    enum =  value.is_a?(Enumeration) ? value :  Enumeration.active_semesters.find { |e| e['value'] == value }
-    raise ArgumentError.new( "#{value} is not a valid semester value ( #{Enumeration.active_semesters.map(&:value).join(',')} )" ) unless enum 
-    
+    enum =  value.is_a?(Enumeration) ? value : Enumeration.active_semesters.find { |e| e['value'] == value }
+    raise ArgumentError, "#{value} is not a valid semester value ( #{Enumeration.active_semesters.map(&:value).join(',')} )" unless enum
+
     enumerations.delete(current) unless current.nil?
     enumerations << enum
     @semester = enum
@@ -100,7 +100,7 @@ class Prospect < ActiveRecord::Base
   validates :user_signature, presence: true, if: ->(p) { p.last_step? }
 
   # directory_id and semester
-  %i( directory_id  ).each do |attr|
+  %i(directory_id).each do |attr|
     validates attr, presence: true, if: ->(p) { p.current_step == 'id_and_semester' }
   end
 
@@ -141,7 +141,7 @@ class Prospect < ActiveRecord::Base
   end
 
   def day_times=(dts)
-    available_times.each { |at| at.mark_for_destruction } 
+    available_times.each(&:mark_for_destruction)
     dts.each do |dt|
       day, time = dt.split('-').map(&:to_i)
       available_times.build(day: day, time: time)

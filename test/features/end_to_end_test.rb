@@ -89,5 +89,21 @@ feature 'submit an application' do
 
     email = ActionMailer::Base.deliveries.last
     assert_equal email.to.first, email_addr
+
+    # now we should not be able to resubmit
+    click_link 'Apply!'
+    
+    fill_in('Directory', with: 'myIdentifier')
+    choose(Enumeration.active_semesters.first.value)
+    click_button 'Continue'
+  
+    refute page.has_content?('Contact Information')
+    assert page.has_content?("Please note that this directory ID has already submitted an application") 
+    
+    fill_in('Directory', with: SecureRandom.hex)
+    click_button 'Continue'
+    refute page.has_content?("Please note that this directory ID has already submitted an application") 
+    assert page.has_content?('Contact Information')
+
   end
 end
