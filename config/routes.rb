@@ -20,7 +20,5 @@ Rails.application.routes.draw do
   get 'configuration' => 'configuration#show', as: :configuration
   post 'configuration' => 'configuration#update', as: :update_configuration
 
-  match "/delayed_jobs" => DelayedJobWeb, anchor: false, via: [:get, :post]
-
-
+  match '/delayed_jobs' => DelayedJobWeb, anchor: false, via: [:get, :post]
 end

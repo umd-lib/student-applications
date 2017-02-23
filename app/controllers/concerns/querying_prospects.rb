@@ -73,11 +73,10 @@ module QueryingProspects
     end
 
     def text_search_statement
-      query = params[:text_search].inject([]) do |memo, (k, val)|
+      query = params[:text_search].each_with_object([]) do |(k, val), memo|
         unless val.empty?
           memo << Prospect.arel_table[k.intern].matches("#{val}%")
         end
-        memo
       end
       !query.blank? ? query.inject(&:and) : {}
     end
@@ -98,15 +97,12 @@ module QueryingProspects
     end
 
     def search_statement
-      query = params[:search].inject([]) do |memo, (k, val)|
-        unless val.empty?
-          # not sure we really need to reflect on associations but just in case we
-          # make some weird data model change
-          memo << Arel::Table.new(Prospect.reflect_on_association(k.intern).table_name)[:id].in(Array.wrap(val))
-        end
-        memo
+      query = params[:search].each_with_object([]) do |(k, val), memo|
+        next if val.empty?
+        # not sure we really need to reflect on associations but just in case we
+        # make some weird data model change
+        memo << Arel::Table.new(Prospect.reflect_on_association(k.intern).table_name)[:id].in(Array.wrap(val))
       end
       !query.blank? ? query.inject(&:and) : {}
     end
-
 end

@@ -5,7 +5,7 @@ class Enumeration < ActiveRecord::Base
 
   validates :value, presence: true
   validates :list, presence: true
-  
+
   enum list: ENUMERATION_LISTS
 
   class << self
