@@ -10,13 +10,17 @@
         <%= form_tag prospects_path, method: 'get', id: 'filter-prospects-form' do %> 
             <div class="row">
               <h4>Contact Information</h4> 
-              <div class="col-md-3"> 
+              <div class="col-md-2"> 
                 <%= label_tag "text_search[last_name]", "Last Name" %> 
                 <%= text_field_tag "text_search[last_name]", params[:text_search][:last_name] || "", placeholder: "Use % for wildcard" %> 
               </div>   
-              <div class="col-md-3"> 
+              <div class="col-md-2"> 
                 <%= label_tag "text_search[first_name]", "First Name" %> 
                 <%= text_field_tag "text_search[first_name]", params[:text_search][:first_name] || "", placeholder: "Use % for wildcard" %> 
+              </div>   
+              <div class="col-md-2"> 
+                <%= label_tag "text_search[directory_id]", "Directory ID" %> 
+                <%= text_field_tag "text_search[directory_id]", params[:text_search][:directory_id] || "", placeholder: "Use % for wildcard" %> 
               </div>   
             </div> <!-- contact info row -->
             
