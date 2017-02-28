@@ -76,8 +76,6 @@ group :development do
   gem 'rb-fsevent', require: false
   gem 'ruby_dep', '~> 1.3.1'
   gem 'terminal-notifier-guard', require: false
-
-  gem 'rubocop'
 end
 
 group :test do
@@ -93,6 +91,11 @@ group :test do
   gem 'rack_session_access'
   gem 'shoulda-context'
   gem 'shoulda-matchers', '>= 3.0.1'
-  gem 'simplecov', require: false
   gem 'test_after_commit'
+
+  # Code analysis tools
+  gem 'rubocop', require: false
+  gem 'rubocop-checkstyle_formatter', require: false
+  gem 'simplecov', require: false
+  gem 'simplecov-rcov', require: false
 end

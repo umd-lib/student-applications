@@ -1,8 +1,12 @@
 require 'simplecov'
+require 'simplecov-rcov'
 require 'database_cleaner'
 
+SimpleCov.formatters = [
+  SimpleCov::Formatter::HTMLFormatter,
+  SimpleCov::Formatter::RcovFormatter
+]
 SimpleCov.start
-
 
 require 'securerandom'
 
