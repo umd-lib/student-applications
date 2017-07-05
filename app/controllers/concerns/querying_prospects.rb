@@ -26,7 +26,7 @@ module QueryingProspects
     def default_search_params
       params[:text_search] ||= {}
       params[:search] ||= {}
-      %i(prospect enumerations skills).each do |k|
+      %i[prospect enumerations skills].each do |k|
         params[:search][k] ||= []
       end
     end
@@ -52,16 +52,16 @@ module QueryingProspects
     end
 
     def sort_column
-      legal_sort_columns = %w(
+      legal_sort_columns = %w[
         prospects.last_name prospects.id prospects.in_federal_study
         enumerations.class_status_values enumerations.semester_values prospects.hired
         enumerations.graduation_year_values prospects.available_hours_per_week
-      )
+      ]
       legal_sort_columns.include?(params[:sort]) ? params[:sort] : 'prospects.last_name'
     end
 
     def sort_direction
-      %w(asc desc).include?(params[:direction]) ? params[:direction] : 'asc'
+      %w[asc desc].include?(params[:direction]) ? params[:direction] : 'asc'
     end
 
     def available_range_statement
@@ -78,7 +78,7 @@ module QueryingProspects
           memo << Prospect.arel_table[k.intern].matches("#{val}%")
         end
       end
-      !query.blank? ? query.inject(&:and) : {}
+      query.present? ? query.inject(&:and) : {}
     end
 
     def day_times_sql
@@ -103,6 +103,6 @@ module QueryingProspects
         # make some weird data model change
         memo << Arel::Table.new(Prospect.reflect_on_association(k.intern).table_name)[:id].in(Array.wrap(val))
       end
-      !query.blank? ? query.inject(&:and) : {}
+      query.present? ? query.inject(&:and) : {}
     end
 end

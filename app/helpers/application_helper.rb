@@ -98,4 +98,16 @@ module ApplicationHelper
     end
   end
   # rubocop:enable Metrics/AbcSize, Metrics/CyclomaticComplexity, Metrics/PerceivedComplexity
+
+  # Simple helper method to format the per_page pull down
+  def per_page_select(current_count, all_count)
+    range = [current_count]
+    range << all_count if all_count < 500
+    [50, 100, 250, 500].each do |i|
+      range << i if i <= all_count
+    end
+    p = params.dup
+    %w[per_page controller action].each { |k| p.delete k }
+    select_tag :per_page, options_for_select(range.uniq.sort, current_count), class: 'per-page-select'
+  end
 end

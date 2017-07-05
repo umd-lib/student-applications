@@ -35,15 +35,20 @@ var init = function() {
       var data = { "ids" : ids };
       
       var callback = function(data) {
-          $("#prospect-select-all").removeAttr("checked"); 
+          $("#prospect-select-all").removeAttr("checked");
+          $(".pagination").hide(); // hacky fix since deleting messes up pagination order
           $rows.find("input").removeAttr("checked").remove(); 
           $("#deactivate-modal").modal('hide');
-          var msg = '<div class="alert alert-info fade in"><button class="close" data-dismiss="alert">x</button>' + ids.length + ' records deleted</div>';
+          var msg = '<div class="alert alert-info fade in"><button class="close" data-dismiss="alert">x</button>' + ids.length + ' records deleted. Click <a onclick="location.reload()">here</a> if page does not automatically reload.</div>';
           $rows.addClass("danger"); 
-        $("body > .container").prepend(msg);           
+        $("body > .container").prepend(msg);                 
       }
-    
-      App.postData( url, data ).done(callback).fail( function() { alert("Problem with update!"); } );
+   
+      var refresh = function() { 
+          setTimeout(function () { location.reload(); }, 2500); 
+      }
+
+      App.postData( url, data ).done(callback).done(refresh).fail( function() { alert("Problem with update!"); } );
   
   });
 
@@ -74,6 +79,49 @@ var init = function() {
       $("#avail-" + dt ).removeClass("warning").addClass("success");
     });
   });
+	
+  var deserializeParams = function(query) {
+		if (!query) {
+			return { };
+		}
+    query = decodeURIComponent(query);
+		return (/^[?#]/.test(query) ? query.slice(1) : query)
+			.split('&')
+			.reduce( function(params, param) {
+				let [ key, value ] = param.split('=');
+	      if ( /\[\]$/.test(key) ) {
+          key.replace(/\[\]$/, '');
+          params[key] = params[key] || [];
+          params[key].push( value ? decodeURIComponent(value.replace(/\+/g, ' ')) : '');
+        }	else {  	
+          params[key] = value ? decodeURIComponent(value.replace(/\+/g, ' ')) : '';
+        }	
+        return params;
+			}, {} );
+	}; 
+	
+	var serializeParams = function(obj) {
+		var str = [];
+  	for(pairs in obj) {
+      var vals = obj[pairs];
+      if ( vals !== null && typeof vals === 'object' ) {
+         for(val in vals) {
+           str.push(pairs + "=" + encodeURIComponent(vals[val]));
+         } 
+      } else { 
+       str.push(pairs + "=" + encodeURIComponent(vals))  
+      }
+    }
+  	return str.join("&");
+	}
+  
+  $('.per-page-select').change( function(){ 
+    let [ url, query ] =  window.location.href.split("?");  
+    query = deserializeParams(query);
+    query["per_page"] = this.value;
+    window.location = url + '?' + serializeParams(query);
+	});
+  
 
 }
 

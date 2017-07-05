@@ -1,4 +1,4 @@
 <div class='pagination pull-right'>
-  <small>Showing <%= @prospects.count %> applications of <%= @all_results.count %></small> 
+  <small>Showing <%= per_page_select @prospects.count, @all_results.count %> applications of <%= @all_results.count %></small> 
   <%= will_paginate @prospect_ids, renderer: BootstrapPagination::Rails %>
 </div>

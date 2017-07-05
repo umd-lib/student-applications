@@ -50,7 +50,7 @@ class ResumesController < ApplicationController
     end
 
     def same_session?
-      @resume.upload_session_id == session.id && !@resume.upload_session_id.blank?
+      @resume.upload_session_id == session.id && @resume.upload_session_id.present?
     end
 
     def save_prospect
