@@ -15,8 +15,9 @@ Skill.where(promoted: false).delete_all
   prospect = Prospect.new(hash)
   prospect.enumerations << Enumeration.active_graduation_years.sample(1)
   prospect.enumerations << Enumeration.active_class_statuses.sample(1)
-  prospect.enumerations <<  Enumeration.active_semesters.sample(1)
-  prospect.enumerations <<  Enumeration.active_libraries.sample(3)
+
+  prospect.semester = Enumeration.active_semesters.sample(1).first.value
+  prospect.enumerations << Enumeration.active_libraries.sample(3)
 
   prospect.local_address.street_address_1 = Faker::Address.street_address
   prospect.local_address.city = Faker::Address.city

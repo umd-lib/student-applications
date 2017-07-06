@@ -2,7 +2,7 @@ require 'csv'
 # lib/tasks/add_cas_user.rake
 namespace :db do
   desc 'Add an admin user'
-  task :add_admin_cas_user, [:cas_directory_id, :full_name] => :environment do |_t, args|
+  task :add_admin_cas_user, %i[cas_directory_id full_name] => :environment do |_t, args|
     cas_directory_id = args[:cas_directory_id]
 
     if !User.find_by(cas_directory_id: cas_directory_id)
@@ -14,7 +14,7 @@ namespace :db do
   end
 
   desc 'Add a non-admin user'
-  task :add_cas_user, [:cas_directory_id, :full_name] => :environment do |_t, args|
+  task :add_cas_user, %i[cas_directory_id full_name] => :environment do |_t, args|
     cas_directory_id = args[:cas_directory_id]
 
     if !User.find_by(cas_directory_id: cas_directory_id)
