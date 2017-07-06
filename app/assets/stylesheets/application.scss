@@ -174,4 +174,10 @@ ul.list-group { list-style-type: none; }
     padding-bottom: 25px;
     vertical-align: middle;
   }
+  .bootstrap-select:not([class*="col-"]):not([class*="form-control"]):not(.input-group-btn) { 
+    width: 75px; 
+  
+   }
+
 }
+

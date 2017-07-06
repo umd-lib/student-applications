@@ -9,13 +9,14 @@ AllCops:
     - 'bin/spring'
     - 'test/**/*' 
     - 'config/application.rb'
-    - 'db/schema.rb'
-    - 'db/migrate/*'
+    - 'db/**/*'
+    - 'lib/**/*'
+    - 'config/**/*'
   TargetRubyVersion: 2.2
 
 # Increase max allowed line length
 Metrics/LineLength:
-  Max: 120
+  Max: 200
 
 Metrics/ClassLength:
   Exclude:
