@@ -3,9 +3,9 @@ class ProspectsController < ApplicationController
 
   @error_message = "We're sorry, but something has gone wrong. Please try again."
 
-  before_action :set_session, only: [:new, :create]
-  before_action :set_prospect, only: [:new, :create]
-  before_action :ensure_auth, only: [:index, :update, :show, :deactivate]
+  before_action :set_session, only: %i[new create]
+  before_action :set_prospect, only: %i[new create]
+  before_action :ensure_auth, only: %i[index update show deactivate]
 
   def new
     choose_action if params[:step]
@@ -65,13 +65,14 @@ class ProspectsController < ApplicationController
   def index
     default_search_params
     find_prospects
-    @weekdays = %w(Sunday Monday Tuesday Wednesday Thursday Friday Saturday)
+    @weekdays = %w[Sunday Monday Tuesday Wednesday Thursday Friday Saturday]
   end
 
   def edit
     @prospect = Prospect.find(params[:id])
     @resume = @prospect.resume
   end
+
   def update
     @prospect = Prospect.includes(:enumerations, :available_times, :skills).find(params[:id])
     if @prospect.update(prospect_params)
@@ -127,7 +128,7 @@ class ProspectsController < ApplicationController
       session[:prospect_params] ||= {}.with_indifferent_access
       session[:prospect_params].deep_merge!(prospect_params)
       session[:prospect_params].keys.select { |a| a =~ /_attributes$/ }.each do |attr|
-        session[:prospect_params][attr] = params[:prospect][attr] unless params[:prospect][attr].blank?
+        session[:prospect_params][attr] = params[:prospect][attr] if params[:prospect][attr].present?
       end
       session[:prospect_params].each do |k, v|
         session[:prospect_params][k] = v.to_hash if v.is_a?(ActionController::Parameters)
@@ -156,12 +157,12 @@ class ProspectsController < ApplicationController
 
     def whitelisted_attrs
       # these are all the single keys that are allowed.
-      attrs = %i(
+      attrs = %i[
         current_step commit in_federal_study directory_id first_name last_name
         email class_status graduation_year additional_comments available_hours_per_week
         resume_id user_confirmation user_signature class_status hired hr_comments
         suppressed major semester
-      )
+      ]
       # these are has_many relationships that point to other pre-existing records
       has_many_ids = { enumeration_ids: [], day_times: [], skill_ids: [], library_ids: [] }
       # these are has_many relationships that point to newly created records
@@ -209,7 +210,8 @@ class ProspectsController < ApplicationController
                              .active.order(sort_order)
                              .pluck('prospects.id').uniq
 
-      @prospect_ids = @all_results.paginate(page: params[:page], per_page: 30)
+      @per_page = params[:per_page] ? params[:per_page].to_i : 50
+      @prospect_ids = @all_results.paginate(page: params[:page], per_page: @per_page)
       @prospects = Prospect.includes(:enumerations, :available_times, :skills).find(@prospect_ids)
                            .index_by(&:id)
                            .values_at(*@prospect_ids)
