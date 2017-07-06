@@ -88,8 +88,10 @@ var init = function() {
 		return (/^[?#]/.test(query) ? query.slice(1) : query)
 			.split('&')
 			.reduce( function(params, param) {
-				let [ key, value ] = param.split('=');
-	      if ( /\[\]$/.test(key) ) {
+			  var key = param.split("=")[0];	
+        var value = param.split("=")[1]; 
+	      
+        if ( /\[\]$/.test(key) ) {
           key.replace(/\[\]$/, '');
           params[key] = params[key] || [];
           params[key].push( value ? decodeURIComponent(value.replace(/\+/g, ' ')) : '');
@@ -116,7 +118,8 @@ var init = function() {
 	}
   
   $('.per-page-select').change( function(){ 
-    let [ url, query ] =  window.location.href.split("?");  
+    var url = window.location.href.split("?")[0]; 
+    var query = window.location.href.split("?")[1]; 
     query = deserializeParams(query);
     query["per_page"] = this.value;
     window.location = url + '?' + serializeParams(query);
