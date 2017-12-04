@@ -42,7 +42,9 @@ gem 'capistrano-rails', group: :development
 gem 'figaro'
 
 gem 'rack-cas'
-gem 'umd_lib_style', github: 'umd-lib/umd_lib_style', ref: '0.2.0'
+
+# UMD Bootstrap style
+gem 'umd_lib_style', github: 'umd-lib/umd_lib_style', ref: '1.0.1'
 
 gem 'bootstrap-toggle-rails'
 gem 'cocoon'

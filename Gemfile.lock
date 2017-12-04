@@ -1,9 +1,9 @@
 GIT
   remote: https://github.com/umd-lib/umd_lib_style.git
-  revision: f97253cf0d0249e15a0b1fa46ae4fe74bc3a2904
-  ref: 0.2.0
+  revision: b336a2c81b324e54e63e10497bb696581f6ab592
+  ref: 1.0.1
   specs:
-    umd_lib_style (0.2.0)
+    umd_lib_style (1.0.1)
       rails (~> 4.2.6)
 
 GEM
@@ -401,4 +401,4 @@ DEPENDENCIES
   will_paginate-bootstrap
 
 BUNDLED WITH
-   1.13.6
+   1.16.0
