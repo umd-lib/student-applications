@@ -18,7 +18,7 @@
  */
 
 
-body > .container { margin-top: 25px;  }
+body > #viewport > .content > .container { margin-top: 25px;  }
 .alert { margin-top: 15px; }
 
 #home-jumbo, #upload-jumbo { margin-top: 50px }
@@ -42,12 +42,12 @@ label.required abbr {
 .help-block.has-error { color: #a94442 }
 
 .radio-question { padding-left: 50px; padding-right: 20px; vertical-align: middle; }
-.help-block.radio-question-help { vertical-align: middle; margin-bottom: 2px; display: inline-block; padding-left: 10px } 
+.help-block.radio-question-help { vertical-align: middle; margin-bottom: 2px; display: inline-block; padding-left: 10px }
 
 #availability-table > thead > tr > th, #availability-table > tbody > tr >  td {
-  text-align: center;  
-  width: 13.2%; 
-  padding: 8px 0px; 
+  text-align: center;
+  width: 13.2%;
+  padding: 8px 0px;
   border: 1px dotted #666666;
 }
 #availability-table th.time-label, #availability-table td.time-label {
@@ -139,22 +139,22 @@ table.prospects th, table.prospects td  {
 /* configuration page */
 .mover { width: 5% }
 .toggler { float: right }
-ul.list-group { list-style-type: none; } 
-.list-group-item { min-height: 56px } 
-.list-group-item div.form-group { margin-bottom: 0; display: inline-block }  
-.enumeration-value > div { width: 50% }  
+ul.list-group { list-style-type: none; }
+.list-group-item { min-height: 56px }
+.list-group-item div.form-group { margin-bottom: 0; display: inline-block }
+.enumeration-value > div { width: 50% }
 
 
 .modal-dialog { width: 800px; }
-#deactivate-modal input { display: none; } 
+#deactivate-modal input { display: none; }
 .slider-selection {
   background: #5bc0de;
 }
 
 #filter-modal b { padding: 0 15px; }
-#filter-modal .availability-select { text-align: center; }  
+#filter-modal .availability-select { text-align: center; }
 #filter-modal .slider.slider-horizontal {
-  width: 80%; 
+  width: 80%;
 }
 .container.configuration.show h3 { padding-top: 2px }
 
@@ -168,16 +168,15 @@ ul.list-group { list-style-type: none; }
 
 
 #skills .pagination span { font-size: 14px }
-.prospects .pagination { 
+.prospects .pagination {
   margin: 0;
-  small { 
+  small {
     padding-bottom: 25px;
     vertical-align: middle;
   }
-  .bootstrap-select:not([class*="col-"]):not([class*="form-control"]):not(.input-group-btn) { 
-    width: 75px; 
-  
+  .bootstrap-select:not([class*="col-"]):not([class*="form-control"]):not(.input-group-btn) {
+    width: 75px;
+
    }
 
 }
-
