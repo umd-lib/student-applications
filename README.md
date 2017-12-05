@@ -72,9 +72,22 @@ by ActionMailer, using a [delayed_job](https://github.com/collectiveidea/delayed
 To run a delayed_job worker, you can start/stop the daemon process using :
 
 ```
-$ ./bin/delayed_job start RAILS_ENV=production 
-$ ./bin/delayed_job stop RAILS_ENV=production 
+$ cd ./student-applications; RAILS_ENV=production ./bin/delayed_job start
+$ cd ./student-applications; RAILS_ENV=production ./bin/delayed_job stop
 ```
+
+There are also a number of Job-related rake tasks that can be invoked 
+These include: 
+
+```
+./bin/rake jobs:clear                                         # Clear the delayed_job queue
+./bin/rake jobs:check[max_age]                                # Exit with error status if any jobs older than max_age seconds haven't been attempted yet
+./bin/rake jobs:work                                          # Start a delayed_job worker
+./bin/rake jobs:workoff                                       # Start a delayed_job worker and exit when all available jobs are complete
+```
+
+Note: Include the RAILS_ENV=production flage if you're using this on
+application in production-mode.
 
 To view the delayed_job queue status, you can visit /delayed_job in the
 application. This requires an admin user to be logged in ( first visit
