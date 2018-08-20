@@ -52,7 +52,7 @@ gem 'country_select'
 gem 'simple_form'
 gem 'will_paginate-bootstrap'
 
-gem 'paperclip', '~> 5.0.0'
+gem 'paperclip', '~> 5.3.0'
 
 gem 'daemons'
 gem 'delayed_job_active_record'
