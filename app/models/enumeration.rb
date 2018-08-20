@@ -2,7 +2,7 @@
 class Enumeration < ActiveRecord::Base
   has_and_belongs_to_many :prospects, join_table: 'prospects_enumerations'
 
-  ENUMERATION_LISTS = %w(class_status graduation_year library semester how_did_you_hear_about_us).map(&:intern).freeze
+  ENUMERATION_LISTS = %w[class_status graduation_year library semester how_did_you_hear_about_us].map(&:intern).freeze
 
   validates :value, presence: true
   validates :list, presence: true

@@ -13,6 +13,7 @@ AllCops:
     - 'lib/**/*'
     - 'config/**/*'
   TargetRubyVersion: 2.2
+  TargetRailsVersion: 4.2
 
 # Increase max allowed line length
 Metrics/LineLength:
@@ -50,10 +51,4 @@ Rails/SkipsModelValidations:
   Exclude:
     - 'app/controllers/configuration_controller.rb'
     - 'app/controllers/prospects_controller.rb'
-
-Style/PercentLiteralDelimiters:
-  Exclude:
-    - 'app/controllers/prospects_controller.rb'
-    - 'app/controllers/concerns/querying_prospects.rb'
-    - 'app/helpers/application_helper.rb'
 

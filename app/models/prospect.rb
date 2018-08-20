@@ -101,13 +101,13 @@ class Prospect < ActiveRecord::Base
   validates :user_signature, presence: true, if: ->(p) { p.last_step? }
 
   # directory_id and semester
-  %i(directory_id).each do |attr|
+  %i[directory_id].each do |attr|
     validates attr, presence: true, if: ->(p) { p.current_step == 'id_and_semester' }
   end
 
   # these are the validations for the contact_information step
   validates :in_federal_study, inclusion: { in: [true, false], if: ->(p) { p.current_step == 'contact_info' } }
-  %i(directory_id first_name last_name email).each do |attr|
+  %i[directory_id first_name last_name email].each do |attr|
     validates attr, presence: true, if: ->(p) { p.current_step == 'contact_info' }
   end
 

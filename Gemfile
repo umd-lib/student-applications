@@ -96,7 +96,7 @@ group :test do
   gem 'test_after_commit'
 
   # Code analysis tools
-  gem 'rubocop', require: false
+  gem 'rubocop', '= 0.49.1', require: false
   gem 'rubocop-checkstyle_formatter', require: false
   gem 'simplecov', require: false
   gem 'simplecov-rcov', require: false

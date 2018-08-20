@@ -5,5 +5,5 @@ class PhoneNumber < ActiveRecord::Base
 
   validates :number, presence: true, if: ->(a) { a.prospect && a.prospect.current_step == 'contact_info' }
 
-  enum phone_type: %i(local cell other)
+  enum phone_type: %i[local cell other]
 end
