@@ -1,4 +1,4 @@
-class ProspectsController < ApplicationController
+class ProspectsController < ApplicationController # rubocop:disable Metrics/ClassLength
   include QueryingProspects
 
   @error_message = "We're sorry, but something has gone wrong. Please try again."
@@ -11,7 +11,7 @@ class ProspectsController < ApplicationController
     choose_action if params[:step]
   end
 
-  def create
+  def create # rubocop:disable Metrics/AbcSize, Metrics/CyclomaticComplexity, Metrics/MethodLength, Metrics/PerceivedComplexity
     if params[:reset]
       redirect_to reset_url
     else
@@ -30,7 +30,7 @@ class ProspectsController < ApplicationController
     elsif @prospect
       begin
           SubmittedMailer.default_email(@prospect).deliver_later
-        rescue EOFError,
+        rescue EOFError, # rubocop:disable Lint/ShadowedException
                IOError,
                TimeoutError,
                Errno::ECONNRESET,
@@ -73,7 +73,7 @@ class ProspectsController < ApplicationController
     @resume = @prospect.resume
   end
 
-  def update
+  def update # rubocop:disable Metrics/AbcSize
     @prospect = Prospect.includes(:enumerations, :available_times, :skills).find(params[:id])
     if @prospect.update(prospect_params)
       redirect_to prospects_path, notice: "#{@prospect.name} application has been updated"
@@ -99,7 +99,7 @@ class ProspectsController < ApplicationController
 
   private
 
-    def log_exception(exception, prospect = nil)
+    def log_exception(exception, prospect = nil) # rubocop:disable Metrics/AbcSize
       logger.error '~' * 100
       logger.error 'Application Submission Failure!'
       logger.error "Prospect: #{prospect.inspect} Errors: #{prospect.errors}" if prospect
@@ -124,7 +124,7 @@ class ProspectsController < ApplicationController
 
     # match the value stored in the session with the incoming values in the
     # param
-    def set_session
+    def set_session # rubocop:disable Metrics/AbcSize
       session[:prospect_params] ||= {}.with_indifferent_access
       session[:prospect_params].deep_merge!(prospect_params)
       session[:prospect_params].keys.select { |a| a =~ /_attributes$/ }.each do |attr|
@@ -135,7 +135,7 @@ class ProspectsController < ApplicationController
       end
     end
 
-    def set_prospect
+    def set_prospect # rubocop:disable Metrics/AbcSize
       @prospect = Prospect.new(ActionController::Parameters.new(session[:prospect_params]).permit!)
       if @prospect.nil? || !@prospect.is_a?(Prospect)
         reset_session
@@ -155,7 +155,7 @@ class ProspectsController < ApplicationController
       params.require(:prospect).permit(*whitelisted_attrs)
     end
 
-    def whitelisted_attrs
+    def whitelisted_attrs # rubocop:disable Metrics/MethodLength
       # these are all the single keys that are allowed.
       attrs = %i[
         current_step commit in_federal_study directory_id first_name last_name
@@ -185,7 +185,7 @@ class ProspectsController < ApplicationController
     end
 
     # decide which step to move to depending on which button was clicked and which step we are already on
-    def choose_action
+    def choose_action # rubocop:disable Metrics/AbcSize, Metrics/MethodLength
       if params[:back_button]
         @prospect.previous_step
       elsif params[:step]
@@ -201,7 +201,7 @@ class ProspectsController < ApplicationController
       raise e
     end
 
-    def find_prospects
+    def find_prospects # rubocop:disable Metrics/AbcSize, Metrics/MethodLength
       @all_results = Prospect.joins(join_table).select(select_statement)
                              .where(text_search_statement)
                              .where(search_statement)

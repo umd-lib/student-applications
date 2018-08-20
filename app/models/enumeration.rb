@@ -1,3 +1,4 @@
+# Model for enumerated values
 class Enumeration < ActiveRecord::Base
   has_and_belongs_to_many :prospects, join_table: 'prospects_enumerations'
 
@@ -26,7 +27,10 @@ class Enumeration < ActiveRecord::Base
     # this takes an array of key values and updates the positions based on
     # their position in the array.
     def update_positions(ids)
-      positions = *(0..ids.length).each_with_object([]) { |v, m| m << { position: v }; m }
+      positions = *(0..ids.length).each_with_object([]) do |v, m|
+        m << { position: v }
+        m
+      end
       Enumeration.update(ids, positions)
     end
   end

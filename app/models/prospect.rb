@@ -28,6 +28,7 @@ class Prospect < ActiveRecord::Base
   # Custom Validations
   validate :must_have_class_status, :must_have_graduation_year, :must_have_semester, :only_one_id_per_semester
 
+  # rubocop:disable Style/GuardClause, Metrics/LineLength, Rails/OutputSafety
   def only_one_id_per_semester
     if current_step == 'id_and_semester' && !persisted? && semester
       if Prospect.joins(:enumerations).where(suppressed: false, directory_id: directory_id, enumerations: { id: semester.id }).exists?
@@ -35,8 +36,8 @@ class Prospect < ActiveRecord::Base
       end
     end
   end
+  # rubocop:enable Metrics/LineLength, Rails/OutputSafety
 
-  # rubocop:disable Style/GuardClause
   def must_have_class_status
     if current_step == 'contact_info' && class_status.nil?
       errors.add(:class_status, 'You must have one ( and only one ) Class Status selected.')
@@ -54,7 +55,7 @@ class Prospect < ActiveRecord::Base
       errors.add(:semester, 'Please indicate which semester you are applying for.')
     end
   end
-  # rubocop:enable Style/GuardClause
+  # rubocop:enable Style/GuardClause, Metrics/LineLength
 
   attr_accessor :class_status
   def class_status
@@ -71,7 +72,7 @@ class Prospect < ActiveRecord::Base
   #  enumerations.find { |e| e['list'] == Enumeration.lists['semester'] }
   # end
 
-  def semester=(value)
+  def semester=(value) # rubocop:disable Metrics/AbcSize
     return if value.nil?
 
     current = @semester.nil? ? enumerations.find { |e| e['list'] == Enumeration.lists['semester'] } : @semester
