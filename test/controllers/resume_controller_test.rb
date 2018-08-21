@@ -40,7 +40,7 @@ class ResumesControllerTest < ActionController::TestCase
   end
 
   test "should not create a new resume if its not a pdf" do
-    file = fixture_file_upload( "resume.pdf", 'text/html' )
+    file = fixture_file_upload( "resume.notpdf", 'text/html' )
     refute_difference( 'Resume.count' ) do
         post :create, resume: { file: file }
     end
@@ -60,25 +60,25 @@ class ResumesControllerTest < ActionController::TestCase
     get :show, id: resume.id
     assert_response(403)
   end
-  
+
   test 'should not allow anyone not logged in to view a submitted resume' do
-    prospect = prospects(:all_valid) 
+    prospect = prospects(:all_valid)
     prospect.build_resume( file: File.new('test/fixtures/resume.pdf', 'r'))
     prospect.save
 
     get :show, id: prospect.resume_id
     assert_response(403)
   end
-  
+
   test 'should allow authed users to view any resume' do
-    prospect = prospects(:all_valid) 
+    prospect = prospects(:all_valid)
     prospect.build_resume( file: File.new('test/fixtures/resume.pdf', 'r'))
     prospect.save
 
     session[:cas] = { user: "admin" }
     get :show, id: prospect.resume_id
     assert_response :success
-    
+
     resume = Resume.create(file: File.new('test/fixtures/resume.pdf', 'r'))
     get :show, id: resume.id
     assert_response :success

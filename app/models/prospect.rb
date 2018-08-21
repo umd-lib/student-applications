@@ -28,6 +28,7 @@ class Prospect < ActiveRecord::Base
   # Custom Validations
   validate :must_have_class_status, :must_have_graduation_year, :must_have_semester, :only_one_id_per_semester
 
+  # rubocop:disable Style/GuardClause, Metrics/LineLength, Rails/OutputSafety
   def only_one_id_per_semester
     if current_step == 'id_and_semester' && !persisted? && semester
       if Prospect.joins(:enumerations).where(suppressed: false, directory_id: directory_id, enumerations: { id: semester.id }).exists?
@@ -35,8 +36,8 @@ class Prospect < ActiveRecord::Base
       end
     end
   end
+  # rubocop:enable Metrics/LineLength, Rails/OutputSafety
 
-  # rubocop:disable Style/GuardClause
   def must_have_class_status
     if current_step == 'contact_info' && class_status.nil?
       errors.add(:class_status, 'You must have one ( and only one ) Class Status selected.')
@@ -54,7 +55,7 @@ class Prospect < ActiveRecord::Base
       errors.add(:semester, 'Please indicate which semester you are applying for.')
     end
   end
-  # rubocop:enable Style/GuardClause
+  # rubocop:enable Style/GuardClause, Metrics/LineLength
 
   attr_accessor :class_status
   def class_status
@@ -71,7 +72,7 @@ class Prospect < ActiveRecord::Base
   #  enumerations.find { |e| e['list'] == Enumeration.lists['semester'] }
   # end
 
-  def semester=(value)
+  def semester=(value) # rubocop:disable Metrics/AbcSize
     return if value.nil?
 
     current = @semester.nil? ? enumerations.find { |e| e['list'] == Enumeration.lists['semester'] } : @semester
@@ -100,13 +101,13 @@ class Prospect < ActiveRecord::Base
   validates :user_signature, presence: true, if: ->(p) { p.last_step? }
 
   # directory_id and semester
-  %i(directory_id).each do |attr|
+  %i[directory_id].each do |attr|
     validates attr, presence: true, if: ->(p) { p.current_step == 'id_and_semester' }
   end
 
   # these are the validations for the contact_information step
   validates :in_federal_study, inclusion: { in: [true, false], if: ->(p) { p.current_step == 'contact_info' } }
-  %i(directory_id first_name last_name email).each do |attr|
+  %i[directory_id first_name last_name email].each do |attr|
     validates attr, presence: true, if: ->(p) { p.current_step == 'contact_info' }
   end
 

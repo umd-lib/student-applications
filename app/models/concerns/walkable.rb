@@ -41,7 +41,7 @@ module Walkable
 
   class_methods do
     def steps
-      %w(id_and_semester contact_info work_experience skills availability upload_resume comments_confirmation)
+      %w[id_and_semester contact_info work_experience skills availability upload_resume comments_confirmation]
     end
 
     def first_step

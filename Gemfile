@@ -4,7 +4,7 @@ source 'https://rubygems.org'
 git_source(:github) { |repo_name| "https://github.com/#{repo_name}.git" }
 
 # Bundle edge Rails instead: gem 'rails', github: 'rails/rails'
-gem 'rails', '4.2.6'
+gem 'rails', '4.2.10'
 # Use sqlite3 as the database for Active Record
 gem 'pg', group: :production
 gem 'sqlite3'
@@ -52,7 +52,7 @@ gem 'country_select'
 gem 'simple_form'
 gem 'will_paginate-bootstrap'
 
-gem 'paperclip', '~> 5.0.0'
+gem 'paperclip', '~> 5.3.0'
 
 gem 'daemons'
 gem 'delayed_job_active_record'
@@ -96,7 +96,7 @@ group :test do
   gem 'test_after_commit'
 
   # Code analysis tools
-  gem 'rubocop', require: false
+  gem 'rubocop', '= 0.49.1', require: false
   gem 'rubocop-checkstyle_formatter', require: false
   gem 'simplecov', require: false
   gem 'simplecov-rcov', require: false

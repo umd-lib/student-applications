@@ -6,7 +6,7 @@ module QueryingProspects
   end
 
   # this is pretty hacky. would be nice to refactor with arel.
-  def sort_order
+  def sort_order # rubocop:disable Metrics/AbcSize, Metrics/MethodLength
     col = sort_column
     # do a case-insensitive sort if we are sort on last name
     col = "lower(#{col})" if col.include?('last_name')
@@ -31,7 +31,7 @@ module QueryingProspects
       end
     end
 
-    def join_table
+    def join_table # rubocop:disable Metrics/AbcSize
       join_tables = []
       if Prospect.reflections.keys.include?(sort_column.split('.').first)
         join_tables << sort_column.split('.').first.intern
