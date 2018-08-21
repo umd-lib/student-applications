@@ -87,10 +87,11 @@ group :test do
   gem 'minitest-reporters'
   # use the head to get the callback functionality
   gem 'capybara-screenshot'
+  gem 'chromedriver-helper'
   gem 'database_cleaner'
   gem 'mocha'
-  gem 'poltergeist'
   gem 'rack_session_access'
+  gem 'selenium-webdriver'
   gem 'shoulda-context'
   gem 'shoulda-matchers', '>= 3.0.1'
   gem 'test_after_commit'

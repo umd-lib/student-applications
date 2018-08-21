@@ -25,7 +25,7 @@ feature 'Upload a resume' do
       end
 
       assert page.has_content?('Resume')
-      page.attach_file('resume_file', 'test/fixtures/resume.pdf', visible: false)
+      page.attach_file('resume_file', File.absolute_path('test/fixtures/resume.pdf'), visible: false)
 
       find("input[name='uploadResume']").click
 
@@ -70,9 +70,13 @@ feature 'Upload a resume' do
       break if page.has_content?('Resume')
     end
     assert page.has_content?('Resume')
-    page.attach_file('resume_file', 'test/fixtures/resume.notpdf', visible: false)
+    page.attach_file('resume_file', File.absolute_path('test/fixtures/resume.notpdf'), visible: false)
 
     find("input[name='uploadResume']").click
+
+    # Dismiss dialog indicating file must be a PDF
+    alert = page.driver.browser.switch_to.alert
+    alert.dismiss
 
     refute_selector "input[value='Success!']"
 

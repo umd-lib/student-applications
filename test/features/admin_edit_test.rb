@@ -2,7 +2,7 @@ require 'test_helper'
 
 feature 'Admins can edit submitted applications' do
   scenario 'login as admin & edit submitted application', js: true do
-    page.driver.resize_window(2048, 2048)
+    page.current_window.resize_to(2048, 2048)
 
     User.create(cas_directory_id: 'editor', name: 'editor', admin: true)
     visit prospects_path
