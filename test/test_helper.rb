@@ -20,7 +20,7 @@ require 'minitest/rails/capybara'
 require 'minitest/reporters'
 
 # add  Minitest::Reporters::SpecReporter.new to first param if you want to see
-# what's running so damn slow.
+# what's running so slow.
 Minitest::Reporters.use!(
   # Minitest::Reporters::SpecReporter.new,
   Minitest::Reporters::ProgressReporter.new,
@@ -28,19 +28,15 @@ Minitest::Reporters.use!(
   Minitest.backtrace_filter
 )
 
-# Capybara and poltergeist integration
+# Capybara integration
 require 'capybara/rails'
-require 'capybara/poltergeist'
 require 'capybara-screenshot/minitest'
 
-# for debugging
-# https://github.com/teampoltergeist/poltergeist#remote-debugging-experimental
-# Capybara.register_driver :poltergeist_debug do |app|
-#  Capybara::Poltergeist::Driver.new(app, :inspector => true)
-# end
-# Capybara.javascript_driver = :poltergeist_debug
+# To see test in browser,
+# use ":selenium_chrome" instead of ":selenium_chrome_headless"
+Capybara.default_driver = :selenium_chrome_headless
+Capybara.javascript_driver = :selenium_chrome_headless
 
-Capybara.javascript_driver = :poltergeist
 require 'rack_session_access/capybara'
 
 DatabaseCleaner.strategy = :truncation, { only: %w(prospects) }
@@ -66,7 +62,7 @@ class ActiveSupport::TestCase
     fixture.directory_id = SecureRandom.hex
     fixture
   end
-  
+
 
 end
 
@@ -93,6 +89,7 @@ ActiveRecord::Base.shared_connection = ActiveRecord::Base.connection
 
 def drag_until(locator, options = {}, &block)
   slider = find(locator)
-  slider.native.drag_by(options[:by], 0) until block.call(slider['aria-valuenow'].to_i)
+  event_input = slider.native
+  page.driver.browser.action.click_and_hold(event_input).move_by(options[:by],0).release.perform until block.call(slider['aria-valuenow'].to_i)
   slider
 end

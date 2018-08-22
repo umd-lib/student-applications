@@ -1,3 +1,5 @@
+require 'no_animations'
+
 Rails.application.configure do
   # Settings specified here will take precedence over those in config/application.rb.
 
@@ -43,4 +45,7 @@ Rails.application.configure do
   # config.action_view.raise_on_missing_translations = true
 
   config.active_job.queue_adapter = :inline
+
+  # Disable CSS animations, as it interferes with Capybara testing
+  config.middleware.use Rack::NoAnimations
 end

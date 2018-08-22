@@ -2,24 +2,18 @@
 
 Rails application for processing student applications for Libraries employment
 
-# Student Application Application
-
-This is an application to accept applications from students. 
-
 A student application ( called "Prospect" to avoid confusion ) is submitted via a multi-page form. This
 is managed by serializing the parameters in a session, which are marshalled at each step of the process.
 
-Each step has a view defined in the app/views/prospect which is rendered when the process reaches that step. 
+Each step has a view defined in the app/views/prospect which is rendered when the process reaches that step.
 
-
-## Setup 
+## Setup
 
 Requires:
 
 * Ruby 2.2
 * Bundler
-* [phantomjs](http://phantomjs.org/) - PhantomJS must be installed separately, and the executable directory placed on the PATH.
-
+* [Google Chrome](https://www.google.com/chrome/index.html) (for testing)
 
 To run the application:
 
@@ -38,23 +32,35 @@ You can load test fixtures in by using db:seed:demo rake task
 $ ./bin/rake db:seed:demo
 ```
 
-
 To develop, you can run [Guard](https://github.com/guard/guard) by issuing:
 
 ```
 $ ./bin/bundle exec guard
 ```
 
-Testing uses [Minitest](https://github.com/seattlerb/minitest) and [Capybara](https://github.com/jnicklas/capybara).
-[Poltergeist](https://github.com/teampoltergeist/poltergeist) provides a headless Webkit driver for Capybara, which
-can be used for Feature tests that use lots of Javascript. 
+## Testing Setup
+
+Testing uses [Minitest](https://github.com/seattlerb/minitest),
+[Capybara](https://github.com/jnicklas/capybara) and the Selenium web driver.
+
+Google Chrome and [chromedriver](https://sites.google.com/a/chromium.org/chromedriver/)
+are used to provide a headless browser for testing.
+
+The [chromedriver-helper](https://github.com/flavorjones/chromedriver-helper)
+gem should automatically download and install the latest chromedrive executable
+into ~/.chromedriver.
+
+CSS animations and transitions cause visibility/timing issues when testing in
+a headless browser. When running the tests, they have turned off by the
+"lib/no_animations.rb" file, which is added as Rack middleware in the
+"config/environment/test.rb" file.
 
 ## Production Environment Configuration
 
 Requires:
 
-* Postgres client to be installed (on RedHat, the "postgresql" and 
-"postgresql-devel" packages)
+* Postgres client to be installed (on RedHat, the "postgresql" and
+  "postgresql-devel" packages)
 
 The application uses the "dotenv" gem to configure the production environment.
 The gem expects a ".env" file in the root directory to contain the environment
@@ -76,8 +82,8 @@ $ cd ./student-applications; RAILS_ENV=production ./bin/delayed_job start
 $ cd ./student-applications; RAILS_ENV=production ./bin/delayed_job stop
 ```
 
-There are also a number of Job-related rake tasks that can be invoked 
-These include: 
+There are also a number of Job-related rake tasks that can be invoked
+These include:
 
 ```
 ./bin/rake jobs:clear                                         # Clear the delayed_job queue
@@ -93,13 +99,12 @@ To view the delayed_job queue status, you can visit /delayed_job in the
 application. This requires an admin user to be logged in ( first visit
 /prospects to login. )
 
-
 ### Adding users
 
-You can add users via a rake task: 
+You can add users via a rake task:
 
 ```
-$ ./bin/rake db:add_admin_cas_user[cas_directory_id,full_name]  # Add an admin user
-$ ./bin/rake db:add_cas_user[cas_directory_id,full_name]        # Add a non-admin user
-$ ./bin/rake db:bulk_add_users[csv_file]  # use csv file with full_name, directory_id rows 
+$ ./bin/rake 'db:add_admin_cas_user[cas_directory_id,full_name]'  # Add an admin user
+$ ./bin/rake 'db:add_cas_user[cas_directory_id,full_name]'        # Add a non-admin user
+$ ./bin/rake db:bulk_add_users[csv_file]  # use csv file with full_name, directory_id rows
 ```
