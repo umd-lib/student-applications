@@ -210,6 +210,21 @@ class ProspectsController < ApplicationController # rubocop:disable Metrics/Clas
                              .active.order(sort_order)
                              .pluck('prospects.id').uniq
 
+      # In the following, we run additional queries for the fields that can
+      # be filtered, then intersect the results with the results from the
+      # overall query. This has the effect of acting as an "OR" within
+      # a field, but as an "AND" between fields.
+      %w[semesters class_statuses libraries].each do |enum_type|
+        where_statement = enumeration_type_search_statement(enum_type)
+        next if where_statement.nil?
+
+        type_results = Prospect.joins(join_table).select(select_statement)
+                               .where(where_statement)
+                               .active.order(sort_order)
+                               .pluck('prospects.id').uniq
+        @all_results &= type_results
+      end
+
       @per_page = params[:per_page] ? params[:per_page].to_i : 50
       @prospect_ids = @all_results.paginate(page: params[:page], per_page: @per_page)
       @prospects = Prospect.includes(:enumerations, :available_times, :skills).find(@prospect_ids)

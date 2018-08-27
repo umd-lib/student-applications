@@ -96,6 +96,18 @@ module QueryingProspects
       params[:available_time] ? { 'prospects.id' => AvailableTime.find_by_sql(day_times_sql).map(&:prospect_id) } : {}
     end
 
+    # Returns a query for the given enumeration type (as represented by the
+    # method name on the Enumeration object)
+    def enumeration_type_search_statement(enumeration_type)
+      all_type_ids = Enumeration.send(enumeration_type).map { |s| s.id.to_s }
+
+      # Get the ids in the params that are in the enumeration type
+      ids_for_search = all_type_ids & params[:search][:enumerations]
+
+      return if ids_for_search.empty?
+      Arel::Table.new(Prospect.reflect_on_association('enumerations').table_name)[:id].in(ids_for_search)
+    end
+
     def search_statement
       query = params[:search].each_with_object([]) do |(k, val), memo|
         next if val.empty?
