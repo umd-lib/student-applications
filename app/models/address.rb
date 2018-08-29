@@ -1,5 +1,5 @@
 # Addresses that are associated to the Prosect
-class Address < ActiveRecord::Base
+class Address < ApplicationRecord
   belongs_to :prospect
   validates :prospect, presence: true
   enum address_type: %i[local permanent]

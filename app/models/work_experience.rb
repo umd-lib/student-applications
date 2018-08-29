@@ -1,2 +1,2 @@
-class WorkExperience < ActiveRecord::Base
+class WorkExperience < ApplicationRecord
 end

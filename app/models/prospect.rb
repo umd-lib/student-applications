@@ -2,7 +2,7 @@
 # It includes the steps that are used to submit one
 # rubocop:disable Rails/HasAndBelongsToMany
 # rubocop:disable Metrics/ClassLength
-class Prospect < ActiveRecord::Base
+class Prospect < ApplicationRecord
   include Walkable
 
   belongs_to :resume
