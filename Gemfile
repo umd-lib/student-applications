@@ -105,10 +105,10 @@ group :test do
   gem 'database_cleaner'
   gem 'mocha'
   gem 'rack_session_access'
+  gem 'rails-controller-testing'
   gem 'selenium-webdriver'
   gem 'shoulda-context'
   gem 'shoulda-matchers', '>= 3.0.1'
-  gem 'test_after_commit'
 
   gem 'simplecov', require: false
   gem 'simplecov-rcov', require: false
