@@ -92,7 +92,7 @@ These include:
 ./bin/rake jobs:workoff                                       # Start a delayed_job worker and exit when all available jobs are complete
 ```
 
-Note: Include the RAILS_ENV=production flage if you're using this on
+Note: Include the RAILS_ENV=production flag if you're using this on
 application in production-mode.
 
 To view the delayed_job queue status, you can visit /delayed_job in the
