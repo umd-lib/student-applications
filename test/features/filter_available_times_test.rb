@@ -12,15 +12,12 @@ feature 'Should be able filter prospects on available times' do
     click_button 'Login'
 
     # Our Students....
-    # rubocop:disable Rails/SkipsModelValidations
-    Prospect.find_by(first_name: 'Betty').update_attribute(:day_times, ['0-9', '0-10', '0-11'])
-    Prospect.find_by(first_name: 'Alvin').update_attribute(:day_times, ['0-8', '0-9'])
-    Prospect.find_by(first_name: 'Rolling').update_attribute(:day_times, ['1-8', '1-9', '1-10'])
-    # rubocop:ensable Rails/SkipsModelValidations
+    set_day_times(Prospect.find_by(first_name: 'Betty'), ['0-9', '0-10', '0-11'])
+    set_day_times(Prospect.find_by(first_name: 'Alvin'), ['0-8', '0-9'])
+    set_day_times(Prospect.find_by(first_name: 'Rolling'), ['1-8', '1-9', '1-10'])
 
     students = Prospect.all.group_by(&:first_name).map { |k,v| [k, v.first] }.to_h
 
-    # We should have all of our students present
     # We should have all of our students present
     page.must_have_selector("#prospect_#{ students["Betty"].id  }")
     page.must_have_selector("#prospect_#{ students["Alvin"].id  }")
@@ -56,5 +53,12 @@ feature 'Should be able filter prospects on available times' do
     page.wont_have_selector("#prospect_#{ students["Rolling"].id  }")
     page.wont_have_selector("#prospect_#{ students["Alvin"].id  }")
 
+  end
+
+  # Helper method for setting an array of day_times on a prospect and then
+  # storing
+  def set_day_times(prospect, day_times)
+    prospect.day_times = day_times
+    prospect.save!
   end
 end
