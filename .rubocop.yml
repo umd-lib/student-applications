@@ -13,7 +13,7 @@ AllCops:
     - 'lib/**/*'
     - 'config/**/*'
   TargetRubyVersion: 2.2
-  TargetRailsVersion: 4.2
+  TargetRailsVersion: 5.0
 
 # Increase max allowed line length
 Metrics/LineLength:
@@ -40,6 +40,26 @@ Style/ClassAndModuleChildren:
 
 Style/IndentationConsistency:
   EnforcedStyle: rails
+
+# Disabling the following as they interfere with the Rails layout of the
+# Gemfile, making changes when doing upgrades less visible
+Bundler/OrderedGems:
+  Enabled: false
+
+Layout/EmptyLines:
+  Exclude:
+    - Gemfile
+
+Style/StringLiterals:
+  Exclude:
+    - Gemfile
+
+Style/SymbolArray:
+  Exclude:
+    - Gemfile
+
+
+
 
 # May want to reconsider these exclusions in the future
 Rails/HasAndBelongsToMany:

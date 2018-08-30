@@ -72,7 +72,7 @@ class Prospect < ApplicationRecord
   #  enumerations.find { |e| e['list'] == Enumeration.lists['semester'] }
   # end
 
-  def semester=(value) # rubocop:disable Metrics/AbcSize
+  def semester=(value) # rubocop:disable Metrics/AbcSize, Metrics/CyclomaticComplexity
     return if value.nil? || value.blank?
 
     current = @semester.nil? ? enumerations.find { |e| e['list'] == 'semester' } : @semester
