@@ -29,11 +29,11 @@ class ApplicationController < ActionController::Base
       # screen
       redirect_to action: 'new', controller: 'prospects'
     elsif session[:cas].nil? || session[:cas][:user].nil?
-      render status: 401, text: 'Redirecting to SSO...'
+      render status: 401, plain: 'Redirecting to SSO...'
     else
       user = User.find_by cas_directory_id: session[:cas][:user]
       if user.nil?
-        render status: 403, text: 'Unrecognized user'
+        render status: 403, plain: 'Unrecognized user'
       else
         update_current_user(user)
       end
