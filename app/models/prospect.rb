@@ -21,7 +21,7 @@ class Prospect < ApplicationRecord
     if semester
       enumerations << semester
     else
-      @semester = enumerations.find { |e| e['list'] == Enumeration.lists['semester'] }
+      @semester = enumerations.find { |e| e['list'] == 'semester' }
     end
   end
 
@@ -59,12 +59,12 @@ class Prospect < ApplicationRecord
 
   attr_accessor :class_status
   def class_status
-    enumerations.find { |e| e['list'] == Enumeration.lists['class_status'] }
+    enumerations.find { |e| e['list'] == 'class_status' }
   end
 
   attr_accessor :graduation_year
   def graduation_year
-    enumerations.find { |e| e['list'] == Enumeration.lists['graduation_year'] }
+    enumerations.find { |e| e['list'] == 'graduation_year' }
   end
 
   attr_accessor :semester
@@ -73,9 +73,9 @@ class Prospect < ApplicationRecord
   # end
 
   def semester=(value) # rubocop:disable Metrics/AbcSize
-    return if value.nil?
+    return if value.nil? || value.blank?
 
-    current = @semester.nil? ? enumerations.find { |e| e['list'] == Enumeration.lists['semester'] } : @semester
+    current = @semester.nil? ? enumerations.find { |e| e['list'] == 'semester' } : @semester
 
     enum =  value.is_a?(Enumeration) ? value : Enumeration.active_semesters.find { |e| e['value'] == value }
     raise ArgumentError, "#{value} is not a valid semester value ( #{Enumeration.active_semesters.map(&:value).join(',')} )" unless enum
@@ -87,12 +87,12 @@ class Prospect < ApplicationRecord
 
   attr_accessor :libraries
   def libraries
-    enumerations.select { |e| e['list'] == Enumeration.lists['library'] } || []
+    enumerations.select { |e| e['list'] == 'library' } || []
   end
 
   attr_accessor :how_did_you_hear_about_us
   def how_did_you_hear_about_us
-    enumerations.find { |e| e['list'] == Enumeration.lists['how_did_you_hear_about_us'] } || []
+    enumerations.find { |e| e['list'] == 'how_did_you_hear_about_us' } || []
   end
 
   # this validates if the user has clicked "All information is correct" on last
