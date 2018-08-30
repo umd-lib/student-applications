@@ -151,7 +151,6 @@ class ProspectsController < ApplicationController # rubocop:disable Metrics/Clas
       # param, we just go to the step in session. if we don't have a session,
       # we just go to first step.
       params[:prospect] ||= { current_step: (session[:prospect_step] || Prospect.steps.first) }
-      params[:prospect] = params[:prospect].with_indifferent_access
       params.require(:prospect).permit(*whitelisted_attrs)
     end
 
