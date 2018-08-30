@@ -49,7 +49,7 @@ gem 'will_paginate', '~> 3.1.0'
 gem 'will_paginate-bootstrap'
 
 # UMD Bootstrap style
-gem 'umd_lib_style', github: 'umd-lib/umd_lib_style', ref: '1.0.1'
+gem 'umd_lib_style', github: 'umd-lib/umd_lib_style', ref: '1.1.0'
 
 # CAS authentication
 gem 'rack-cas'
