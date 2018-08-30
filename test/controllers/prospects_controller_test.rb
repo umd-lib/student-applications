@@ -6,7 +6,7 @@ class ProspectsControllerTest < ActionController::TestCase
     prospect = prospects(:all_valid)
     refute prospect.suppressed?
     session[:cas] = { user: "admin" }
-    post :deactivate, format: :json,  ids: [ prospect.id ]
+    post :deactivate, params: { format: :json,  ids: [ prospect.id ] }
     assert_response :success
     prospect.reload
     assert prospect.suppressed?
@@ -38,7 +38,7 @@ class ProspectsControllerTest < ActionController::TestCase
     session[:prospect_step] = fixture.current_step
 
     refute_difference( 'Prospect.count' ) do
-      post :create,  { prospect: all_valid }
+      post :create,  params: { prospect: all_valid }
     end
 
     assert flash[:error] == "We're sorry, but something has gone wrong. Please try again."
@@ -49,7 +49,7 @@ class ProspectsControllerTest < ActionController::TestCase
     session[:cas] = { user: "admin" }
     spring_2018 = enumerations(:spring_2018)
     search_criteria = [spring_2018.id]
-    get :index, { search: { enumerations: search_criteria } }
+    get :index, params: { search: { enumerations: search_criteria } }
 
     all_request_ids = assigns(:all_results)
 
@@ -67,7 +67,7 @@ class ProspectsControllerTest < ActionController::TestCase
     session[:cas] = { user: "admin" }
     undergraduate = enumerations(:undergraduate)
     search_criteria = [undergraduate.id]
-    get :index, { search: { enumerations: search_criteria } }
+    get :index, params: { search: { enumerations: search_criteria } }
 
     all_request_ids = assigns(:all_results)
 
@@ -85,7 +85,7 @@ class ProspectsControllerTest < ActionController::TestCase
     session[:cas] = { user: "admin" }
     art_library = enumerations(:art_library)
     search_criteria = [art_library.id]
-    get :index, { search: { enumerations: search_criteria } }
+    get :index, params: { search: { enumerations: search_criteria } }
 
     all_request_ids = assigns(:all_results)
 
@@ -104,7 +104,7 @@ class ProspectsControllerTest < ActionController::TestCase
     undergraduate = enumerations(:undergraduate)
     graduate = enumerations(:graduate)
     search_criteria = [undergraduate.id, graduate.id]
-    get :index, { search: { enumerations: search_criteria } }
+    get :index, params: { search: { enumerations: search_criteria } }
 
     all_request_ids = assigns(:all_results)
 
@@ -118,7 +118,7 @@ class ProspectsControllerTest < ActionController::TestCase
     art_library = enumerations(:art_library)
     engineering_library = enumerations(:engineering_library)
     search_criteria = [art_library, engineering_library.id]
-    get :index, { search: { enumerations: search_criteria } }
+    get :index, params: { search: { enumerations: search_criteria } }
 
     all_request_ids = assigns(:all_results)
 
@@ -140,7 +140,7 @@ class ProspectsControllerTest < ActionController::TestCase
     spring_2018 = enumerations(:spring_2018)
     search_criteria = [undergraduate.id, spring_2018.id]
 
-    get :index, { search: { enumerations: search_criteria } }
+    get :index, params: { search: { enumerations: search_criteria } }
 
     all_request_ids = assigns(:all_results)
 
@@ -165,7 +165,7 @@ class ProspectsControllerTest < ActionController::TestCase
     engineering_library = enumerations(:engineering_library)
     search_criteria = [undergraduate.id, spring_2018.id, engineering_library.id]
 
-    get :index, { search: { enumerations: search_criteria } }
+    get :index, params: { search: { enumerations: search_criteria } }
 
     all_request_ids = assigns(:all_results)
 
