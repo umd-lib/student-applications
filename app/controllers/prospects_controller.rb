@@ -131,7 +131,7 @@ class ProspectsController < ApplicationController # rubocop:disable Metrics/Clas
         session[:prospect_params][attr] = params[:prospect][attr] if params[:prospect][attr].present?
       end
       session[:prospect_params].each do |k, v|
-        session[:prospect_params][k] = v.to_hash if v.is_a?(ActionController::Parameters)
+        session[:prospect_params][k] = convert_attributes_param_to_safe_hash(k, v) if v.is_a?(ActionController::Parameters)
       end
     end
 
@@ -153,6 +153,38 @@ class ProspectsController < ApplicationController # rubocop:disable Metrics/Clas
       params[:prospect] ||= { current_step: (session[:prospect_step] || Prospect.steps.first) }
       params[:prospect] = params[:prospect].with_indifferent_access
       params.require(:prospect).permit(*whitelisted_attrs)
+    end
+
+    # Converts attribute-related params that have multiple instances (and so
+    # are listed with numeric keys) into "safe" hash by passing them through
+    # whitelisted_attrs
+    #
+    # attr - The attribute (addresses, phone_numbers, etc.) to use in
+    #        passing through whitelisted_attrs
+    # param - the ActionController::Parameters object to convert
+    def convert_attributes_param_to_safe_hash(attr, param)
+      # Get an unsafe hash of the param
+      unsafe_hash = param.to_unsafe_h
+
+      # The hash of permitted attributes
+      safe_hash = {}
+
+      # Assume that each key ends with "attributes" and corresponds with
+      # attributes in the whitelist (addresses_attributes,
+      # phone_numbers_attributes, etc.)
+      unsafe_hash.each do |(key, value)|
+        # Assign the value to a hash using the attribute as a key, instead of
+        # index number ("0", "1", etc.)
+        temp_hash = { attr => value }
+        # Create a new Parameters object
+        temp_param = ActionController::Parameters.new(temp_hash)
+        # Pass the Parameters object through the whitelist and get the hash
+        temp_param_hash = temp_param.permit(whitelisted_attrs).to_hash
+        # Merge into safe_hash result, using the original numeric key as the
+        # hash key
+        safe_hash.merge!(key => temp_param_hash[attr])
+      end
+      safe_hash
     end
 
     def whitelisted_attrs # rubocop:disable Metrics/MethodLength

@@ -183,4 +183,57 @@ class ProspectsControllerTest < ActionController::TestCase
                    "Incorrect library for #{prospect.id} - #{prospect.last_name}, #{prospect.first_name}"
     end
   end
+
+  test 'convert_attributes_param_to_safe_hash should allow only whitelisted parameters' do
+    address_attributes_hash = {
+      '0'=> {
+        'address_type'=>'local', 'street_address_1'=>'555 Fake St',
+        'street_address_2'=>'', 'city'=>'Springfield', 'state'=>'HI',
+        'postal_code'=>'12345', 'country'=>'US',
+        'malicious_value' => 'this value should not be passed through'
+      }
+    }
+
+    address_attributes_param = ActionController::Parameters.new(address_attributes_hash)
+    controller = ProspectsController.new
+    result = controller.send(:convert_attributes_param_to_safe_hash, 'addresses_attributes', address_attributes_param)
+
+    assert result.has_key?('0')
+    assert result['0'].is_a?(Hash)
+
+    # expected_keys should be sorted alphabetically
+    expected_keys = %w[address_type city country postal_code state
+                       street_address_1 street_address_2]
+    assert_equal expected_keys, result['0'].keys.sort
+    refute result['0'].has_key?('malicious_value')
+  end
+
+  test 'convert_attributes_param_to_safe_hash work should handle multiple instances of attribute' do
+    address_attributes_hash = {
+      '0'=> {
+        'address_type'=>'local', 'street_address_1'=>'555 Fake St',
+        'street_address_2'=>'', 'city'=>'Springfield', 'state'=>'HI',
+        'postal_code'=>'12345', 'country'=>'US',
+        'malicious_value' => 'this value should not be passed through'
+      },
+      '1'=> {
+        'address_type'=>'permanent', 'street_address_1'=>'123 Main St',
+        'street_address_2'=>'', 'city'=>'Anytown', 'state'=>'MD',
+        'postal_code'=>'54321', 'country'=>'US',
+        'malicious_value' => 'this value should not be passed through'
+      }
+    }
+
+    address_attributes_param = ActionController::Parameters.new(address_attributes_hash)
+    controller = ProspectsController.new
+    result = controller.send(:convert_attributes_param_to_safe_hash, 'addresses_attributes', address_attributes_param)
+
+    assert result.has_key?('0')
+    assert_equal 'Springfield', result['0']['city']
+
+    assert result.has_key?('1')
+    assert result['1'].is_a?(Hash)
+    assert_equal 'Anytown', result['1']['city']
+    refute result['1'].has_key?("malicious_value")
+  end
 end
