@@ -108,7 +108,11 @@ module QueryingProspects
       ids_for_search = all_type_ids & params[:search][:enumerations]
 
       return if ids_for_search.empty?
-      Arel::Table.new(Prospect.reflect_on_association('enumerations').table_name)[:id].in(ids_for_search)
+      table_name = Prospect.reflect_on_association('enumerations').table_name
+      table_class = table_name.classify.constantize
+      arel = table_class.arel_table
+
+      arel[:id].in(ids_for_search)
     end
 
     def search_statement
@@ -119,7 +123,11 @@ module QueryingProspects
         next if val.empty?
         # not sure we really need to reflect on associations but just in case we
         # make some weird data model change
-        memo << Arel::Table.new(Prospect.reflect_on_association(k.intern).table_name)[:id].in(Array.wrap(val))
+        table_name = Prospect.reflect_on_association(k.intern).table_name
+        table_class = table_name.classify.constantize
+        arel = table_class.arel_table
+
+        memo << arel[:id].in(Array.wrap(val))
       end
       query.present? ? query.inject(&:and) : {}
     end
