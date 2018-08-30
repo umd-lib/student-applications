@@ -73,7 +73,10 @@ module QueryingProspects
     end
 
     def text_search_statement
-      query = params[:text_search].each_with_object([]) do |(k, val), memo|
+      params_as_hash = params.permit(whitelisted_attrs).to_h
+      text_search_params = params_as_hash[:text_search] || {}
+
+      query = text_search_params.each_with_object([]) do |(k, val), memo|
         unless val.empty?
           memo << Prospect.arel_table[k.intern].matches("#{val}%")
         end
@@ -109,7 +112,10 @@ module QueryingProspects
     end
 
     def search_statement
-      query = params[:search].each_with_object([]) do |(k, val), memo|
+      params_as_hash = params.permit(whitelisted_attrs).to_h
+      search_params = params_as_hash[:search] || {}
+
+      query = search_params.each_with_object([]) do |(k, val), memo|
         next if val.empty?
         # not sure we really need to reflect on associations but just in case we
         # make some weird data model change

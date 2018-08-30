@@ -209,6 +209,10 @@ class ProspectsController < ApplicationController # rubocop:disable Metrics/Clas
         available_times_attributes: sanitize_model_attrs(AvailableTime),
         skills_attributes: sanitize_model_attrs(Skill)
       )
+
+      # attributes for filtering
+      attrs << { search: { prospect: [], enumerations: [], skills: [] } }
+      attrs << { text_search: [ :last_name, :first_name, :directory_id ] }
     end
 
     # This takes a model and pops out the prospect_id which is not needed
