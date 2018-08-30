@@ -161,7 +161,9 @@ class Prospect < ApplicationRecord
   has_one :contact_phone, class_name: PhoneNumber
   accepts_nested_attributes_for :contact_phone, allow_destroy: true
 
-  alias_method_chain :contact_phone, :default
+  def contact_phone
+    super || contact_phone_with_default
+  end
   validates :contact_phone, presence: true, if: ->(o) { o.current_step == 'contact_info' }
   validates_associated :contact_phone, if: ->(o) { o.current_step == 'contact_info' }
 
@@ -178,7 +180,9 @@ class Prospect < ApplicationRecord
   has_one :local_address, -> { where(address_type: 'local') }, class_name: Address
   accepts_nested_attributes_for :local_address, allow_destroy: true
 
-  alias_method_chain :local_address, :default
+  def local_address
+    super || local_address_with_default
+  end
   validates :local_address, presence: true, if: ->(o) { o.current_step == 'contact_info' }
   validates_associated :local_address, if: ->(o) { o.current_step == 'contact_info' }
 
