@@ -7,12 +7,13 @@ AllCops:
   Exclude:
     - 'bin/setup'
     - 'bin/spring'
-    - 'test/**/*' 
+    - 'test/**/*'
     - 'config/application.rb'
     - 'db/**/*'
     - 'lib/**/*'
     - 'config/**/*'
   TargetRubyVersion: 2.2
+  TargetRailsVersion: 4.2
 
 # Increase max allowed line length
 Metrics/LineLength:
@@ -39,3 +40,15 @@ Style/ClassAndModuleChildren:
 
 Style/IndentationConsistency:
   EnforcedStyle: rails
+
+# May want to reconsider these exclusions in the future
+Rails/HasAndBelongsToMany:
+  Exclude:
+    - 'app/models/enumeration.rb'
+    - 'app/models/skill.rb'
+
+Rails/SkipsModelValidations:
+  Exclude:
+    - 'app/controllers/configuration_controller.rb'
+    - 'app/controllers/prospects_controller.rb'
+

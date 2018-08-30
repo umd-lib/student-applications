@@ -14,7 +14,7 @@ class ConfigurationController < ApplicationController
   # 3) Toggle Enumeration active boolean ( pass in id in :toggle_active_id )
   # 4) Create an new enuemration ( in :enumeration param )
   # 5) Create a new skill
-  def update
+  def update # rubocop:disable Metrics/AbcSize, Metrics/CyclomaticComplexity, Metrics/MethodLength, Metrics/PerceivedComplexity
     if params.key?(:update_positions_ids) # this just resets the list of enum values
       render json: Enumeration.update_positions(params[:update_positions_ids]).map(&:id)
     elsif params.key?(:toggle_promoted_id)

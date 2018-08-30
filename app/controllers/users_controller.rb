@@ -2,7 +2,7 @@ class UsersController < ApplicationController
   before_action :ensure_auth
   before_action :ensure_admin, except: :disable_admin
 
-  def create
+  def create # rubocop:disable Metrics/AbcSize
     @user = User.new(user_params)
     respond_to do |format|
       format.json do

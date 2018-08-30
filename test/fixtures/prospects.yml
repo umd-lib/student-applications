@@ -1,10 +1,10 @@
 homeless:
   in_federal_study: true
   directory_id: hobo
-  first_name: Rolling 
+  first_name: Rolling
   last_name: Stone
   email: hobo@umd.edu
-  enumerations: graduate, seventeen_may, seventeen_fall 
+  enumerations: graduate, may_2017, fall_2017
 all_valid:
   in_federal_study: true
   directory_id: bstudent
@@ -13,12 +13,52 @@ all_valid:
   email: bstudent@umd.edu
   available_hours_per_week: 1
   available_times_count: 1
-  user_signature: All Valid  
-  enumerations: graduate, seventeen_dec, seventeen_fall 
+  user_signature: All Valid
+  enumerations: graduate, december_2017, fall_2017
 contact_info:
   in_federal_study: true
   directory_id: astudent
   first_name: Alvin
   last_name: Student
-  enumerations: undergraduate, seventeen_may, seventeen_fall 
+  enumerations: undergraduate, may_2017, fall_2017
   email: astudent@umd.edu
+
+filter_student_1:
+  in_federal_study: true
+  directory_id: filter_student_1
+  first_name: Filter
+  last_name: Student1
+  enumerations: undergraduate, may_2018, fall_2017, art_library
+  email: filter_student_1@umd.edu
+
+filter_student_2:
+  in_federal_study: true
+  directory_id: filter_student_2
+  first_name: Filter
+  last_name: Student2
+  enumerations: graduate, may_2018, fall_2017, art_library
+  email: filter_student_2@umd.edu
+
+filter_student_3:
+  in_federal_study: true
+  directory_id: filter_student_3
+  first_name: Filter
+  last_name: Student3
+  enumerations: undergraduate, may_2018, spring_2018, engineering_library
+  email: filter_student_3@umd.edu
+
+filter_student_4:
+  in_federal_study: true
+  directory_id: filter_student_4
+  first_name: Filter
+  last_name: Student4
+  enumerations: undergraduate, may_2018, spring_2018, science_library
+  email: filter_student_4@umd.edu
+
+filter_student_5:
+  in_federal_study: true
+  directory_id: filter_student_5
+  first_name: Filter
+  last_name: Student5
+  enumerations: graduate, may_2018, spring_2018, science_library
+  email: filter_student_5@umd.edu

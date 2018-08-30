@@ -2,11 +2,11 @@ require 'test_helper'
 
 feature 'Should be able filter prospects on class status' do
   scenario 'login as user & filter', js: true do
-    page.driver.resize_window(2048, 9999)
+    page.current_window.resize_to(2048, 9999)
 
     undergrad = Enumeration.find_by( value: "Undergraduate" ).id
     User.create(cas_directory_id: 'filterer', name: 'filterer', admin: false)
-    
+
     students = Prospect.all.group_by(&:first_name).map { |k,v| [k, v.first] }.to_h
 
     visit prospects_path
@@ -15,23 +15,23 @@ feature 'Should be able filter prospects on class status' do
     click_button 'Login'
 
     # We should have all of our students present
-    page.must_have_selector("#prospect_#{ students["Betty"].id  }") 
-    page.must_have_selector("#prospect_#{ students["Alvin"].id  }") 
-    page.must_have_selector("#prospect_#{ students["Rolling"].id  }") 
+    page.must_have_selector("#prospect_#{ students["Betty"].id  }")
+    page.must_have_selector("#prospect_#{ students["Alvin"].id  }")
+    page.must_have_selector("#prospect_#{ students["Rolling"].id  }")
 
     find("#filter-prospects").click
-    assert page.find( "#filter-modal" ).visible? 
-  
-    # we tweak the slider...
-    find("input#class_status_#{undergrad}").trigger(:click)
-    assert find("input#class_status_#{undergrad}")["checked"]
-    
-    find("#submit-filter").trigger(:click)
-    page.must_have_selector( "#filter-modal", visible: false ) 
+    assert page.find( "#filter-modal" ).visible?
 
-    # only alvin is an undergrad 
-    page.wont_have_selector("#prospect_#{ students["Betty"].id  }") 
-    page.wont_have_selector("#prospect_#{ students["Rolling"].id  }") 
-    page.must_have_selector("#prospect_#{ students["Alvin"].id  }") 
+    # we tweak the slider...
+    find("input#class_status_#{undergrad}").click
+    assert find("input#class_status_#{undergrad}")["checked"]
+
+    find("#submit-filter").click
+    page.must_have_selector( "#filter-modal", visible: false )
+
+    # only alvin is an undergrad
+    page.wont_have_selector("#prospect_#{ students["Betty"].id  }")
+    page.wont_have_selector("#prospect_#{ students["Rolling"].id  }")
+    page.must_have_selector("#prospect_#{ students["Alvin"].id  }")
   end
 end

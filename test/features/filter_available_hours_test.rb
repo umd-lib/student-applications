@@ -2,7 +2,7 @@ require 'test_helper'
 
 feature 'Should be able filter prospects on available hours per week' do
   scenario 'login as user & filter', js: true do
-    page.driver.resize_window(2048, 2048)
+    page.current_window.resize_to(2048, 2048)
 
     User.create(cas_directory_id: 'filterer', name: 'filterer', admin: false)
     visit prospects_path

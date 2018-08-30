@@ -6,7 +6,7 @@ module QueryingProspects
   end
 
   # this is pretty hacky. would be nice to refactor with arel.
-  def sort_order
+  def sort_order # rubocop:disable Metrics/AbcSize, Metrics/MethodLength
     col = sort_column
     # do a case-insensitive sort if we are sort on last name
     col = "lower(#{col})" if col.include?('last_name')
@@ -31,7 +31,7 @@ module QueryingProspects
       end
     end
 
-    def join_table
+    def join_table # rubocop:disable Metrics/AbcSize
       join_tables = []
       if Prospect.reflections.keys.include?(sort_column.split('.').first)
         join_tables << sort_column.split('.').first.intern
@@ -94,6 +94,18 @@ module QueryingProspects
 
     def prospects_by_available_time
       params[:available_time] ? { 'prospects.id' => AvailableTime.find_by_sql(day_times_sql).map(&:prospect_id) } : {}
+    end
+
+    # Returns a query for the given enumeration type (as represented by the
+    # method name on the Enumeration object)
+    def enumeration_type_search_statement(enumeration_type)
+      all_type_ids = Enumeration.send(enumeration_type).map { |s| s.id.to_s }
+
+      # Get the ids in the params that are in the enumeration type
+      ids_for_search = all_type_ids & params[:search][:enumerations]
+
+      return if ids_for_search.empty?
+      Arel::Table.new(Prospect.reflect_on_association('enumerations').table_name)[:id].in(ids_for_search)
     end
 
     def search_statement

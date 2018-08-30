@@ -1,52 +1,59 @@
+# Class Status
 undergraduate:
   value: Undergraduate
   list: 0
   position: 0
-  prospects: contact_info
 graduate:
   value: Graduate
-  list: 0 
+  list: 0
   position: 1
-  prospects: homeless, all_valid
-sixteen_dec:
+
+# Expected Graduation
+december_2016:
   value: 2016 Dec
-  list: 1 
+  list: 1
   position: 0
-seventeen_may:
+may_2017:
   value: 2017 May
-  list: 1 
+  list: 1
   position: 1
-  prospects: homeless, contact_info
-seventeen_dec:
+december_2017:
   value: 2017 Dec
-  list: 1 
+  list: 1
   position: 1
-  prospects: all_valid
-art_lib:
-  value: Art Library
-  list: 2 
-  position: 0
-science_lib:
-  value: Science Library
-  list: 2 
+may_2018:
+  value: 2018 May
+  list: 1
   position: 1
-engineering_lib:
-  value: Engineering Library
-  list: 2 
-  position: 2
-arch_lib:
+
+# Preferred Libraries
+architecture_library:
   value: Architecture Library
-  list: 2 
+  list: 2
   position: 3
-seventeen_spring:
+art_library:
+  value: Art Library
+  list: 2
+  position: 0
+engineering_library:
+  value: Engineering Library
+  list: 2
+  position: 2
+science_library:
+  value: Science Library
+  list: 2
+  position: 1
+
+# Semester
+spring_2017:
   value: Spring 2017
   list: 3
   position: 0
-seventeen_fall:
+fall_2017:
   value: Fall 2017
   list: 3
   position: 0
-eighteen_spring:
+spring_2018:
   value: Spring 2018
   list: 3
   position: 2

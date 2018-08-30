@@ -34,7 +34,7 @@ feature 'Add some Available Times' do
 
     # lets click the 5 tds related to that checkbox
     day_times.each_with_index do |dt, i|
-      find(:css, "input[value='#{dt}']", visible: false).first(:xpath, './/../..').trigger(:click)
+      find(:css, "input[value='#{dt}']", visible: false).first(:xpath, './/../..').click
     end
 
     assert_equal day_times.length, find_all(:css, 'input[type=checkbox]:checked', visible: false).length
@@ -80,7 +80,7 @@ feature 'Add some Available Times' do
 
     # lets click the 5 tds related to that checkbox
     day_times.each do |dt|
-      find(:css, "input[value='#{dt}']", visible: false).first(:xpath, './/../..').trigger(:click)
+      find(:css, "input[value='#{dt}']", visible: false).first(:xpath, './/../..').click
     end
 
     # but let's put the total times higher..

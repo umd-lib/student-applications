@@ -2,7 +2,7 @@ require 'test_helper'
 
 feature 'Should preserve filter query when sorting' do
   scenario 'login as user & filter & sort', js: true do
-    page.driver.resize_window(2048, 2048)
+    page.current_window.resize_to(2048, 2048)
 
     User.create(cas_directory_id: 'filterer', name: 'filterer', admin: false)
     visit prospects_path

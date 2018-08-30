@@ -2,10 +2,10 @@ require 'test_helper'
 
 feature 'Verify "Reset" button functionality' do
   scenario 'put some basic information into the first step and hit "Reset"', js: true do
-    page.driver.resize_window(2048, 2048)
+    page.current_window.resize_to(2048, 2048)
     visit root_path
     click_link 'Apply!'
-    
+
     fill_in('Directory', with: 'myIdentifier')
     choose(Enumeration.active_semesters.first.value)
     click_button 'Continue'
@@ -28,6 +28,6 @@ feature 'Verify "Reset" button functionality' do
     # fields.
     click_link 'Apply!'
     assert page.has_field?('Directory', with: '')
-  
+
   end
 end
