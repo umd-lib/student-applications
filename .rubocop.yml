@@ -38,7 +38,7 @@ Style/ClassAndModuleChildren:
   Exclude:
     - 'test/**/*'
 
-Style/IndentationConsistency:
+Layout/IndentationConsistency:
   EnforcedStyle: rails
 
 # Disabling the following as they interfere with the Rails layout of the
