@@ -9,12 +9,15 @@ Bundler.require(*Rails.groups)
 
 module OnlineStudentApplications
   class Application < Rails::Application
+    # Initialize configuration defaults for originally generated Rails version.
+    config.load_defaults 5.1
+
     # Settings in config/environments/* take precedence over those specified here.
     # Application configuration should go into files in config/initializers
     # -- all .rb files in that directory are automatically loaded.
-  
+
     config.rack_cas.server_url = 'https://login.umd.edu/cas'
-    config.rack_cas.session_store = RackCAS::ActiveRecordStore 
+    config.rack_cas.session_store = RackCAS::ActiveRecordStore
 
     config.active_job.queue_adapter = :delayed_job
   end
