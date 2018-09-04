@@ -9,11 +9,11 @@ feature 'Comment Confirmation page' do
     all_valid.reject! { |a| %w(id created_at updated_at).include? a }
 
     all_valid[:directory_id] = SecureRandom.hex
-    all_valid[:semester] = "Fall 2017"
+    all_valid[:semester] = Enumeration.active_semesters.first.value
     all_valid[:available_hours_per_week] = 0
 
-    all_valid[:addresses] = fixture.addresses
-    all_valid[:phone_numbers] = fixture.phone_numbers
+    all_valid['addresses_attributes'] = [addresses(:all_valid_springfield).attributes.reject { |a| a == 'id' }]
+    all_valid['phone_numbers_attributes'] = [phone_numbers(:all_valid_dummy).attributes.reject { |a| a == 'id' }]
 
     page.set_rack_session("prospect_params": all_valid)
     page.set_rack_session("prospect_step": 'comments_confirmation')
