@@ -40,7 +40,7 @@ gem 'pg', group: :production
 gem 'sdoc', '~> 0.4.0', group: :doc
 
 # dotenv - For storing production configuration parameters
-gem 'dotenv-rails', '~> 2.1.1'
+gem 'dotenv-rails', '~> 2.5.0'
 
 # Pagination
 gem 'will_paginate', '~> 3.1.0'
