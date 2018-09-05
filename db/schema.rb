@@ -1,4 +1,3 @@
-# encoding: UTF-8
 # This file is auto-generated from the current state of the database. Instead
 # of editing this file, please use the migrations feature of Active Record to
 # incrementally modify your database, and then regenerate this schema definition.
@@ -22,17 +21,15 @@ ActiveRecord::Schema.define(version: 20170127130407) do
     t.string  "country"
     t.integer "address_type",     default: 1, null: false
     t.integer "prospect_id"
+    t.index ["prospect_id"], name: "index_addresses_on_prospect_id"
   end
-
-  add_index "addresses", ["prospect_id"], name: "index_addresses_on_prospect_id"
 
   create_table "available_times", force: :cascade do |t|
     t.integer "prospect_id"
     t.integer "day",         default: 0, null: false
     t.integer "time",        default: 0, null: false
+    t.index ["prospect_id"], name: "index_available_times_on_prospect_id"
   end
-
-  add_index "available_times", ["prospect_id"], name: "index_available_times_on_prospect_id"
 
   create_table "delayed_jobs", force: :cascade do |t|
     t.integer  "priority",   default: 0, null: false
@@ -46,9 +43,8 @@ ActiveRecord::Schema.define(version: 20170127130407) do
     t.string   "queue"
     t.datetime "created_at"
     t.datetime "updated_at"
+    t.index ["priority", "run_at"], name: "delayed_jobs_priority"
   end
-
-  add_index "delayed_jobs", ["priority", "run_at"], name: "delayed_jobs_priority"
 
   create_table "enumerations", force: :cascade do |t|
     t.string  "value",                   null: false
@@ -61,9 +57,8 @@ ActiveRecord::Schema.define(version: 20170127130407) do
     t.string  "number"
     t.integer "phone_type",  default: 0, null: false
     t.integer "prospect_id"
+    t.index ["prospect_id"], name: "index_phone_numbers_on_prospect_id"
   end
-
-  add_index "phone_numbers", ["prospect_id"], name: "index_phone_numbers_on_prospect_id"
 
   create_table "prospects", force: :cascade do |t|
     t.string   "directory_id"
@@ -87,25 +82,22 @@ ActiveRecord::Schema.define(version: 20170127130407) do
     t.string   "user_signature"
     t.integer  "semester"
     t.boolean  "suppressed",               default: false
+    t.index ["resume_id"], name: "index_prospects_on_resume_id"
   end
-
-  add_index "prospects", ["resume_id"], name: "index_prospects_on_resume_id"
 
   create_table "prospects_enumerations", id: false, force: :cascade do |t|
     t.integer "prospect_id"
     t.integer "enumeration_id"
+    t.index ["enumeration_id"], name: "index_prospects_enumerations_on_enumeration_id"
+    t.index ["prospect_id"], name: "index_prospects_enumerations_on_prospect_id"
   end
-
-  add_index "prospects_enumerations", ["enumeration_id"], name: "index_prospects_enumerations_on_enumeration_id"
-  add_index "prospects_enumerations", ["prospect_id"], name: "index_prospects_enumerations_on_prospect_id"
 
   create_table "prospects_skills", force: :cascade do |t|
     t.integer "prospect_id"
     t.integer "skill_id"
+    t.index ["prospect_id"], name: "index_prospects_skills_on_prospect_id"
+    t.index ["skill_id"], name: "index_prospects_skills_on_skill_id"
   end
-
-  add_index "prospects_skills", ["prospect_id"], name: "index_prospects_skills_on_prospect_id"
-  add_index "prospects_skills", ["skill_id"], name: "index_prospects_skills_on_skill_id"
 
   create_table "resumes", force: :cascade do |t|
     t.string   "file_file_name"
@@ -121,11 +113,10 @@ ActiveRecord::Schema.define(version: 20170127130407) do
     t.text     "data"
     t.datetime "created_at"
     t.datetime "updated_at"
+    t.index ["cas_ticket"], name: "index_sessions_on_cas_ticket"
+    t.index ["session_id"], name: "index_sessions_on_session_id"
+    t.index ["updated_at"], name: "index_sessions_on_updated_at"
   end
-
-  add_index "sessions", ["cas_ticket"], name: "index_sessions_on_cas_ticket"
-  add_index "sessions", ["session_id"], name: "index_sessions_on_session_id"
-  add_index "sessions", ["updated_at"], name: "index_sessions_on_updated_at"
 
   create_table "skills", force: :cascade do |t|
     t.string  "name"
@@ -148,8 +139,7 @@ ActiveRecord::Schema.define(version: 20170127130407) do
     t.text    "duties"
     t.boolean "library_related"
     t.string  "position_title"
+    t.index ["prospect_id"], name: "index_work_experiences_on_prospect_id"
   end
-
-  add_index "work_experiences", ["prospect_id"], name: "index_work_experiences_on_prospect_id"
 
 end

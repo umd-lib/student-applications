@@ -2,7 +2,7 @@
 # It includes the steps that are used to submit one
 # rubocop:disable Rails/HasAndBelongsToMany
 # rubocop:disable Metrics/ClassLength
-class Prospect < ActiveRecord::Base
+class Prospect < ApplicationRecord
   include Walkable
 
   belongs_to :resume
@@ -21,7 +21,7 @@ class Prospect < ActiveRecord::Base
     if semester
       enumerations << semester
     else
-      @semester = enumerations.find { |e| e['list'] == Enumeration.lists['semester'] }
+      @semester = enumerations.find { |e| e['list'] == 'semester' }
     end
   end
 
@@ -59,12 +59,12 @@ class Prospect < ActiveRecord::Base
 
   attr_accessor :class_status
   def class_status
-    enumerations.find { |e| e['list'] == Enumeration.lists['class_status'] }
+    enumerations.find { |e| e['list'] == 'class_status' }
   end
 
   attr_accessor :graduation_year
   def graduation_year
-    enumerations.find { |e| e['list'] == Enumeration.lists['graduation_year'] }
+    enumerations.find { |e| e['list'] == 'graduation_year' }
   end
 
   attr_accessor :semester
@@ -72,10 +72,10 @@ class Prospect < ActiveRecord::Base
   #  enumerations.find { |e| e['list'] == Enumeration.lists['semester'] }
   # end
 
-  def semester=(value) # rubocop:disable Metrics/AbcSize
-    return if value.nil?
+  def semester=(value) # rubocop:disable Metrics/AbcSize, Metrics/CyclomaticComplexity
+    return if value.nil? || value.blank?
 
-    current = @semester.nil? ? enumerations.find { |e| e['list'] == Enumeration.lists['semester'] } : @semester
+    current = @semester.nil? ? enumerations.find { |e| e['list'] == 'semester' } : @semester
 
     enum =  value.is_a?(Enumeration) ? value : Enumeration.active_semesters.find { |e| e['value'] == value }
     raise ArgumentError, "#{value} is not a valid semester value ( #{Enumeration.active_semesters.map(&:value).join(',')} )" unless enum
@@ -87,12 +87,12 @@ class Prospect < ActiveRecord::Base
 
   attr_accessor :libraries
   def libraries
-    enumerations.select { |e| e['list'] == Enumeration.lists['library'] } || []
+    enumerations.select { |e| e['list'] == 'library' } || []
   end
 
   attr_accessor :how_did_you_hear_about_us
   def how_did_you_hear_about_us
-    enumerations.find { |e| e['list'] == Enumeration.lists['how_did_you_hear_about_us'] } || []
+    enumerations.find { |e| e['list'] == 'how_did_you_hear_about_us' } || []
   end
 
   # this validates if the user has clicked "All information is correct" on last
@@ -161,7 +161,9 @@ class Prospect < ActiveRecord::Base
   has_one :contact_phone, class_name: PhoneNumber
   accepts_nested_attributes_for :contact_phone, allow_destroy: true
 
-  alias_method_chain :contact_phone, :default
+  def contact_phone
+    super || contact_phone_with_default
+  end
   validates :contact_phone, presence: true, if: ->(o) { o.current_step == 'contact_info' }
   validates_associated :contact_phone, if: ->(o) { o.current_step == 'contact_info' }
 
@@ -178,7 +180,9 @@ class Prospect < ActiveRecord::Base
   has_one :local_address, -> { where(address_type: 'local') }, class_name: Address
   accepts_nested_attributes_for :local_address, allow_destroy: true
 
-  alias_method_chain :local_address, :default
+  def local_address
+    super || local_address_with_default
+  end
   validates :local_address, presence: true, if: ->(o) { o.current_step == 'contact_info' }
   validates_associated :local_address, if: ->(o) { o.current_step == 'contact_info' }
 

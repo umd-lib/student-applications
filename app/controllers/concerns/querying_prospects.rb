@@ -1,5 +1,5 @@
 # concerns for searching for prospects
-module QueryingProspects
+module QueryingProspects # rubocop:disable Metrics/ModuleLength
   extend ActiveSupport::Concern
   included do
     helper_method :sort_column, :sort_direction
@@ -73,7 +73,10 @@ module QueryingProspects
     end
 
     def text_search_statement
-      query = params[:text_search].each_with_object([]) do |(k, val), memo|
+      params_as_hash = params.permit(whitelisted_attrs).to_h
+      text_search_params = params_as_hash[:text_search] || {}
+
+      query = text_search_params.each_with_object([]) do |(k, val), memo|
         unless val.empty?
           memo << Prospect.arel_table[k.intern].matches("#{val}%")
         end
@@ -98,22 +101,33 @@ module QueryingProspects
 
     # Returns a query for the given enumeration type (as represented by the
     # method name on the Enumeration object)
-    def enumeration_type_search_statement(enumeration_type)
+    def enumeration_type_search_statement(enumeration_type) # rubocop:disable Metrics/AbcSize
       all_type_ids = Enumeration.send(enumeration_type).map { |s| s.id.to_s }
 
       # Get the ids in the params that are in the enumeration type
       ids_for_search = all_type_ids & params[:search][:enumerations]
 
       return if ids_for_search.empty?
-      Arel::Table.new(Prospect.reflect_on_association('enumerations').table_name)[:id].in(ids_for_search)
+      table_name = Prospect.reflect_on_association('enumerations').table_name
+      table_class = table_name.classify.constantize
+      arel = table_class.arel_table
+
+      arel[:id].in(ids_for_search)
     end
 
-    def search_statement
-      query = params[:search].each_with_object([]) do |(k, val), memo|
+    def search_statement # rubocop:disable Metrics/AbcSize
+      params_as_hash = params.permit(whitelisted_attrs).to_h
+      search_params = params_as_hash[:search] || {}
+
+      query = search_params.each_with_object([]) do |(k, val), memo|
         next if val.empty?
         # not sure we really need to reflect on associations but just in case we
         # make some weird data model change
-        memo << Arel::Table.new(Prospect.reflect_on_association(k.intern).table_name)[:id].in(Array.wrap(val))
+        table_name = Prospect.reflect_on_association(k.intern).table_name
+        table_class = table_name.classify.constantize
+        arel = table_class.arel_table
+
+        memo << arel[:id].in(Array.wrap(val))
       end
       query.present? ? query.inject(&:and) : {}
     end

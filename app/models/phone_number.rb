@@ -1,5 +1,5 @@
 # A phone number for the prospect
-class PhoneNumber < ActiveRecord::Base
+class PhoneNumber < ApplicationRecord
   belongs_to :prospect
   validates :prospect, presence: true
 

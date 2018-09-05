@@ -1,6 +1,6 @@
 # This is a model for a application
 # It includes the steps that are used to submit one
-class Resume < ActiveRecord::Base
+class Resume < ApplicationRecord
   has_attached_file :file
 
   validates_attachment_presence :file
