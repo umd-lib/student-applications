@@ -77,9 +77,6 @@ GEM
       rack (>= 1.0.0)
       rack-test (>= 0.5.4)
       xpath (>= 2.0, < 4.0)
-    capybara-screenshot (1.0.21)
-      capybara (>= 1.0, < 4)
-      launchy
     childprocess (0.9.0)
       ffi (~> 1.0, >= 1.0.11)
     chromedriver-helper (1.2.0)
@@ -100,7 +97,6 @@ GEM
       sort_alphabetical (~> 1.0)
     crass (1.0.4)
     daemons (1.2.6)
-    database_cleaner (1.7.0)
     delayed_job (4.1.5)
       activesupport (>= 3.0, < 5.3)
     delayed_job_active_record (4.1.3)
@@ -172,20 +168,6 @@ GEM
     mini_mime (1.0.1)
     mini_portile2 (2.3.0)
     minitest (5.10.0)
-    minitest-capybara (0.8.2)
-      capybara (~> 2.2)
-      minitest (~> 5.0)
-      rake
-    minitest-metadata (0.6.0)
-      minitest (>= 4.7, < 6.0)
-    minitest-rails (3.0.0)
-      minitest (~> 5.8)
-      railties (~> 5.0)
-    minitest-rails-capybara (3.0.1)
-      capybara (~> 2.7)
-      minitest-capybara (~> 0.8)
-      minitest-metadata (~> 0.6)
-      minitest-rails (~> 3.0)
     minitest-reporters (1.3.4)
       ansi
       builder
@@ -375,13 +357,11 @@ DEPENDENCIES
   byebug
   capistrano-rails
   capybara (~> 2.13)
-  capybara-screenshot
   chromedriver-helper
   cocoon
   connection_pool
   country_select
   daemons
-  database_cleaner
   delayed_job_active_record
   delayed_job_web
   dotenv-rails (~> 2.5.0)
@@ -394,7 +374,6 @@ DEPENDENCIES
   launchy
   listen (>= 3.0.5, < 3.2)
   minitest (= 5.10.0)
-  minitest-rails-capybara
   minitest-reporters
   mocha
   paperclip (~> 5.3.0)

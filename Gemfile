@@ -103,12 +103,8 @@ group :test do
   gem 'launchy'
   # Pin minitest to v5.10.0, because of https://github.com/seattlerb/minitest/issues/730
   gem 'minitest', '5.10.0'
-  gem 'minitest-rails-capybara'
   gem 'minitest-reporters'
-  # use the head to get the callback functionality
-  gem 'capybara-screenshot'
   gem 'chromedriver-helper'
-  gem 'database_cleaner'
   gem 'mocha'
   gem 'rack_session_access'
   gem 'rails-controller-testing'
