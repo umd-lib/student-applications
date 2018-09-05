@@ -39,6 +39,9 @@ gem 'pg', group: :production
 # bundle exec rake doc:rails generates the API under doc/api.
 gem 'sdoc', '~> 0.4.0', group: :doc
 
+# jquery
+gem 'jquery-rails'
+
 # dotenv - For storing production configuration parameters
 gem 'dotenv-rails', '~> 2.5.0'
 
