@@ -10,7 +10,7 @@ SimpleCov.start
 require 'securerandom'
 
 ENV['RAILS_ENV'] ||= 'test'
-require File.expand_path('../../config/environment', __FILE__)
+require_relative '../config/environment'
 require 'rails/test_help'
 require 'mocha/minitest'
 

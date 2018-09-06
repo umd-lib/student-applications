@@ -1,5 +1,4 @@
 class ApplicationController < ActionController::Base
-  protect_from_forgery with: :exception
   before_action :fix_cas_session
 
   rescue_from ActionController::InvalidAuthenticityToken do |_e|
