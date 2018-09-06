@@ -15,7 +15,7 @@ class ApplicationController < ActionController::Base
   end
   # rubocop:enable Style/GuardClause
 
-  # just returns tue if the user is logged in. does not redirect
+  # just returns true if the user is logged in. does not redirect
   # if not logged in
   def logged_in?
     return false if session[:cas].nil? || session[:cas][:user].nil?
