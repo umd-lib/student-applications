@@ -1,7 +1,7 @@
-require 'test_helper'
+require 'application_system_test_case'
 
-feature 'Add some Available Times' do
-  scenario 'add some availability to the prospect', js: true do
+class AvailabilityTest < ApplicationSystemTestCase
+  test 'Add some Available Times to the prospect' do
     # we can fast-forward to the available_times step
     fixture = dup_fixture
     all_valid = fixture.attributes
@@ -48,7 +48,7 @@ feature 'Add some Available Times' do
     assert_equal day_times.length, find_all(:css, 'td.success').length
   end
 
-  scenario 'make sure our total times is in line with the times available', js: true do
+  test 'make sure our total times is in line with the times available' do
     # we can fast-forward to the available_times step
     fixture = dup_fixture
     all_valid = fixture.attributes

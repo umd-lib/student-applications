@@ -1,7 +1,7 @@
-require 'test_helper'
+require 'application_system_test_case'
 
-feature 'Should be able to login as admin and disable it temporarly' do
-  scenario 'login as admin, look around, then test the disable', js: true do
+class AdminDisableTest < ApplicationSystemTestCase
+  test 'Should be able to login as admin and disable it temporarily' do
     page.current_window.resize_to(2048, 2048)
     User.create(cas_directory_id: 'admin', name: 'admin', admin: true)
     visit prospects_path

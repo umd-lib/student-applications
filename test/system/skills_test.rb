@@ -1,7 +1,7 @@
-require 'test_helper'
+require 'application_system_test_case'
 
-feature 'Add some skills' do
-  scenario 'add some skills to the prospect', js: true do
+class SkillsTest < ApplicationSystemTestCase
+  test 'add some skills to the prospect' do
     # we can fast-forward to the skills step
     all_valid = prospects(:all_valid).attributes
     page.set_rack_session("prospect_params": all_valid)

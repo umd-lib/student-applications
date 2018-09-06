@@ -1,7 +1,8 @@
-require 'test_helper'
+require 'application_system_test_case'
 
-feature 'Verify "Reset" button functionality' do
-  scenario 'put some basic information into the first step and hit "Reset"', js: true do
+class ResetFormTest < ApplicationSystemTestCase
+  test 'Verify "Reset" button functionality' do
+    # put some basic information into the first step and hit "Reset"'
     page.current_window.resize_to(2048, 2048)
     visit root_path
     click_link 'Apply!'
@@ -28,6 +29,5 @@ feature 'Verify "Reset" button functionality' do
     # fields.
     click_link 'Apply!'
     assert page.has_field?('Directory', with: '')
-
   end
 end

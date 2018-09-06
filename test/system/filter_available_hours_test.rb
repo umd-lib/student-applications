@@ -1,7 +1,7 @@
-require 'test_helper'
+require 'application_system_test_case'
 
-feature 'Should be able filter prospects on available hours per week' do
-  scenario 'login as user & filter', js: true do
+class FilterAvailableHoursTest < ApplicationSystemTestCase
+  test 'Should be able filter prospects on available hours per week' do
     page.current_window.resize_to(2048, 2048)
 
     User.create(cas_directory_id: 'filterer', name: 'filterer', admin: false)
@@ -33,6 +33,5 @@ feature 'Should be able filter prospects on available hours per week' do
     assert page.has_content?("Student, Betty")
     refute page.has_content?("Student, Alvin")
     refute page.has_content?("Stone, Rolling")
-
   end
 end

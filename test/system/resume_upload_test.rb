@@ -1,9 +1,8 @@
 require 'open-uri'
-require 'test_helper'
+require 'application_system_test_case'
 
-feature 'Upload a resume' do
-
-  scenario 'an application can upload a PDF', js: true do
+class ResumeUploadTest < ApplicationSystemTestCase
+  test 'an application can upload a PDF resume' do
     Capybara.using_session('bad contact info') do
       # we can fast-forward to the available_times step
 
@@ -44,13 +43,14 @@ feature 'Upload a resume' do
       assert_equal 200, page.evaluate_script( "downloadCSVXHR()")
 
       # and now for fools trying to get in the backdoor
-      err = ->{ open(href) }.must_raise OpenURI::HTTPError
-      err.message.must_match /403 Forbidden/
-
+      err = assert_raises OpenURI::HTTPError do
+        open(href)
+      end
+      assert_match /403 Forbidden/, err.message
     end
   end
 
-  scenario 'an applicant cannot upload a non-pdf', js: true do
+  test 'an applicant cannot upload a non-PDF resume' do
     # we can fast-forward to the available_times step
 
     fixture = dup_fixture
@@ -85,6 +85,5 @@ feature 'Upload a resume' do
 
     # let's download it andmake sure its the same
     refute_selector ".download-resume"
-
   end
 end

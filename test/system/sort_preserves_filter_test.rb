@@ -1,7 +1,7 @@
-require 'test_helper'
+require 'application_system_test_case'
 
-feature 'Should preserve filter query when sorting' do
-  scenario 'login as user & filter & sort', js: true do
+class SortPreservesFilterTest < ApplicationSystemTestCase
+  test 'Should preserve filter query when sorting' do
     page.current_window.resize_to(2048, 2048)
 
     User.create(cas_directory_id: 'filterer', name: 'filterer', admin: false)
@@ -43,6 +43,5 @@ feature 'Should preserve filter query when sorting' do
     assert page.has_content?("Student, Betty")
     refute page.has_content?("Student, Alvin")
     refute page.has_content?("Stone, Rolling")
-
   end
 end

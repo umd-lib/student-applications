@@ -1,7 +1,7 @@
-require 'test_helper'
+require 'application_system_test_case'
 
-feature 'Should be able filter prospects on class status' do
-  scenario 'login as user & filter', js: true do
+class FilterClassStatusTest < ApplicationSystemTestCase
+  test 'Should be able filter prospects on class status' do
     page.current_window.resize_to(2048, 9999)
 
     undergrad = Enumeration.find_by( value: "Undergraduate" ).id
@@ -15,9 +15,9 @@ feature 'Should be able filter prospects on class status' do
     click_button 'Login'
 
     # We should have all of our students present
-    page.must_have_selector("#prospect_#{ students["Betty"].id  }")
-    page.must_have_selector("#prospect_#{ students["Alvin"].id  }")
-    page.must_have_selector("#prospect_#{ students["Rolling"].id  }")
+    page.assert_selector("#prospect_#{ students["Betty"].id  }")
+    page.assert_selector("#prospect_#{ students["Alvin"].id  }")
+    page.assert_selector("#prospect_#{ students["Rolling"].id  }")
 
     find("#filter-prospects").click
     assert page.find( "#filter-modal" ).visible?
@@ -27,11 +27,11 @@ feature 'Should be able filter prospects on class status' do
     assert find("input#class_status_#{undergrad}")["checked"]
 
     find("#submit-filter").click
-    page.must_have_selector( "#filter-modal", visible: false )
+    page.assert_selector( "#filter-modal", visible: false )
 
     # only alvin is an undergrad
-    page.wont_have_selector("#prospect_#{ students["Betty"].id  }")
-    page.wont_have_selector("#prospect_#{ students["Rolling"].id  }")
-    page.must_have_selector("#prospect_#{ students["Alvin"].id  }")
+    page.refute_selector("#prospect_#{ students["Betty"].id  }")
+    page.refute_selector("#prospect_#{ students["Rolling"].id  }")
+    page.assert_selector("#prospect_#{ students["Alvin"].id  }")
   end
 end

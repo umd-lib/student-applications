@@ -1,7 +1,7 @@
-require 'test_helper'
+require 'application_system_test_case'
 
-feature 'Comment Confirmation page' do
-  scenario 'go to the page and follow the change links', js: true do
+class CommentConfirmationTest < ApplicationSystemTestCase
+  test 'go to Comment Confirmation page and follow the change links' do
     # we can fast-forward to the skills step
     fixture = prospects(:all_valid)
     all_valid = fixture.attributes

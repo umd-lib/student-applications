@@ -1,7 +1,7 @@
-require 'test_helper'
+require 'application_system_test_case'
 
-feature 'Add some work experiences' do
-  scenario 'add some experiences to the prospect', js: true do
+class WorkExperiencesTest < ApplicationSystemTestCase
+  test 'Add some work experiences to the prospect' do
     # we can fast-forward to the work_experiences step
     fixture = prospects(:all_valid)
     all_valid = fixture.attributes

@@ -1,8 +1,8 @@
-require 'test_helper'
+require 'application_system_test_case'
 
-feature 'Admins can edit submitted applications' do
-  scenario 'login as admin & edit submitted application', js: true do
-    page.current_window.resize_to(2048, 2048)
+class AdminEditTest < ApplicationSystemTestCase
+  test 'Admins can edit submitted applications' do
+    page.current_window.resize_to(2048, 8192)
 
     User.create(cas_directory_id: 'editor', name: 'editor', admin: true)
     visit prospects_path

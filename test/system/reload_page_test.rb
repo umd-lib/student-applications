@@ -1,7 +1,7 @@
-require 'test_helper'
+require 'application_system_test_case'
 
-feature 'Refresh during an application should cause any problems' do
-  scenario 'add some skills to the prospect and refresh the broswer', js: true do
+class ReloadPageTest < ApplicationSystemTestCase
+  test 'Refresh during an application should cause any problems' do
     # we can fast-forward to the skills step
     all_valid = prospects(:all_valid).attributes
     page.set_rack_session("prospect_params": all_valid)
@@ -13,6 +13,7 @@ feature 'Refresh during an application should cause any problems' do
     skill_id = "prospect_skill_ids_#{Skill.promoted.sample.id}"
     check skill_id
 
+    # add some skills to the prospect
     click_link 'Add Skill'
     assert_equal 1, find(:css, '#skills').all('.nested-fields').length
 

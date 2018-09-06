@@ -1,12 +1,12 @@
-require 'test_helper'
+require 'application_system_test_case'
 
-feature 'Enter contact information' do
-  scenario 'put some basic information into the first step', js: true do
+class ContactInformationTest < ApplicationSystemTestCase
+  test 'put some basic contact information into the first step' do
     # pretty boring test, since it's the exact same as out integration
     # test..just to get the ball rollin'
     visit root_path
     click_link 'Apply!'
-      
+
     fill_in('Directory', with: 'myIdentifier')
     choose(Enumeration.active_semesters.first.value)
     click_button 'Continue'
@@ -32,10 +32,10 @@ feature 'Enter contact information' do
     assert_equal Prospect.steps[2], page.get_rack_session_key('prospect_step')
   end
 
-  scenario 'user wants to add multiple addresses in the contact_information page', js: true do
+  test 'user wants to add multiple addresses in the contact_information page' do
     visit root_path
     click_link 'Apply!'
-    
+
     fill_in('Directory', with: 'myIdentifier')
     choose(Enumeration.active_semesters.first.value)
     click_button 'Continue'

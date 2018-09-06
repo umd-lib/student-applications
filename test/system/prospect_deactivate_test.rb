@@ -1,7 +1,7 @@
-require 'test_helper'
+require 'application_system_test_case'
 
-feature 'Should be able to login as admin and deactivate applications' do
-  scenario 'login as admin and deactivate applications', js: true do
+class ProspectDeactivateTest < ApplicationSystemTestCase
+  test 'Should be able to login as admin and deactivate applications' do
     page.current_window.resize_to(2048, 2048)
     User.create(cas_directory_id: 'admin', name: 'admin', admin: true)
     visit prospects_path

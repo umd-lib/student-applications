@@ -1,14 +1,13 @@
-require 'test_helper'
+require 'application_system_test_case'
 require 'securerandom'
 
-# rubocop:disable Metrics/BlockLength
-feature 'submit an application' do
-  scenario 'just submit a standard application from start to finish', js: true do
+class EndToEndTest < ApplicationSystemTestCase # rubocop:disable Metrics/BlockLength
+  test 'submit a standard application from start to finish' do
     # pretty boring test, since it's the exact same as out integration
     # test..just to get the ball rollin'
     visit root_path
     click_link 'Apply!'
-    
+
     fill_in('Directory', with: 'myIdentifier')
     choose(Enumeration.active_semesters.first.value)
     click_button 'Continue'
@@ -92,18 +91,17 @@ feature 'submit an application' do
 
     # now we should not be able to resubmit
     click_link 'Apply!'
-    
+
     fill_in('Directory', with: 'myIdentifier')
     choose(Enumeration.active_semesters.first.value)
     click_button 'Continue'
-  
+
     refute page.has_content?('Contact Information')
-    assert page.has_content?("Please note that this directory ID has already submitted an application") 
-    
+    assert page.has_content?("Please note that this directory ID has already submitted an application")
+
     fill_in('Directory', with: SecureRandom.hex)
     click_button 'Continue'
-    refute page.has_content?("Please note that this directory ID has already submitted an application") 
+    refute page.has_content?("Please note that this directory ID has already submitted an application")
     assert page.has_content?('Contact Information')
-
   end
 end
