@@ -41,7 +41,7 @@ class ResumesControllerTest < ActionController::TestCase
 
   test "should not create a new resume if its not a pdf" do
     file = fixture_file_upload( "resume.notpdf", 'text/html' )
-    refute_difference( 'Resume.count' ) do
+    assert_no_difference( 'Resume.count' ) do
         post :create, params: { resume: { file: file } }
     end
     assert_response(400)
@@ -49,7 +49,7 @@ class ResumesControllerTest < ActionController::TestCase
 
   test 'should not create a new resume if nothing is attached' do
     file = nil
-    refute_difference( 'Resume.count' ) do
+    assert_no_difference( 'Resume.count' ) do
       post :create, params: { resume: { file: file } }
     end
     assert_response(400)

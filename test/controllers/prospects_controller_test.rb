@@ -37,7 +37,7 @@ class ProspectsControllerTest < ActionController::TestCase
     session[:cas] = { user: "admin" }
     session[:prospect_step] = fixture.current_step
 
-    refute_difference( 'Prospect.count' ) do
+    assert_no_difference( 'Prospect.count' ) do
       post :create,  params: { prospect: all_valid }
     end
 

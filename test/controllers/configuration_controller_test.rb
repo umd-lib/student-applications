@@ -1,9 +1,8 @@
 require 'test_helper'
 
 class ConfigurationControllerTest < ActionController::TestCase
-
   test 'should not create a new enumeration for non-users' do
-    refute_difference( 'Enumeration.count' ) do
+    assert_no_difference( 'Enumeration.count' ) do
       post :update, params: { enumeration: { list_id: 0, value: "phd" } }
     end
     assert_response(401)
@@ -64,6 +63,4 @@ class ConfigurationControllerTest < ActionController::TestCase
     assert_response(400)
     assert JSON.parse(response.body).has_key?("error")
   end
-
-
 end
