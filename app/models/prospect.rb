@@ -5,7 +5,7 @@
 class Prospect < ApplicationRecord
   include Walkable
 
-  belongs_to :resume
+  belongs_to :resume, optional: true
   after_initialize :after_initialize
 
   has_and_belongs_to_many :enumerations, join_table: 'prospects_enumerations'
