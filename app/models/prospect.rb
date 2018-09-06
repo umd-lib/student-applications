@@ -158,7 +158,7 @@ class Prospect < ApplicationRecord
   def contact_phone_with_default
     phone_numbers.first || phone_numbers.build
   end
-  has_one :contact_phone, class_name: PhoneNumber
+  has_one :contact_phone, class_name: 'PhoneNumber'
   accepts_nested_attributes_for :contact_phone, allow_destroy: true
 
   def contact_phone
@@ -177,7 +177,7 @@ class Prospect < ApplicationRecord
     addresses.find(&:local?) || addresses.build(address_type: 'local')
   end
 
-  has_one :local_address, -> { where(address_type: 'local') }, class_name: Address
+  has_one :local_address, -> { where(address_type: 'local') }, class_name: 'Address'
   accepts_nested_attributes_for :local_address, allow_destroy: true
 
   def local_address
@@ -186,7 +186,7 @@ class Prospect < ApplicationRecord
   validates :local_address, presence: true, if: ->(o) { o.current_step == 'contact_info' }
   validates_associated :local_address, if: ->(o) { o.current_step == 'contact_info' }
 
-  has_one :permanent_address, -> { where(address_type: 'permanent') }, class_name: Address
+  has_one :permanent_address, -> { where(address_type: 'permanent') }, class_name: 'Address'
   accepts_nested_attributes_for :permanent_address, allow_destroy: true
 
   has_and_belongs_to_many :skills, dependent: :nullify
