@@ -10,7 +10,7 @@ module QueryingProspects # rubocop:disable Metrics/ModuleLength
     col = sort_column
     # do a case-insensitive sort if we are sort on last name
     col = "lower(#{col})" if col.include?('last_name')
-    return "#{col} #{sort_direction}" unless col.include?('enumerations')
+    return Arel.sql("#{col} #{sort_direction}") unless col.include?('enumerations')
     klass, method = col.split('.')
     values = klass.singularize.capitalize.constantize.send(method.intern).order("value #{sort_direction} ")
                   .pluck('value')
@@ -18,7 +18,7 @@ module QueryingProspects # rubocop:disable Metrics/ModuleLength
       memo << "WHEN( enumerations.value = '#{val}') THEN #{i} "
       memo
     end
-    "#{order_query} ELSE #{values.length} END"
+    Arel.sql("#{order_query} ELSE #{values.length} END")
   end
 
   private
