@@ -56,7 +56,7 @@ class Prospect < ApplicationRecord # rubocop:disable Metrics/ClassLength
       errors.add(:semester, 'Please indicate which semester you are applying for.')
     end
   end
-  # rubocop:enable Style/GuardClause, Metrics/LineLength
+  # rubocop:enable Style/GuardClause
 
   attr_writer :class_status
   def class_status

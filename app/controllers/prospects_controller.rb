@@ -86,7 +86,6 @@ class ProspectsController < ApplicationController # rubocop:disable Metrics/Clas
       end
     end
   end
-  # rubocop:enable Style/GuardClause
 
   # we don't actually want to destroy record, but just mark them as inactive
   # accepts a hash of params
