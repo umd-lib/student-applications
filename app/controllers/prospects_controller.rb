@@ -138,13 +138,13 @@ class ProspectsController < ApplicationController # rubocop:disable Metrics/Clas
       end
     end
 
-    def set_prospect # rubocop:disable Metrics/AbcSize
+    def set_prospect
       @prospect = Prospect.new(ActionController::Parameters.new(session[:prospect_params]).permit!)
       if @prospect.nil? || !@prospect.is_a?(Prospect)
         reset_session
         redirect_to(root_path, flash: { error: @error_message }) && raise(false)
       else
-        @resume = @prospect.resume ? @prospect.resume : @prospect.build_resume
+        @resume = @prospect.resume || @prospect.build_resume
       end
     end
 
