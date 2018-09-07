@@ -8,5 +8,5 @@ class Resume < ApplicationRecord
   validates_attachment_presence :file
   validates_attachment :file, content_type: { content_type: 'application/pdf' }
 
-  has_one :prospect
+  has_one :prospect # rubocop:disable Rails/HasManyOrHasOneDependent
 end
