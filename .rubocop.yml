@@ -5,13 +5,13 @@ Rails:
 # Exclude auto-generated files
 AllCops:
   Exclude:
-    - 'bin/setup'
-    - 'bin/spring'
-    - 'test/**/*'
-    - 'config/application.rb'
+    - 'config.ru'
+    - 'Rakefile'
+    - 'bin/**/*'
+    - 'config/**/*'
     - 'db/**/*'
     - 'lib/**/*'
-    - 'config/**/*'
+    - 'test/**/*'
   TargetRubyVersion: 2.5
   TargetRailsVersion: 5.2
 
@@ -58,8 +58,9 @@ Style/SymbolArray:
   Exclude:
     - Gemfile
 
-
-
+Style/FrozenStringLiteralComment:
+  Exclude:
+    - Gemfile
 
 # May want to reconsider these exclusions in the future
 Rails/HasAndBelongsToMany:
