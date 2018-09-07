@@ -79,9 +79,7 @@ module QueryingProspects # rubocop:disable Metrics/ModuleLength
       text_search_params = params_as_hash[:text_search] || {}
 
       query = text_search_params.each_with_object([]) do |(k, val), memo|
-        unless val.empty?
-          memo << Prospect.arel_table[k.intern].matches("#{val}%")
-        end
+        memo << Prospect.arel_table[k.intern].matches("#{val}%") unless val.empty?
       end
       query.present? ? query.inject(&:and) : {}
     end
