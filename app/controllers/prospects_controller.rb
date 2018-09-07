@@ -27,7 +27,7 @@ class ProspectsController < ApplicationController # rubocop:disable Metrics/Clas
       end
     end
 
-    if @prospect && @prospect.new_record?
+    if @prospect&.new_record?
       render 'new'
     elsif @prospect
       begin
