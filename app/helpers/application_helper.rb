@@ -25,8 +25,7 @@ module ApplicationHelper
     @current_user&.admin?
   end
 
-  # rubocop:disable Rails/TimeZone
-  # takes an 24 hour integer and formcats it into "HHam/pm".
+  # takes an 24 hour integer and formats it into "HHam/pm".
   # like 13 => 1pm
   def hour_integer_to_humanized(time)
     Time.strptime(time.to_s, '%H').strftime('%l%P')
@@ -39,7 +38,6 @@ module ApplicationHelper
     endt = Time.strptime((time + 1).to_s, '%H').strftime('%l:%M %P')
     "#{startt}#{endt}"
   end
-  # rubocop:enable Rails/TimeZone
 
   # this returns the css class used in the cell of the avail table
   def avail_table_cell_status(form, value)

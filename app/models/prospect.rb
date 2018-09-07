@@ -158,7 +158,7 @@ class Prospect < ApplicationRecord # rubocop:disable Metrics/ClassLength
   def contact_phone_with_default
     phone_numbers.first || phone_numbers.build
   end
-  has_one :contact_phone, class_name: 'PhoneNumber' # rubocop:disable Rails/HasManyOrHasOneDependent, Rails/InverseOf
+  has_one :contact_phone, class_name: 'PhoneNumber' # rubocop:disable Rails/HasManyOrHasOneDependent
   accepts_nested_attributes_for :contact_phone, allow_destroy: true
 
   def contact_phone
