@@ -3,8 +3,7 @@
 # This is a model for a application
 # It includes the steps that are used to submit one
 # rubocop:disable Rails/HasAndBelongsToMany
-# rubocop:disable Metrics/ClassLength
-class Prospect < ApplicationRecord
+class Prospect < ApplicationRecord # rubocop:disable Metrics/ClassLength
   include Walkable
 
   belongs_to :resume, optional: true
@@ -197,3 +196,4 @@ class Prospect < ApplicationRecord
     skills.select(&:unpromoted)
   end
 end
+# rubocop:enable Rails/HasAndBelongsToMany
