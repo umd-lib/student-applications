@@ -1,16 +1,16 @@
-class AddEnumerations < ActiveRecord::Migration
+class AddEnumerations < ActiveRecord::Migration[4.2]
   def change
-    
-    remove_column :prospects, :graduation_year    
-    remove_column :prospects, :class_status  
+
+    remove_column :prospects, :graduation_year
+    remove_column :prospects, :class_status
 
     drop_table :libraries_prospects
     drop_table :libraries
-    
+
     create_table :enumerations do |t|
       t.column :value, :string, null: false
       t.column :list, :integer, default: 0, null: false
-      t.column :active, :boolean, default: true 
+      t.column :active, :boolean, default: true
       t.column :position, :integer, default: 0, null: false
     end
 
@@ -18,6 +18,6 @@ class AddEnumerations < ActiveRecord::Migration
       t.belongs_to :prospect, index: true
       t.belongs_to :enumeration, index: true
     end
-  
+
   end
 end
