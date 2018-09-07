@@ -12,7 +12,7 @@ AllCops:
     - 'db/**/*'
     - 'lib/**/*'
     - 'config/**/*'
-  TargetRubyVersion: 2.2
+  TargetRubyVersion: 2.5
   TargetRailsVersion: 5.2
 
 # Increase max allowed line length
