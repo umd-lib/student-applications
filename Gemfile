@@ -95,7 +95,7 @@ group :development do
   gem 'terminal-notifier-guard', require: false
 
   # Code analysis tools
-  gem 'rubocop', '= 0.52.1', require: false
+  gem 'rubocop', '= 0.58.2', require: false
   gem 'rubocop-checkstyle_formatter', require: false
 end
 
