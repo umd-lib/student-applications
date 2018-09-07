@@ -117,7 +117,7 @@ class ProspectsController < ApplicationController # rubocop:disable Metrics/Clas
 
     def prospect_from_session
       Prospect.new(ActionController::Parameters.new(session[:prospect_params]).permit!)
-    rescue
+    rescue StandardError
       # a nice place to debug..
       # byebug
       reset_session
