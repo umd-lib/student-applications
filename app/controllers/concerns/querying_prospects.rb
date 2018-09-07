@@ -35,12 +35,10 @@ module QueryingProspects # rubocop:disable Metrics/ModuleLength
 
     def join_table # rubocop:disable Metrics/AbcSize
       join_tables = []
-      if Prospect.reflections.keys.include?(sort_column.split('.').first)
-        join_tables << sort_column.split('.').first.intern
-      end
+      join_tables << sort_column.split('.').first.intern if Prospect.reflections.key?(sort_column.split('.').first)
       params[:search].each do |key, v|
         next if v.empty?
-        join_tables << key if Prospect.reflections.keys.include?(key)
+        join_tables << key if Prospect.reflections.key?(key)
       end
       join_tables.map(&:intern)
     end
