@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 class ConfigurationController < ApplicationController
   before_action :ensure_auth
   before_action :ensure_admin

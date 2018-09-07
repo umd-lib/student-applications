@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 # concerns for searching for prospects
 module QueryingProspects # rubocop:disable Metrics/ModuleLength
   extend ActiveSupport::Concern

@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 class UsersController < ApplicationController
   before_action :ensure_auth
   before_action :ensure_admin, except: :disable_admin

@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 # This is a model for a application
 # It includes the steps that are used to submit one
 # rubocop:disable Rails/HasAndBelongsToMany

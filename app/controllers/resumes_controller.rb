@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 class ResumesController < ApplicationController
   def new
     render plain: 'forbidden', status: 403, layout: false unless logged_in?

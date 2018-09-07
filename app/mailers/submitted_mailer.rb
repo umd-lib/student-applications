@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 # Mailer for successful application submissions
 class SubmittedMailer < ApplicationMailer
   default from: 'no_reply@umd.edu'

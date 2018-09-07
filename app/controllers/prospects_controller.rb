@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 class ProspectsController < ApplicationController # rubocop:disable Metrics/ClassLength
   include QueryingProspects
 

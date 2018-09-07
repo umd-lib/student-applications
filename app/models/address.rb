@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 # Addresses that are associated to the Prosect
 class Address < ApplicationRecord
   belongs_to :prospect

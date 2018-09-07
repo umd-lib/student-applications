@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 # Model for enumerated values
 class Enumeration < ApplicationRecord
   has_and_belongs_to_many :prospects, join_table: 'prospects_enumerations'

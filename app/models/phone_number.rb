@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 # A phone number for the prospect
 class PhoneNumber < ApplicationRecord
   belongs_to :prospect

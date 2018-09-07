@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 # Times of day the applicant is available to work
 class AvailableTime < ApplicationRecord
   belongs_to :prospect, counter_cache: true
