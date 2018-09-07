@@ -59,17 +59,17 @@ class Prospect < ApplicationRecord
   end
   # rubocop:enable Style/GuardClause, Metrics/LineLength
 
-  attr_accessor :class_status
+  attr_writer :class_status
   def class_status
     enumerations.find { |e| e['list'] == 'class_status' }
   end
 
-  attr_accessor :graduation_year
+  attr_writer :graduation_year
   def graduation_year
     enumerations.find { |e| e['list'] == 'graduation_year' }
   end
 
-  attr_accessor :semester
+  attr_reader :semester
   # def semester
   #  enumerations.find { |e| e['list'] == Enumeration.lists['semester'] }
   # end
@@ -87,12 +87,12 @@ class Prospect < ApplicationRecord
     @semester = enum
   end
 
-  attr_accessor :libraries
+  attr_writer :libraries
   def libraries
     enumerations.select { |e| e['list'] == 'library' } || []
   end
 
-  attr_accessor :how_did_you_hear_about_us
+  attr_writer :how_did_you_hear_about_us
   def how_did_you_hear_about_us
     enumerations.find { |e| e['list'] == 'how_did_you_hear_about_us' } || []
   end
@@ -137,7 +137,6 @@ class Prospect < ApplicationRecord
 
   # this is a way of feeding day-times into the prospect and have them stored
   # in
-  attr_accessor :day_times
   def day_times
     @day_times ||= available_times.map(&:day_time)
     @day_times
