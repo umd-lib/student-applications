@@ -133,7 +133,9 @@ class ProspectsController < ApplicationController # rubocop:disable Metrics/Clas
         session[:prospect_params][attr] = params[:prospect][attr] if params[:prospect][attr].present?
       end
       session[:prospect_params].each do |k, v|
-        session[:prospect_params][k] = convert_attributes_param_to_safe_hash(k, v) if v.is_a?(ActionController::Parameters)
+        if v.is_a?(ActionController::Parameters)
+          session[:prospect_params][k] = convert_attributes_param_to_safe_hash(k, v)
+        end
       end
     end
 

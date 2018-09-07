@@ -80,7 +80,7 @@ class Prospect < ApplicationRecord
     current = @semester.nil? ? enumerations.find { |e| e['list'] == 'semester' } : @semester
 
     enum =  value.is_a?(Enumeration) ? value : Enumeration.active_semesters.find { |e| e['value'] == value }
-    raise ArgumentError, "#{value} is not a valid semester value ( #{Enumeration.active_semesters.map(&:value).join(',')} )" unless enum
+    raise ArgumentError, "#{value} is not a valid semester value ( #{Enumeration.active_semesters.map(&:value).join(',')} )" unless enum # rubocop:disable Metrics/LineLength
 
     enumerations.delete(current) unless current.nil?
     enumerations << enum
