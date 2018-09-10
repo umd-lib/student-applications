@@ -106,8 +106,7 @@ group :test do
   gem 'chromedriver-helper'
   gem 'connection_pool'
   gem 'launchy'
-  # Pin minitest to v5.10.0, because of https://github.com/seattlerb/minitest/issues/730
-  gem 'minitest', '5.10.0'
+  gem 'minitest'
   gem 'minitest-reporters'
   gem 'mocha'
   gem 'rack_session_access'
