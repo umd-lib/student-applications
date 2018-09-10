@@ -11,7 +11,7 @@ Each step has a view defined in the app/views/prospect which is rendered when th
 
 Requires:
 
-* Ruby 2.2
+* Ruby 2.5.1
 * Bundler
 * [Google Chrome](https://www.google.com/chrome/index.html) (for testing)
 
