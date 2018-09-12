@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 require 'application_system_test_case'
 
 class AdminDisableTest < ApplicationSystemTestCase
@@ -19,6 +21,6 @@ class AdminDisableTest < ApplicationSystemTestCase
       'You have temporarly disabled admin functionality. Sign out and log back in to restore admin role.'
     )
     assert_equal 10, page.find_all('th').length
-    refute page.has_content?('User Management')
+    assert_not page.has_content?('User Management')
   end
 end

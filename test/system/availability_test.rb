@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 require 'application_system_test_case'
 
 class AvailabilityTest < ApplicationSystemTestCase
@@ -6,7 +8,7 @@ class AvailabilityTest < ApplicationSystemTestCase
     fixture = dup_fixture
     all_valid = fixture.attributes
     all_valid[:enumeration_ids] = fixture.enumerations.map(&:id)
-    all_valid.reject! { |a| %w(id created_at updated_at).include? a }
+    all_valid.reject! { |a| %w[id created_at updated_at].include? a }
 
     all_valid['addresses_attributes'] = [addresses(:all_valid_springfield).attributes.reject { |a| a == 'id' }]
     all_valid['available_times_attributes'] = []
@@ -22,18 +24,17 @@ class AvailabilityTest < ApplicationSystemTestCase
     end
     assert page.has_content?('Availability')
 
-
     # lets get 5 random date_times
     day_times = []
     5.times do
-      dt = [ [*0..6].sample, [*0..23].sample ]
+      dt = [[*0..6].sample, [*0..23].sample]
       redo if day_times.include?(dt)
       day_times << dt
     end
-    day_times.map! { |dt| "#{dt.first.to_s}-#{dt.last.to_s}" }
+    day_times.map! { |dt| "#{dt.first}-#{dt.last}" }
 
     # lets click the 5 tds related to that checkbox
-    day_times.each_with_index do |dt, i|
+    day_times.each do |dt|
       find(:css, "input[value='#{dt}']", visible: false).first(:xpath, './/../..').click
     end
 
@@ -53,7 +54,7 @@ class AvailabilityTest < ApplicationSystemTestCase
     fixture = dup_fixture
     all_valid = fixture.attributes
     all_valid[:enumeration_ids] = fixture.enumerations.map(&:id)
-    all_valid.reject! { |a| %w(id created_at updated_at).include? a }
+    all_valid.reject! { |a| %w[id created_at updated_at].include? a }
 
     all_valid['available_times_attributes'] = []
     all_valid['available_hours_per_week'] = 0
@@ -72,11 +73,11 @@ class AvailabilityTest < ApplicationSystemTestCase
     # like before,  lets get 5 random date_times
     day_times = []
     5.times do
-      dt = [ [*0..6].sample, [*0..23].sample ]
+      dt = [[*0..6].sample, [*0..23].sample]
       redo if day_times.include?(dt)
       day_times << dt
     end
-    day_times.map! { |dt| "#{dt.first.to_s}-#{dt.last.to_s}" }
+    day_times.map! { |dt| "#{dt.first}-#{dt.last}" }
 
     # lets click the 5 tds related to that checkbox
     day_times.each do |dt|

@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 require 'application_system_test_case'
 
 class ContactInformationTest < ApplicationSystemTestCase
@@ -51,7 +53,7 @@ class ContactInformationTest < ApplicationSystemTestCase
     assert_equal 2, find(:css, '#addresses').all('.nested-fields').length
     2.times do |i|
       within("#addresses .nested-fields:nth-child(#{i + 1})") do
-        %w(_street_address_1 _city _state _postal_code).each do |attr|
+        %w[_street_address_1 _city _state _postal_code].each do |attr|
           el_id = find("input[id$='#{attr}']")[:id]
           fill_in(el_id, with: "#{attr} #{i}")
         end
@@ -62,7 +64,7 @@ class ContactInformationTest < ApplicationSystemTestCase
     assert_equal 3, find(:css, '#phone-numbers').all('.nested-fields').length
     3.times do |i|
       within("#phone-numbers .nested-fields:nth-child(#{i + 1})") do
-        %w(_number).each do |attr|
+        %w[_number].each do |attr|
           el_id = find("input[id$='#{attr}']")[:id]
           fill_in(el_id, with: (i.to_s * 11).to_s)
         end
@@ -80,7 +82,7 @@ class ContactInformationTest < ApplicationSystemTestCase
     2.times do |i|
       # and with all our content
       within("#addresses .nested-fields:nth-child(#{i + 1})") do
-        %w(_street_address_1 _city _state _postal_code).each_with_index do |attr|
+        %w[_street_address_1 _city _state _postal_code].each do |attr|
           el_id = find("input[id$='#{attr}']")[:id]
           assert page.has_field?(el_id, with: "#{attr} #{i}")
         end
@@ -89,7 +91,7 @@ class ContactInformationTest < ApplicationSystemTestCase
 
     2.times do |i|
       within("#phone-numbers .nested-fields:nth-child(#{i + 1})") do
-        %w(_number).each do |attr|
+        %w[_number].each do |attr|
           el_id = find("input[id$='#{attr}']")[:id]
           assert page.has_field?(el_id, with: (i.to_s * 11).to_s)
         end

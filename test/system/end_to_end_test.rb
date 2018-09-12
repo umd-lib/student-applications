@@ -1,7 +1,9 @@
+# frozen_string_literal: true
+
 require 'application_system_test_case'
 require 'securerandom'
 
-class EndToEndTest < ApplicationSystemTestCase # rubocop:disable Metrics/BlockLength
+class EndToEndTest < ApplicationSystemTestCase
   test 'submit a standard application from start to finish' do
     # pretty boring test, since it's the exact same as out integration
     # test..just to get the ball rollin'
@@ -38,11 +40,11 @@ class EndToEndTest < ApplicationSystemTestCase # rubocop:disable Metrics/BlockLe
     assert_equal 1, find(:css, '#work-experiences').all('.nested-fields').length
 
     within('#work-experiences .nested-fields:nth-child(1)') do
-      %w(_name _dates_of_employment _location).each do |attr|
+      %w[_name _dates_of_employment _location].each do |attr|
         el_id = find("input[id$='#{attr}']")[:id]
         fill_in(el_id, with: attr)
       end
-      %w(_duties).each do |attr|
+      %w[_duties].each do |attr|
         el_id = find("textarea[id$='#{attr}']")[:id]
         fill_in(el_id, with: attr)
       end
@@ -96,12 +98,12 @@ class EndToEndTest < ApplicationSystemTestCase # rubocop:disable Metrics/BlockLe
     choose(Enumeration.active_semesters.first.value)
     click_button 'Continue'
 
-    refute page.has_content?('Contact Information')
-    assert page.has_content?("Please note that this directory ID has already submitted an application")
+    assert_not page.has_content?('Contact Information')
+    assert page.has_content?('Please note that this directory ID has already submitted an application')
 
     fill_in('Directory', with: SecureRandom.hex)
     click_button 'Continue'
-    refute page.has_content?("Please note that this directory ID has already submitted an application")
+    assert_not page.has_content?('Please note that this directory ID has already submitted an application')
     assert page.has_content?('Contact Information')
   end
 end

@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 require 'application_system_test_case'
 
 class AdminEditTest < ApplicationSystemTestCase
@@ -11,9 +13,9 @@ class AdminEditTest < ApplicationSystemTestCase
     click_button 'Login'
 
     # We should have all of our students present
-    assert page.has_content?("Student, Betty")
-    assert page.has_content?("Student, Alvin")
-    assert page.has_content?("Stone, Rolling")
+    assert page.has_content?('Student, Betty')
+    assert page.has_content?('Student, Alvin')
+    assert page.has_content?('Stone, Rolling')
 
     find_link('Student, Betty').click
     find_link('Edit Submission').click
@@ -22,10 +24,9 @@ class AdminEditTest < ApplicationSystemTestCase
     find_button('Save').click
 
     # We should have all of our students present, but Betty's name has changed
-    refute page.has_content?("Student, Betty")
-    assert page.has_content?("Nova, Cassie")
-    assert page.has_content?("Student, Alvin")
-    assert page.has_content?("Stone, Rolling")
-
+    assert_not page.has_content?('Student, Betty')
+    assert page.has_content?('Nova, Cassie')
+    assert page.has_content?('Student, Alvin')
+    assert page.has_content?('Stone, Rolling')
   end
 end

@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 require 'simplecov'
 require 'simplecov-rcov'
 
@@ -34,7 +36,7 @@ class ActiveSupport::TestCase
 
   # this returns a hash of a fixture with an existing fixture with a random
   # directory_id to pass validations
-  def dup_fixture( name = :all_valid )
+  def dup_fixture
     fixture = prospects(:all_valid)
     fixture.directory_id = SecureRandom.hex
     fixture
@@ -44,6 +46,9 @@ end
 def drag_until(locator, options = {}, &block)
   slider = find(locator)
   event_input = slider.native
-  page.driver.browser.action.click_and_hold(event_input).move_by(options[:by],0).release.perform until block.call(slider['aria-valuenow'].to_i)
+  page.driver.browser.action
+      .click_and_hold(event_input)
+      .move_by(options[:by], 0).release
+      .perform until block.call(slider['aria-valuenow'].to_i) # rubocop:disable Performance/RedundantBlockCall:
   slider
 end

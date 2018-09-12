@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 require 'application_system_test_case'
 
 class ConfigurationTest < ApplicationSystemTestCase
@@ -16,14 +18,13 @@ class ConfigurationTest < ApplicationSystemTestCase
     assert skill.promoted?
     assert page.has_content?(skill.name)
 
-
     find(:css, "#skill_#{skill.id} .toggle:not(.off)").click
-    page.assert_selector  "#skill_#{skill.id} .toggle.off"
+    page.assert_selector "#skill_#{skill.id} .toggle.off"
     sleep 1
 
-    refute skill.reload.promoted?
+    assert_not skill.reload.promoted?
     find(:css, "#skill_#{skill.id} .toggle").click
-    page.assert_selector  "#skill_#{skill.id} .toggle:not(.off)"
+    page.assert_selector "#skill_#{skill.id} .toggle:not(.off)"
     sleep 1
     assert skill.reload.promoted?
   end
@@ -44,13 +45,12 @@ class ConfigurationTest < ApplicationSystemTestCase
     assert enum.active?
     assert page.has_content?(enum.value)
 
-
     find(:css, "#enumeration_#{enum.id} .toggle:not(.off)").click
-    page.assert_selector  "#enumeration_#{enum.id} .toggle.off"
+    page.assert_selector "#enumeration_#{enum.id} .toggle.off"
     sleep(1)
-    refute enum.reload.active?
+    assert_not enum.reload.active?
     find(:css, "#enumeration_#{enum.id} .toggle").click
-    page.assert_selector  "#enumeration_#{enum.id} .toggle:not(.off)"
+    page.assert_selector "#enumeration_#{enum.id} .toggle:not(.off)"
     sleep(1)
     assert enum.reload.active?
   end
@@ -68,11 +68,10 @@ class ConfigurationTest < ApplicationSystemTestCase
     click_link list.pluralize.humanize.upcase
     assert page.assert_selector "#enumeration-#{list}.collapse.in"
 
-    assert_difference( 'Enumeration.count' ) do
-      find(:css, "input#enumeration_#{list}_value").send_keys "phd", :enter
-      assert page.has_content?("phd")
+    assert_difference('Enumeration.count') do
+      find(:css, "input#enumeration_#{list}_value").send_keys 'phd', :enter
+      assert page.has_content?('phd')
     end
-
   end
 
   test 'admin should be able to create skills enumeration' do
@@ -85,12 +84,11 @@ class ConfigurationTest < ApplicationSystemTestCase
     click_button 'Login'
 
     click_link 'SKILLS'
-    assert page.assert_selector "#skills.collapse.in"
+    assert page.assert_selector '#skills.collapse.in'
 
-    assert_difference( 'Skill.count' ) do
-      find(:css, "input#new_skill_name").send_keys "programming", :enter
-      assert page.has_content?("programming")
+    assert_difference('Skill.count') do
+      find(:css, 'input#new_skill_name').send_keys 'programming', :enter
+      assert page.has_content?('programming')
     end
   end
-
 end
