@@ -3,7 +3,8 @@
 <div class='panel panel-default'>
   <div class="panel-heading"><span>Total Available Hours Per Week</span></div>
   <div class="panel-body" id="basic-info">
-    <%= form.input :available_hours_per_week, required: true, input_html: { min: '0', step: 'any' } %>
+    <%= form.input :available_hours_per_week, required: true,
+                   input_html: { min: '0', max: @prospect.max_available_hours_per_week, step: 'any' } %>
   </div>
 </div>
 

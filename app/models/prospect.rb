@@ -119,7 +119,20 @@ class Prospect < ActiveRecord::Base
 
   # the number of available hours per week should =< number of available_times
   validate :available_hours_per_week_gt_available_times
-  validates :available_hours_per_week, numericality: { greater_than_or_equal_to: 0 }
+  validate :available_hours_per_week_less_than_max
+
+  # Maximum number of available hours per week
+  def self.max_available_hours_per_week
+    50 # 7 days * 24 hours
+  end
+
+  def available_hours_per_week_less_than_max
+    if available_hours_per_week < 0
+      errors.add(:available_hours_per_week, 'must be greater than or equal to zero.')
+    elsif available_hours_per_week > max_available_hours_per_week
+      errors.add(:available_hours_per_week, "must be less than or equal to #{max_available_hours_per_week} hours.")
+    end
+  end
 
   # rubocop:disable Style/GuardClause
   def available_hours_per_week_gt_available_times
