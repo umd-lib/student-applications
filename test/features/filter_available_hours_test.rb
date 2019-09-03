@@ -24,7 +24,7 @@ feature 'Should be able filter prospects on available hours per week' do
     assert page.has_content?('Filter Applications')
 
     # we tweak the slider...
-    min = drag_until('.min-slider-handle', by: 100) { |v| v > 1 }
+    min = drag_until('.min-slider-handle', by: 10) { |v| v > 1 }
     max = drag_until('.max-slider-handle', by: -100) { |v| v < 40 }
     sleep(2)
     find("#submit-filter").click
