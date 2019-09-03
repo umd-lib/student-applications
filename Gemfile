@@ -87,7 +87,7 @@ group :test do
   gem 'minitest-reporters'
   # use the head to get the callback functionality
   gem 'capybara-screenshot'
-  gem 'chromedriver-helper'
+  gem 'webdrivers', '~> 3.9'
   gem 'database_cleaner'
   gem 'mocha'
   gem 'rack_session_access'
