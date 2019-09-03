@@ -87,7 +87,6 @@ group :test do
   gem 'minitest-reporters'
   # use the head to get the callback functionality
   gem 'capybara-screenshot'
-  gem 'webdrivers', '~> 3.9'
   gem 'database_cleaner'
   gem 'mocha'
   gem 'rack_session_access'
@@ -95,6 +94,7 @@ group :test do
   gem 'shoulda-context'
   gem 'shoulda-matchers', '>= 3.0.1'
   gem 'test_after_commit'
+  gem 'webdrivers', '~> 3.9'
 
   # Code analysis tools
   gem 'rubocop', '= 0.49.1', require: false
