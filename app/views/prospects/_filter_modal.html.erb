@@ -26,12 +26,13 @@
 
             <div class="row">
                 <h4>Available Hours</h4>
+                <% max_hours_per_week = Prospect.max_available_hours_per_week %>
                 <div class="col-md-8 availability-select">
                   <b>0</b><input id="available-hours-selector" type="text" class="span2" value="" data-slider-min="0"
-                  data-slider-max="50" data-slider-step="1"
-                  data-slider-value="[<%= params[:available_hours_per_week_min] || 0 %>,<%= params[:available_hours_per_week_max] || 50 %>]"/><b>50</b>
+                  data-slider-max="<%= max_hours_per_week %>" data-slider-step="1"
+                  data-slider-value="[<%= params[:available_hours_per_week_min] || 0 %>,<%= params[:available_hours_per_week_max] || max_hours_per_week %>]"/><b><%= max_hours_per_week %></b>
                  <%= hidden_field_tag( "available_hours_per_week_min", params[:available_hours_per_week_min] || 0, { id: 'availability-min' } ) %>
-                 <%= hidden_field_tag( "available_hours_per_week_max", params[:available_hours_per_week_max] || 50,{ id: 'availability-max' }) %>
+                 <%= hidden_field_tag( "available_hours_per_week_max", params[:available_hours_per_week_max] || max_hours_per_week, { id: 'availability-max' }) %>
                 </div>
             </div>
 
