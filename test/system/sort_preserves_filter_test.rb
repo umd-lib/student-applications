@@ -26,8 +26,8 @@ class SortPreservesFilterTest < ApplicationSystemTestCase
     assert page.has_content?('Filter Applications')
 
     # we tweak the slider...
-    min = drag_until('.min-slider-handle', by: 10) { |v| v > 1 }
-    max = drag_until('.max-slider-handle', by: -100) { |v| v < 40 }
+    drag_until('.min-slider-handle', by: 10) { |v| v > 1 }
+    drag_until('.max-slider-handle', by: -100) { |v| v < 40 }
     # wait for the changes to update before submitting
     sleep(2)
     find('#submit-filter').click

@@ -128,10 +128,11 @@ class Prospect < ApplicationRecord # rubocop:disable Metrics/ClassLength
   end
 
   def available_hours_per_week_less_than_max
-    if available_hours_per_week < 0
+    if available_hours_per_week.negative?
       errors.add(:available_hours_per_week, 'must be greater than or equal to zero.')
     elsif available_hours_per_week > Prospect.max_available_hours_per_week
-      errors.add(:available_hours_per_week, "must be less than or equal to #{Prospect.max_available_hours_per_week} hours.")
+      errors.add(:available_hours_per_week,
+                 "must be less than or equal to #{Prospect.max_available_hours_per_week} hours.")
     end
   end
 
