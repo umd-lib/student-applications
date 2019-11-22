@@ -32,8 +32,8 @@ class FilterClassStatusTest < ApplicationSystemTestCase
     page.assert_selector('#filter-modal', visible: false)
 
     # only alvin is an undergrad
-    page.refute_selector("#prospect_#{students['Betty'].id}")
-    page.refute_selector("#prospect_#{students['Rolling'].id}")
+    page.assert_no_selector("#prospect_#{students['Betty'].id}")
+    page.assert_no_selector("#prospect_#{students['Rolling'].id}")
     page.assert_selector("#prospect_#{students['Alvin'].id}")
   end
 end
