@@ -1,4 +1,4 @@
-class CreateRackCasSessions < ActiveRecord::Migration
+class CreateRackCasSessions < ActiveRecord::Migration[4.2]
   def self.up
     create_table :sessions do |t|
       t.string :session_id, :null => false

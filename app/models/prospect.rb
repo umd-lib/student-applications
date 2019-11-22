@@ -1,11 +1,12 @@
+# frozen_string_literal: true
+
 # This is a model for a application
 # It includes the steps that are used to submit one
 # rubocop:disable Rails/HasAndBelongsToMany
-# rubocop:disable Metrics/ClassLength
-class Prospect < ActiveRecord::Base
+class Prospect < ApplicationRecord # rubocop:disable Metrics/ClassLength
   include Walkable
 
-  belongs_to :resume
+  belongs_to :resume, optional: true
   after_initialize :after_initialize
 
   has_and_belongs_to_many :enumerations, join_table: 'prospects_enumerations'
@@ -21,7 +22,7 @@ class Prospect < ActiveRecord::Base
     if semester
       enumerations << semester
     else
-      @semester = enumerations.find { |e| e['list'] == Enumeration.lists['semester'] }
+      @semester = enumerations.find { |e| e['list'] == 'semester' }
     end
   end
 
@@ -55,44 +56,44 @@ class Prospect < ActiveRecord::Base
       errors.add(:semester, 'Please indicate which semester you are applying for.')
     end
   end
-  # rubocop:enable Style/GuardClause, Metrics/LineLength
+  # rubocop:enable Style/GuardClause
 
-  attr_accessor :class_status
+  attr_writer :class_status
   def class_status
-    enumerations.find { |e| e['list'] == Enumeration.lists['class_status'] }
+    enumerations.find { |e| e['list'] == 'class_status' }
   end
 
-  attr_accessor :graduation_year
+  attr_writer :graduation_year
   def graduation_year
-    enumerations.find { |e| e['list'] == Enumeration.lists['graduation_year'] }
+    enumerations.find { |e| e['list'] == 'graduation_year' }
   end
 
-  attr_accessor :semester
+  attr_reader :semester
   # def semester
   #  enumerations.find { |e| e['list'] == Enumeration.lists['semester'] }
   # end
 
-  def semester=(value) # rubocop:disable Metrics/AbcSize
-    return if value.nil?
+  def semester=(value) # rubocop:disable Metrics/AbcSize, Metrics/CyclomaticComplexity
+    return if value.nil? || value.blank?
 
-    current = @semester.nil? ? enumerations.find { |e| e['list'] == Enumeration.lists['semester'] } : @semester
+    current = @semester.nil? ? enumerations.find { |e| e['list'] == 'semester' } : @semester
 
     enum =  value.is_a?(Enumeration) ? value : Enumeration.active_semesters.find { |e| e['value'] == value }
-    raise ArgumentError, "#{value} is not a valid semester value ( #{Enumeration.active_semesters.map(&:value).join(',')} )" unless enum
+    raise ArgumentError, "#{value} is not a valid semester value ( #{Enumeration.active_semesters.map(&:value).join(',')} )" unless enum # rubocop:disable Metrics/LineLength
 
     enumerations.delete(current) unless current.nil?
     enumerations << enum
     @semester = enum
   end
 
-  attr_accessor :libraries
+  attr_writer :libraries
   def libraries
-    enumerations.select { |e| e['list'] == Enumeration.lists['library'] } || []
+    enumerations.select { |e| e['list'] == 'library' } || []
   end
 
-  attr_accessor :how_did_you_hear_about_us
+  attr_writer :how_did_you_hear_about_us
   def how_did_you_hear_about_us
-    enumerations.find { |e| e['list'] == Enumeration.lists['how_did_you_hear_about_us'] } || []
+    enumerations.find { |e| e['list'] == 'how_did_you_hear_about_us' } || []
   end
 
   # this validates if the user has clicked "All information is correct" on last
@@ -148,7 +149,6 @@ class Prospect < ActiveRecord::Base
 
   # this is a way of feeding day-times into the prospect and have them stored
   # in
-  attr_accessor :day_times
   def day_times
     @day_times ||= available_times.map(&:day_time)
     @day_times
@@ -171,10 +171,12 @@ class Prospect < ActiveRecord::Base
   def contact_phone_with_default
     phone_numbers.first || phone_numbers.build
   end
-  has_one :contact_phone, class_name: PhoneNumber
+  has_one :contact_phone, class_name: 'PhoneNumber' # rubocop:disable Rails/HasManyOrHasOneDependent
   accepts_nested_attributes_for :contact_phone, allow_destroy: true
 
-  alias_method_chain :contact_phone, :default
+  def contact_phone
+    super || contact_phone_with_default
+  end
   validates :contact_phone, presence: true, if: ->(o) { o.current_step == 'contact_info' }
   validates_associated :contact_phone, if: ->(o) { o.current_step == 'contact_info' }
 
@@ -188,14 +190,16 @@ class Prospect < ActiveRecord::Base
     addresses.find(&:local?) || addresses.build(address_type: 'local')
   end
 
-  has_one :local_address, -> { where(address_type: 'local') }, class_name: Address
+  has_one :local_address, -> { where(address_type: 'local') }, class_name: 'Address' # rubocop:disable Rails/InverseOf
   accepts_nested_attributes_for :local_address, allow_destroy: true
 
-  alias_method_chain :local_address, :default
+  def local_address
+    super || local_address_with_default
+  end
   validates :local_address, presence: true, if: ->(o) { o.current_step == 'contact_info' }
   validates_associated :local_address, if: ->(o) { o.current_step == 'contact_info' }
 
-  has_one :permanent_address, -> { where(address_type: 'permanent') }, class_name: Address
+  has_one :permanent_address, -> { where(address_type: 'permanent') }, class_name: 'Address' # rubocop:disable Rails/InverseOf
   accepts_nested_attributes_for :permanent_address, allow_destroy: true
 
   has_and_belongs_to_many :skills, dependent: :nullify
@@ -205,3 +209,4 @@ class Prospect < ActiveRecord::Base
     skills.select(&:unpromoted)
   end
 end
+# rubocop:enable Rails/HasAndBelongsToMany

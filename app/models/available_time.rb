@@ -1,5 +1,7 @@
+# frozen_string_literal: true
+
 # Times of day the applicant is available to work
-class AvailableTime < ActiveRecord::Base
+class AvailableTime < ApplicationRecord
   belongs_to :prospect, counter_cache: true
   enum day: %i[sunday monday tuesday wednesday thursday friday saturday]
 

@@ -1,2 +1,4 @@
-class WorkExperience < ActiveRecord::Base
+# frozen_string_literal: true
+
+class WorkExperience < ApplicationRecord
 end

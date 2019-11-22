@@ -1,5 +1,10 @@
 <% provide :container_class, "container #{controller_name} #{action_name}" %>
 
+<% content_for :app_name do "Student Applications" end; %>
+
+<% content_for :additional_head_content do %>
+  <%= csp_meta_tag %>
+<% end %>
 
 <% content_for :navbar do %>
   <ul class="nav navbar-nav">
@@ -10,19 +15,19 @@
             <b>Review Applications</b>
           <% end %>
         <% end %>
-      <% else %>  
+      <% else %>
         <%= link_to( reset_url , id: 'navbar-reset-link', data: { confirm: "Are you sure want to reset the form?\n\nThis will erase any information you have already entered." }) do  %>
           <b>Reset</b> <span class="glyphicon glyphicon-remove-circle" ></span>
         <% end %>
-      <% end %>     
+      <% end %>
     </li>
     <li><%= link_to_if( admin?, "<b>List Configuration</b>".html_safe, configuration_path ) {   } %></li>
     <li><%= link_to_if( admin?, "<b>User Management</b>".html_safe, users_path ) {   } %></li>
-    <li> 
+    <li>
         <% if @current_user %>
           <%= link_to( "<b>Sign Out</b>".html_safe, logout_url( service: URI.encode(sign_out_url) )  )  %>
         <% end %>
-    </li>     
+    </li>
   </ul>
 <% end %>
 

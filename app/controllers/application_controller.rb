@@ -1,7 +1,6 @@
+# frozen_string_literal: true
+
 class ApplicationController < ActionController::Base
-  # Prevent CSRF attacks by raising an exception.
-  # For APIs, you may want to use :null_session instead.
-  protect_from_forgery with: :exception
   before_action :fix_cas_session
 
   rescue_from ActionController::InvalidAuthenticityToken do |_e|
@@ -17,7 +16,7 @@ class ApplicationController < ActionController::Base
   end
   # rubocop:enable Style/GuardClause
 
-  # just returns tue if the user is logged in. does not redirect
+  # just returns true if the user is logged in. does not redirect
   # if not logged in
   def logged_in?
     return false if session[:cas].nil? || session[:cas][:user].nil?
@@ -31,11 +30,11 @@ class ApplicationController < ActionController::Base
       # screen
       redirect_to action: 'new', controller: 'prospects'
     elsif session[:cas].nil? || session[:cas][:user].nil?
-      render status: 401, text: 'Redirecting to SSO...'
+      render status: :unauthorized, plain: 'Redirecting to SSO...'
     else
       user = User.find_by cas_directory_id: session[:cas][:user]
       if user.nil?
-        render status: 403, text: 'Unrecognized user'
+        render status: :forbidden, plain: 'Unrecognized user'
       else
         update_current_user(user)
       end
