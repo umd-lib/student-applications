@@ -30,6 +30,9 @@ Minitest::Reporters.use!(
 
 require 'rack_session_access/capybara'
 
+# Suppress puma start/version output when running tests
+Capybara.server = :puma, { Silent: true } # To clean up your test output
+
 class ActiveSupport::TestCase
   # Setup all fixtures in test/fixtures/*.yml for all tests in alphabetical order.
   fixtures :all
