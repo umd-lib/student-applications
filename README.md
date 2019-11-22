@@ -22,7 +22,7 @@ $ git clone https://github.com/umd-lib/student-applications.git
 $ cd student-applications
 $ bundle
 $ ./bin/rails db:migrate
-$ ./bin/tails db:seed
+$ ./bin/rails db:seed
 $ ./bin/rails s
 ```
 
@@ -95,7 +95,7 @@ These include:
 Note: Include the RAILS_ENV=production flag if you're using this on
 application in production-mode.
 
-To view the delayed_job queue status, you can visit /delayed_job in the
+To view the delayed_job queue status, you can visit /delayed_jobs in the
 application. This requires an admin user to be logged in ( first visit
 /prospects to login. )
 
