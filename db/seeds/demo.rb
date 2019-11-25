@@ -35,8 +35,8 @@ Skill.where(promoted: false).delete_all
   end
 
   rand(0..3).times do
-    prospect.work_experiences << WorkExperience.new(name: Faker::Company.name, position_title: Faker::Job.title, location: Faker::LordOfTheRings.location, dates_of_employment: Faker::Date.backward(rand(0..1_000_000)),
-                                                    duties: Faker::Lorem.words(rand(0..10)).join("\n"), library_related: [true, false].sample)
+    prospect.work_experiences << WorkExperience.new(name: Faker::Company.name, position_title: Faker::Job.title, location: Faker::Movies::LordOfTheRings.location, dates_of_employment: Faker::Date.backward(days: rand(0..1_000_000)),
+                                                    duties: Faker::Lorem.words(number: rand(0..10)).join("\n"), library_related: [true, false].sample)
   end
 
   prospect.available_hours_per_week = rand(0..40)
