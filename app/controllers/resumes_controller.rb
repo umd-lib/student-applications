@@ -1,6 +1,8 @@
+# frozen_string_literal: true
+
 class ResumesController < ApplicationController
   def new
-    render text: 'forbidden', status: 403, layout: false unless logged_in?
+    render plain: 'forbidden', status: :forbidden, layout: false unless logged_in?
     @prospect = Prospect.find(params[:prospect])
     @resume = Resume.new(prospect: @prospect)
   end
@@ -24,12 +26,12 @@ class ResumesController < ApplicationController
     if same_session? || logged_in?
       send_file(@resume.file.path, disposition: 'attachment', filename: @resume.file_file_name)
     else
-      render text: 'forbidden', status: 403, layout: false
+      render plain: 'forbidden', status: :forbidden, layout: false
     end
   end
 
   def edit
-    render text: 'forbidden', status: 403, layout: false unless logged_in?
+    render plain: 'forbidden', status: :forbidden, layout: false unless logged_in?
     @resume = Resume.includes(:prospect).find(params[:id])
     @prospect = Prospect.find_by(resume: @resume)
   end
