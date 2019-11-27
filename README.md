@@ -43,17 +43,25 @@ $ ./bin/bundle exec guard
 Testing uses [Minitest](https://github.com/seattlerb/minitest),
 [Capybara](https://github.com/jnicklas/capybara) and the Selenium web driver.
 
-Google Chrome and [chromedriver](https://sites.google.com/a/chromium.org/chromedriver/)
-are used to provide a headless browser for testing.
+Google Chrome and the "webdriver" gem are used to provide a headless browser for
+testing.
 
-The [chromedriver-helper](https://github.com/flavorjones/chromedriver-helper)
-gem should automatically download and install the latest chromedrive executable
+The [webdriver](https://github.com/titusfortner/webdrivers)
+gem should automatically download and install the latest chromedrivee executable
 into ~/.chromedriver.
 
 CSS animations and transitions cause visibility/timing issues when testing in
 a headless browser. When running the tests, they have turned off by the
 "lib/no_animations.rb" file, which is added as Rack middleware in the
 "config/environment/test.rb" file.
+
+## Docker.ci and Jenkinsfile
+
+The "Dockerfile.ci" file is used to encapsulate the environment needed by the
+continuous integration (ci) server for building and testing the application.
+
+The "Jenkinsfile" provides the Jenkins pipeline steps for building and
+testing the application.
 
 ## Production Environment Configuration
 
@@ -101,7 +109,7 @@ application. This requires an admin user to be logged in ( first visit
 
 ### Adding users
 
-You can add users via a Rake task:
+You can add users via a Rails task:
 
 ```
 $ ./bin/rails 'db:add_admin_cas_user[cas_directory_id,full_name]'  # Add an admin user
