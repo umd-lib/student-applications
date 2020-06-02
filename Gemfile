@@ -40,9 +40,6 @@ gem 'bootsnap', '>= 1.1.0', require: false
 # Use Postgres in production
 gem 'pg', group: :production
 
-# bundle exec rake doc:rails generates the API under doc/api.
-gem 'sdoc', '~> 0.4.0', group: :doc
-
 # jquery
 gem 'jquery-rails'
 
