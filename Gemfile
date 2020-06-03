@@ -5,7 +5,7 @@ git_source(:github) { |repo| "https://github.com/#{repo}.git" }
 # ruby '2.5.0'
 
 # Bundle edge Rails instead: gem 'rails', github: 'rails/rails'
-gem 'rails', '~> 5.2.3'
+gem 'rails', '~> 5.2.4.3'
 # Use sqlite3 as the database for Active Record
 gem 'sqlite3'
 # Use Puma as the app server
@@ -39,9 +39,6 @@ gem 'bootsnap', '>= 1.1.0', require: false
 
 # Use Postgres in production
 gem 'pg', group: :production
-
-# bundle exec rake doc:rails generates the API under doc/api.
-gem 'sdoc', '~> 0.4.0', group: :doc
 
 # jquery
 gem 'jquery-rails'

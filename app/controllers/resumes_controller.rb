@@ -52,7 +52,7 @@ class ResumesController < ApplicationController
     end
 
     def same_session?
-      @resume.upload_session_id == session.id && @resume.upload_session_id.present?
+      (@resume.upload_session_id == session.id.to_s) && @resume.upload_session_id.present?
     end
 
     def save_prospect
@@ -62,6 +62,6 @@ class ResumesController < ApplicationController
     end
 
     def upload_session_id
-      session.id || SecureRandom.hex(16).encode(Encoding::UTF_8)
+      session.id.to_s || SecureRandom.hex(16).encode(Encoding::UTF_8)
     end
 end
