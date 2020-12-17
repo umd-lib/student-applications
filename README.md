@@ -11,8 +11,8 @@ Each step has a view defined in the app/views/prospect which is rendered when th
 
 Requires:
 
-* Ruby 2.5.1
-* Bundler
+* Ruby 2.7.2
+* Bundler v1.17.3
 * [Google Chrome](https://www.google.com/chrome/index.html) (for testing)
 
 To run the application:
@@ -69,6 +69,7 @@ Requires:
 
 * Postgres client to be installed (on RedHat, the "postgresql" and
   "postgresql-devel" packages)
+* The "imagemagick" package (required by the "paperclip" gem)
 
 The application uses the "dotenv" gem to configure the production environment.
 The gem expects a ".env" file in the root directory to contain the environment
