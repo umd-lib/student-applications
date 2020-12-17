@@ -14,9 +14,9 @@ module QueryingProspects # rubocop:disable Metrics/ModuleLength
     col = "lower(#{col})" if col.include?('last_name')
     return Arel.sql("#{col} #{sort_direction}") unless col.include?('enumerations')
     klass, method = col.split('.')
-    values = klass.singularize.capitalize.constantize.send(method.intern).order("value #{sort_direction} ")
-                  .pluck('value')
-    order_query = values.each_with_index.inject('CASE ') do |memo, (val, i)|
+    values = klass.singularize.capitalize.constantize.send(method.intern)
+                  .order(Arel.sql("value #{sort_direction} ")).pluck('value')
+    order_query = values.each_with_index.inject(+'CASE ') do |memo, (val, i)| # rubocop:disable Style/EachWithObject
       memo << "WHEN( enumerations.value = '#{val}') THEN #{i} "
       memo
     end

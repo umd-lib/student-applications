@@ -25,7 +25,7 @@
     <li><%= link_to_if( admin?, "<b>User Management</b>".html_safe, users_path ) {   } %></li>
     <li>
         <% if @current_user %>
-          <%= link_to( "<b>Sign Out</b>".html_safe, logout_url( service: URI.encode(sign_out_url) )  )  %>
+          <%= link_to( "<b>Sign Out</b>".html_safe, logout_url( service: sign_out_url )  )  %>
         <% end %>
     </li>
   </ul>

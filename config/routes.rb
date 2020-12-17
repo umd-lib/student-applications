@@ -22,4 +22,6 @@ Rails.application.routes.draw do
   post 'configuration' => 'configuration#update', as: :update_configuration
 
   match '/delayed_jobs' => DelayedJobWeb, anchor: false, via: %i[get post]
+
+  get '/ping' => 'ping#verify'
 end
