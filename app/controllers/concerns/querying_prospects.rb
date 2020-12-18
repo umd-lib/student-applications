@@ -1,5 +1,7 @@
+# frozen_string_literal: true
+
 # concerns for searching for prospects
-module QueryingProspects
+module QueryingProspects # rubocop:disable Metrics/ModuleLength
   extend ActiveSupport::Concern
   included do
     helper_method :sort_column, :sort_direction
@@ -10,15 +12,15 @@ module QueryingProspects
     col = sort_column
     # do a case-insensitive sort if we are sort on last name
     col = "lower(#{col})" if col.include?('last_name')
-    return "#{col} #{sort_direction}" unless col.include?('enumerations')
+    return Arel.sql("#{col} #{sort_direction}") unless col.include?('enumerations')
     klass, method = col.split('.')
-    values = klass.singularize.capitalize.constantize.send(method.intern).order("value #{sort_direction} ")
-                  .pluck('value')
-    order_query = values.each_with_index.inject('CASE ') do |memo, (val, i)|
+    values = klass.singularize.capitalize.constantize.send(method.intern)
+                  .order(Arel.sql("value #{sort_direction} ")).pluck('value')
+    order_query = values.each_with_index.inject(+'CASE ') do |memo, (val, i)| # rubocop:disable Style/EachWithObject
       memo << "WHEN( enumerations.value = '#{val}') THEN #{i} "
       memo
     end
-    "#{order_query} ELSE #{values.length} END"
+    Arel.sql("#{order_query} ELSE #{values.length} END")
   end
 
   private
@@ -33,12 +35,10 @@ module QueryingProspects
 
     def join_table # rubocop:disable Metrics/AbcSize
       join_tables = []
-      if Prospect.reflections.keys.include?(sort_column.split('.').first)
-        join_tables << sort_column.split('.').first.intern
-      end
+      join_tables << sort_column.split('.').first.intern if Prospect.reflections.key?(sort_column.split('.').first)
       params[:search].each do |key, v|
         next if v.empty?
-        join_tables << key if Prospect.reflections.keys.include?(key)
+        join_tables << key if Prospect.reflections.key?(key)
       end
       join_tables.map(&:intern)
     end
@@ -73,10 +73,11 @@ module QueryingProspects
     end
 
     def text_search_statement
-      query = params[:text_search].each_with_object([]) do |(k, val), memo|
-        unless val.empty?
-          memo << Prospect.arel_table[k.intern].matches("#{val}%")
-        end
+      params_as_hash = params.permit(whitelisted_attrs).to_h
+      text_search_params = params_as_hash[:text_search] || {}
+
+      query = text_search_params.each_with_object([]) do |(k, val), memo|
+        memo << Prospect.arel_table[k.intern].matches("#{val}%") unless val.empty?
       end
       query.present? ? query.inject(&:and) : {}
     end
@@ -98,22 +99,33 @@ module QueryingProspects
 
     # Returns a query for the given enumeration type (as represented by the
     # method name on the Enumeration object)
-    def enumeration_type_search_statement(enumeration_type)
+    def enumeration_type_search_statement(enumeration_type) # rubocop:disable Metrics/AbcSize
       all_type_ids = Enumeration.send(enumeration_type).map { |s| s.id.to_s }
 
       # Get the ids in the params that are in the enumeration type
       ids_for_search = all_type_ids & params[:search][:enumerations]
 
       return if ids_for_search.empty?
-      Arel::Table.new(Prospect.reflect_on_association('enumerations').table_name)[:id].in(ids_for_search)
+      table_name = Prospect.reflect_on_association('enumerations').table_name
+      table_class = table_name.classify.constantize
+      arel = table_class.arel_table
+
+      arel[:id].in(ids_for_search)
     end
 
-    def search_statement
-      query = params[:search].each_with_object([]) do |(k, val), memo|
+    def search_statement # rubocop:disable Metrics/AbcSize
+      params_as_hash = params.permit(whitelisted_attrs).to_h
+      search_params = params_as_hash[:search] || {}
+
+      query = search_params.each_with_object([]) do |(k, val), memo|
         next if val.empty?
         # not sure we really need to reflect on associations but just in case we
         # make some weird data model change
-        memo << Arel::Table.new(Prospect.reflect_on_association(k.intern).table_name)[:id].in(Array.wrap(val))
+        table_name = Prospect.reflect_on_association(k.intern).table_name
+        table_class = table_name.classify.constantize
+        arel = table_class.arel_table
+
+        memo << arel[:id].in(Array.wrap(val))
       end
       query.present? ? query.inject(&:and) : {}
     end

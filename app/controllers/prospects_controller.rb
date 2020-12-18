@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 class ProspectsController < ApplicationController # rubocop:disable Metrics/ClassLength
   include QueryingProspects
 
@@ -25,7 +27,7 @@ class ProspectsController < ApplicationController # rubocop:disable Metrics/Clas
       end
     end
 
-    if @prospect && @prospect.new_record?
+    if @prospect&.new_record?
       render 'new'
     elsif @prospect
       begin
@@ -84,7 +86,6 @@ class ProspectsController < ApplicationController # rubocop:disable Metrics/Clas
       end
     end
   end
-  # rubocop:enable Style/GuardClause
 
   # we don't actually want to destroy record, but just mark them as inactive
   # accepts a hash of params
@@ -115,7 +116,7 @@ class ProspectsController < ApplicationController # rubocop:disable Metrics/Clas
 
     def prospect_from_session
       Prospect.new(ActionController::Parameters.new(session[:prospect_params]).permit!)
-    rescue
+    rescue StandardError
       # a nice place to debug..
       # byebug
       reset_session
@@ -131,17 +132,19 @@ class ProspectsController < ApplicationController # rubocop:disable Metrics/Clas
         session[:prospect_params][attr] = params[:prospect][attr] if params[:prospect][attr].present?
       end
       session[:prospect_params].each do |k, v|
-        session[:prospect_params][k] = v.to_hash if v.is_a?(ActionController::Parameters)
+        if v.is_a?(ActionController::Parameters)
+          session[:prospect_params][k] = convert_attributes_param_to_safe_hash(k, v)
+        end
       end
     end
 
-    def set_prospect # rubocop:disable Metrics/AbcSize
+    def set_prospect
       @prospect = Prospect.new(ActionController::Parameters.new(session[:prospect_params]).permit!)
       if @prospect.nil? || !@prospect.is_a?(Prospect)
         reset_session
         redirect_to(root_path, flash: { error: @error_message }) && raise(false)
       else
-        @resume = @prospect.resume ? @prospect.resume : @prospect.build_resume
+        @resume = @prospect.resume || @prospect.build_resume
       end
     end
 
@@ -151,8 +154,39 @@ class ProspectsController < ApplicationController # rubocop:disable Metrics/Clas
       # param, we just go to the step in session. if we don't have a session,
       # we just go to first step.
       params[:prospect] ||= { current_step: (session[:prospect_step] || Prospect.steps.first) }
-      params[:prospect] = params[:prospect].with_indifferent_access
       params.require(:prospect).permit(*whitelisted_attrs)
+    end
+
+    # Converts attribute-related params that have multiple instances (and so
+    # are listed with numeric keys) into "safe" hash by passing them through
+    # whitelisted_attrs
+    #
+    # attr - The attribute (addresses, phone_numbers, etc.) to use in
+    #        passing through whitelisted_attrs
+    # param - the ActionController::Parameters object to convert
+    def convert_attributes_param_to_safe_hash(attr, param)
+      # Get an unsafe hash of the param
+      unsafe_hash = param.to_unsafe_h
+
+      # The hash of permitted attributes
+      safe_hash = {}
+
+      # Assume that each key ends with "attributes" and corresponds with
+      # attributes in the whitelist (addresses_attributes,
+      # phone_numbers_attributes, etc.)
+      unsafe_hash.each do |(key, value)|
+        # Assign the value to a hash using the attribute as a key, instead of
+        # index number ("0", "1", etc.)
+        temp_hash = { attr => value }
+        # Create a new Parameters object
+        temp_param = ActionController::Parameters.new(temp_hash)
+        # Pass the Parameters object through the whitelist and get the hash
+        temp_param_hash = temp_param.permit(whitelisted_attrs).to_hash
+        # Merge into safe_hash result, using the original numeric key as the
+        # hash key
+        safe_hash.merge!(key => temp_param_hash[attr])
+      end
+      safe_hash
     end
 
     def whitelisted_attrs # rubocop:disable Metrics/MethodLength
@@ -177,6 +211,10 @@ class ProspectsController < ApplicationController # rubocop:disable Metrics/Clas
         available_times_attributes: sanitize_model_attrs(AvailableTime),
         skills_attributes: sanitize_model_attrs(Skill)
       )
+
+      # attributes for filtering
+      attrs << { search: { prospect: [], enumerations: [], skills: [] } }
+      attrs << { text_search: %i[last_name first_name directory_id] }
     end
 
     # This takes a model and pops out the prospect_id which is not needed

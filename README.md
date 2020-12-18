@@ -11,8 +11,8 @@ Each step has a view defined in the app/views/prospect which is rendered when th
 
 Requires:
 
-* Ruby 2.2
-* Bundler
+* Ruby 2.7.2
+* Bundler v1.17.3
 * [Google Chrome](https://www.google.com/chrome/index.html) (for testing)
 
 To run the application:
@@ -21,15 +21,15 @@ To run the application:
 $ git clone https://github.com/umd-lib/student-applications.git
 $ cd student-applications
 $ bundle
-$ ./bin/rake db:migrate
-$ ./bin/rake db:seed
+$ ./bin/rails db:migrate
+$ ./bin/rails db:seed
 $ ./bin/rails s
 ```
 
 You can load test fixtures in by using db:seed:demo rake task
 
 ```
-$ ./bin/rake db:seed:demo
+$ ./bin/rails db:seed:demo
 ```
 
 To develop, you can run [Guard](https://github.com/guard/guard) by issuing:
@@ -43,11 +43,11 @@ $ ./bin/bundle exec guard
 Testing uses [Minitest](https://github.com/seattlerb/minitest),
 [Capybara](https://github.com/jnicklas/capybara) and the Selenium web driver.
 
-Google Chrome and [chromedriver](https://sites.google.com/a/chromium.org/chromedriver/)
-are used to provide a headless browser for testing.
+Google Chrome and the "webdriver" gem are used to provide a headless browser for
+testing.
 
-The [chromedriver-helper](https://github.com/flavorjones/chromedriver-helper)
-gem should automatically download and install the latest chromedrive executable
+The [webdriver](https://github.com/titusfortner/webdrivers)
+gem should automatically download and install the latest chromedrivee executable
 into ~/.chromedriver.
 
 CSS animations and transitions cause visibility/timing issues when testing in
@@ -55,12 +55,21 @@ a headless browser. When running the tests, they have turned off by the
 "lib/no_animations.rb" file, which is added as Rack middleware in the
 "config/environment/test.rb" file.
 
+## Docker.ci and Jenkinsfile
+
+The "Dockerfile.ci" file is used to encapsulate the environment needed by the
+continuous integration (ci) server for building and testing the application.
+
+The "Jenkinsfile" provides the Jenkins pipeline steps for building and
+testing the application.
+
 ## Production Environment Configuration
 
 Requires:
 
 * Postgres client to be installed (on RedHat, the "postgresql" and
   "postgresql-devel" packages)
+* The "imagemagick" package (required by the "paperclip" gem)
 
 The application uses the "dotenv" gem to configure the production environment.
 The gem expects a ".env" file in the root directory to contain the environment
@@ -86,25 +95,25 @@ There are also a number of Job-related rake tasks that can be invoked
 These include:
 
 ```
-./bin/rake jobs:clear                                         # Clear the delayed_job queue
-./bin/rake jobs:check[max_age]                                # Exit with error status if any jobs older than max_age seconds haven't been attempted yet
-./bin/rake jobs:work                                          # Start a delayed_job worker
-./bin/rake jobs:workoff                                       # Start a delayed_job worker and exit when all available jobs are complete
+./bin/rails jobs:clear                                         # Clear the delayed_job queue
+./bin/rails jobs:check[max_age]                                # Exit with error status if any jobs older than max_age seconds haven't been attempted yet
+./bin/rails jobs:work                                          # Start a delayed_job worker
+./bin/rails jobs:workoff                                       # Start a delayed_job worker and exit when all available jobs are complete
 ```
 
-Note: Include the RAILS_ENV=production flage if you're using this on
+Note: Include the RAILS_ENV=production flag if you're using this on
 application in production-mode.
 
-To view the delayed_job queue status, you can visit /delayed_job in the
+To view the delayed_job queue status, you can visit /delayed_jobs in the
 application. This requires an admin user to be logged in ( first visit
 /prospects to login. )
 
 ### Adding users
 
-You can add users via a rake task:
+You can add users via a Rails task:
 
 ```
-$ ./bin/rake 'db:add_admin_cas_user[cas_directory_id,full_name]'  # Add an admin user
-$ ./bin/rake 'db:add_cas_user[cas_directory_id,full_name]'        # Add a non-admin user
-$ ./bin/rake db:bulk_add_users[csv_file]  # use csv file with full_name, directory_id rows
+$ ./bin/rails 'db:add_admin_cas_user[cas_directory_id,full_name]'  # Add an admin user
+$ ./bin/rails 'db:add_cas_user[cas_directory_id,full_name]'        # Add a non-admin user
+$ ./bin/rails db:bulk_add_users[csv_file]  # use csv file with full_name, directory_id rows
 ```

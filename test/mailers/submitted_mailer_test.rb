@@ -1,5 +1,8 @@
+# frozen_string_literal: true
+
 require 'test_helper'
 
+# Unite tests for submitted mailer
 class SubmittedMailerTest < ActionMailer::TestCase
   def setup
     @prospect = prospects(:all_valid)

@@ -1,6 +1,8 @@
+# frozen_string_literal: true
+
 class ResumesController < ApplicationController
   def new
-    render text: 'forbidden', status: 403, layout: false unless logged_in?
+    render plain: 'forbidden', status: :forbidden, layout: false unless logged_in?
     @prospect = Prospect.find(params[:prospect])
     @resume = Resume.new(prospect: @prospect)
   end
@@ -24,12 +26,12 @@ class ResumesController < ApplicationController
     if same_session? || logged_in?
       send_file(@resume.file.path, disposition: 'attachment', filename: @resume.file_file_name)
     else
-      render text: 'forbidden', status: 403, layout: false
+      render plain: 'forbidden', status: :forbidden, layout: false
     end
   end
 
   def edit
-    render text: 'forbidden', status: 403, layout: false unless logged_in?
+    render plain: 'forbidden', status: :forbidden, layout: false unless logged_in?
     @resume = Resume.includes(:prospect).find(params[:id])
     @prospect = Prospect.find_by(resume: @resume)
   end
@@ -50,7 +52,7 @@ class ResumesController < ApplicationController
     end
 
     def same_session?
-      @resume.upload_session_id == session.id && @resume.upload_session_id.present?
+      (@resume.upload_session_id == session.id.to_s) && @resume.upload_session_id.present?
     end
 
     def save_prospect
@@ -60,6 +62,6 @@ class ResumesController < ApplicationController
     end
 
     def upload_session_id
-      session.id || SecureRandom.hex(16).encode(Encoding::UTF_8)
+      session.id.to_s || SecureRandom.hex(16).encode(Encoding::UTF_8)
     end
 end

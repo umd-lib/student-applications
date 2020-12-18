@@ -1,4 +1,4 @@
-class AddProspect < ActiveRecord::Migration
+class AddProspect < ActiveRecord::Migration[4.2]
   def change
 
     create_table :prospects do |t|

@@ -1,4 +1,5 @@
 Rails.application.routes.draw do
+  # For details on the DSL available within this file, see http://guides.rubyonrails.org/routing.html
   root 'home#index'
   get 'new' => 'home#new', as: :start_new_application
   get 'reset' => 'home#reset', as: :reset
@@ -21,4 +22,6 @@ Rails.application.routes.draw do
   post 'configuration' => 'configuration#update', as: :update_configuration
 
   match '/delayed_jobs' => DelayedJobWeb, anchor: false, via: %i[get post]
+
+  get '/ping' => 'ping#verify'
 end

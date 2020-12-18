@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 require 'test_helper'
 
 # Unit test for the prospect (i.e., application form) model
@@ -7,7 +9,6 @@ class ProspectTest < ActiveSupport::TestCase
     @all_valid = prospects(:all_valid)
   end
 
-
   test 'should be valid if the contact info is completed on the contact_info step' do
     assert @contact_info.current_step == Prospect.first_step
     @contact_info.next_step
@@ -16,37 +17,35 @@ class ProspectTest < ActiveSupport::TestCase
   end
 
   test 'should be invalid on the contact_info step if the contact info is not present' do
-    prospect = Prospect.new( directory_id: "123", semester: Enumeration.active_semesters.first.value  )
+    prospect = Prospect.new(directory_id: '123', semester: Enumeration.active_semesters.first.value)
     prospect.next_step
     assert_equal prospect.current_step, 'contact_info'
-    refute prospect.valid?
-  end
-  
-  test 'should be invalid the directory_id has already been used for a semester' do
-    assert @all_valid.all_valid?
-    prospect = Prospect.new( directory_id: @all_valid.directory_id, semester: @all_valid.semester )
-    refute prospect.valid?
- 
-    prospect.directory_id = SecureRandom.hex
-    assert prospect.valid?
-    
-    prospect = Prospect.new( directory_id: @all_valid.directory_id, semester: @all_valid.semester )
-    refute prospect.valid?
-    
-    prospect.semester = Enumeration.active_semesters.last
-    assert prospect.valid?
-  
+    assert_not prospect.valid?
   end
 
+  test 'should be invalid the directory_id has already been used for a semester' do
+    assert @all_valid.all_valid?
+    prospect = Prospect.new(directory_id: @all_valid.directory_id, semester: @all_valid.semester)
+    assert_not prospect.valid?
+
+    prospect.directory_id = SecureRandom.hex
+    assert prospect.valid?
+
+    prospect = Prospect.new(directory_id: @all_valid.directory_id, semester: @all_valid.semester)
+    assert_not prospect.valid?
+
+    prospect.semester = Enumeration.active_semesters.last
+    assert prospect.valid?
+  end
 
   test 'should be valid on a non-contact_info step if the contact info is not present' do
     prospect = Prospect.new
     prospect.next_step
     prospect.next_step
-    refute_equal prospect.current_step, 'contact_info'
+    assert_not_equal prospect.current_step, 'contact_info'
     assert prospect.valid?
     prospect.previous_step
-    refute prospect.valid?
+    assert_not prospect.valid?
   end
 
   test 'should be all valid if the information is all present' do
@@ -54,7 +53,7 @@ class ProspectTest < ActiveSupport::TestCase
   end
 
   test 'should not be all valid if the information is not all present' do
-    refute Prospect.new.all_valid?
+    assert_not Prospect.new.all_valid?
   end
 
   test 'should create a local_address on init' do
@@ -75,13 +74,13 @@ class ProspectTest < ActiveSupport::TestCase
     homeless.contact_phone.phone_type = 'local'
     homeless.contact_phone.number = '301-555-0123'
     # not valid bc no address
-    refute homeless.valid?
+    assert_not homeless.valid?
     # but if we ae on another step, it should be ok
     homeless.next_step
     assert homeless.valid?
 
     homeless.previous_step
-    %i(street_address_1= city= state= postal_code=).each do |attr|
+    %i[street_address_1= city= state= postal_code=].each do |attr|
       homeless.local_address.send(attr, SecureRandom.hex)
     end
     assert homeless.valid?, homeless.errors
@@ -106,13 +105,13 @@ class ProspectTest < ActiveSupport::TestCase
       assert_includes prospect.day_times, a.day_time
     end
   end
-  
+
   test 'it should be able to modify available_times via the day_times shortcut' do
-    prospect = prospects(:all_valid) 
+    prospect = prospects(:all_valid)
     dts = prospect.day_times
     assert_equal prospect.available_times.length, dts.length
-    new_dts=  [ "0-13", "1-14", "2-15", "3-16", "4-17", "5-18", "6-19" ] 
-    prospect.day_times = new_dts 
+    new_dts = ['0-13', '1-14', '2-15', '3-16', '4-17', '5-18', '6-19']
+    prospect.day_times = new_dts
     assert prospect.save!
     assert_equal prospect.day_times, new_dts
   end
@@ -120,7 +119,7 @@ class ProspectTest < ActiveSupport::TestCase
   test 'it ensure the total available hours is not more than the available_times selected' do
     assert_equal @all_valid.available_hours_per_week, 1
     @all_valid.available_hours_per_week = 100
-    refute @all_valid.valid?
+    assert_not @all_valid.valid?
     @all_valid.available_hours_per_week = @all_valid.available_times.size
     assert @all_valid.valid?
   end
@@ -133,19 +132,18 @@ class ProspectTest < ActiveSupport::TestCase
     assert_equal prospect.special_skills.length, 1
     assert_equal prospect.special_skills.first.name, 'fightin'
   end
-  
+
   test 'it can set the semester' do
     prospect = Prospect.new
-    
+
     values = Enumeration.active_semesters
 
     prospect.semester = values.first.value
 
-    assert_includes prospect.enumerations, values.first 
-    
-    prospect.semester = values.last.value
-    refute_includes prospect.enumerations, values.first 
-    assert_includes prospect.enumerations, values.last
+    assert_includes prospect.enumerations, values.first
 
+    prospect.semester = values.last.value
+    assert_not_includes prospect.enumerations, values.first
+    assert_includes prospect.enumerations, values.last
   end
 end

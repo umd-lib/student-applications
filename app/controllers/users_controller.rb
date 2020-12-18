@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 class UsersController < ApplicationController
   before_action :ensure_auth
   before_action :ensure_admin, except: :disable_admin
@@ -39,7 +41,11 @@ class UsersController < ApplicationController
   def disable_admin
     session[:disable_admin] = true
     respond_to do |format|
-      format.html { redirect_to prospects_url, notice: 'You have temporarly disabled admin functionality. Sign out and log back in to restore admin role.' }
+      format.html do
+        redirect_to prospects_url,
+                    notice: 'You have temporarly disabled admin functionality. ' \
+                            'Sign out and log back in to restore admin role.'
+      end
     end
   end
 
