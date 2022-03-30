@@ -11,6 +11,9 @@ class Prospect < ApplicationRecord # rubocop:disable Metrics/ClassLength
 
   has_and_belongs_to_many :enumerations, join_table: 'prospects_enumerations'
 
+  attr_reader :semester
+  attr_writer :class_status, :graduation_year, :libraries, :how_did_you_hear_about_us
+
   def self.active
     where(suppressed: false)
   end
@@ -29,15 +32,16 @@ class Prospect < ApplicationRecord # rubocop:disable Metrics/ClassLength
   # Custom Validations
   validate :must_have_class_status, :must_have_graduation_year, :must_have_semester, :only_one_id_per_semester
 
-  # rubocop:disable Style/GuardClause, Metrics/LineLength, Rails/OutputSafety
+  # rubocop:disable Style/GuardClause
+  # rubocop:disable Layout/LineLength, Style/SoleNestedConditional
   def only_one_id_per_semester
     if current_step == 'id_and_semester' && !persisted? && semester
-      if Prospect.joins(:enumerations).where(suppressed: false, directory_id: directory_id, enumerations: { id: semester.id }).exists?
+      if Prospect.joins(:enumerations).exists?(suppressed: false, directory_id: directory_id, enumerations: { id: semester.id })
         errors.add(:semester, "Please note that this directory ID has already submitted an application. You are only allowed one application submission per semester. If you need to edit your submission please contact Lisa Warner at <a href='tel:3014059245'>301-405-9245</a> or <a href='mailto:lwarner@umd.edu'>lwarner@umd.edu</a> for assistance.".html_safe)
       end
     end
   end
-  # rubocop:enable Metrics/LineLength, Rails/OutputSafety
+  # rubocop:enable Layout/LineLength, Style/SoleNestedConditional
 
   def must_have_class_status
     if current_step == 'contact_info' && class_status.nil?
@@ -58,40 +62,31 @@ class Prospect < ApplicationRecord # rubocop:disable Metrics/ClassLength
   end
   # rubocop:enable Style/GuardClause
 
-  attr_writer :class_status
   def class_status
     enumerations.find { |e| e['list'] == 'class_status' }
   end
 
-  attr_writer :graduation_year
   def graduation_year
     enumerations.find { |e| e['list'] == 'graduation_year' }
   end
 
-  attr_reader :semester
-  # def semester
-  #  enumerations.find { |e| e['list'] == Enumeration.lists['semester'] }
-  # end
-
-  def semester=(value) # rubocop:disable Metrics/AbcSize, Metrics/CyclomaticComplexity
+  def semester=(value) # rubocop:disable Metrics/AbcSize, Metrics/CyclomaticComplexity, Metrics/PerceivedComplexity
     return if value.nil? || value.blank?
 
     current = @semester.nil? ? enumerations.find { |e| e['list'] == 'semester' } : @semester
 
     enum =  value.is_a?(Enumeration) ? value : Enumeration.active_semesters.find { |e| e['value'] == value }
-    raise ArgumentError, "#{value} is not a valid semester value ( #{Enumeration.active_semesters.map(&:value).join(',')} )" unless enum # rubocop:disable Metrics/LineLength
+    raise ArgumentError, "#{value} is not a valid semester value ( #{Enumeration.active_semesters.map(&:value).join(',')} )" unless enum # rubocop:disable Layout/LineLength
 
     enumerations.delete(current) unless current.nil?
     enumerations << enum
     @semester = enum
   end
 
-  attr_writer :libraries
   def libraries
     enumerations.select { |e| e['list'] == 'library' } || []
   end
 
-  attr_writer :how_did_you_hear_about_us
   def how_did_you_hear_about_us
     enumerations.find { |e| e['list'] == 'how_did_you_hear_about_us' } || []
   end
@@ -191,7 +186,7 @@ class Prospect < ApplicationRecord # rubocop:disable Metrics/ClassLength
     addresses.find(&:local?) || addresses.build(address_type: 'local')
   end
 
-  has_one :local_address, -> { where(address_type: 'local') }, class_name: 'Address' # rubocop:disable Rails/InverseOf
+  has_one :local_address, -> { where(address_type: 'local') }, class_name: 'Address', dependent: nil # rubocop:disable Rails/InverseOf
   accepts_nested_attributes_for :local_address, allow_destroy: true
 
   def local_address
@@ -200,7 +195,7 @@ class Prospect < ApplicationRecord # rubocop:disable Metrics/ClassLength
   validates :local_address, presence: true, if: ->(o) { o.current_step == 'contact_info' }
   validates_associated :local_address, if: ->(o) { o.current_step == 'contact_info' }
 
-  has_one :permanent_address, -> { where(address_type: 'permanent') }, class_name: 'Address' # rubocop:disable Rails/InverseOf
+  has_one :permanent_address, -> { where(address_type: 'permanent') }, class_name: 'Address', dependent: nil # rubocop:disable Rails/InverseOf
   accepts_nested_attributes_for :permanent_address, allow_destroy: true
 
   has_and_belongs_to_many :skills, dependent: :nullify

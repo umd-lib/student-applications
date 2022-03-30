@@ -52,6 +52,6 @@ def drag_until(locator, options = {}, &block)
   page.driver.browser.action
       .click_and_hold(event_input)
       .move_by(options[:by], 0).release
-      .perform until block.call(slider['aria-valuenow'].to_i) # rubocop:disable Performance/RedundantBlockCall:
+      .perform until block.call(slider['aria-valuenow'].to_i)
   slider
 end

@@ -14,7 +14,7 @@ class AvailabilityTest < ApplicationSystemTestCase
     all_valid['available_times_attributes'] = []
     all_valid['available_hours_per_week'] = 0
     all_valid['phone_numbers_attributes'] = [phone_numbers(:all_valid_dummy).attributes.reject { |a| a == 'id' }]
-    page.set_rack_session("prospect_params": all_valid)
+    page.set_rack_session(prospect_params: all_valid)
 
     visit new_prospect_path
 
@@ -60,7 +60,7 @@ class AvailabilityTest < ApplicationSystemTestCase
     all_valid['available_hours_per_week'] = 0
     all_valid['addresses_attributes'] = [addresses(:all_valid_springfield).attributes.reject { |a| a == 'id' }]
     all_valid['phone_numbers_attributes'] = [phone_numbers(:all_valid_dummy).attributes.reject { |a| a == 'id' }]
-    page.set_rack_session("prospect_params": all_valid)
+    page.set_rack_session(prospect_params: all_valid)
 
     visit new_prospect_path
 

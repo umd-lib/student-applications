@@ -31,22 +31,22 @@ class ProspectsController < ApplicationController # rubocop:disable Metrics/Clas
       render 'new'
     elsif @prospect
       begin
-          SubmittedMailer.default_email(@prospect).deliver_later
-        rescue EOFError, # rubocop:disable Lint/ShadowedException
-               IOError,
-               TimeoutError,
-               Errno::ECONNRESET,
-               Errno::ECONNABORTED,
-               Errno::EPIPE,
-               Errno::ETIMEDOUT,
-               Net::SMTPAuthenticationError,
-               Net::SMTPServerBusy,
-               Net::SMTPSyntaxError,
-               Net::SMTPUnknownError,
-               OpenSSL::SSL::SSLError => e
+        SubmittedMailer.default_email(@prospect).deliver_later
+      rescue EOFError, # rubocop:disable Lint/ShadowedException
+             IOError,
+             TimeoutError,
+             Errno::ECONNRESET,
+             Errno::ECONNABORTED,
+             Errno::EPIPE,
+             Errno::ETIMEDOUT,
+             Net::SMTPAuthenticationError,
+             Net::SMTPServerBusy,
+             Net::SMTPSyntaxError,
+             Net::SMTPUnknownError,
+             OpenSSL::SSL::SSLError => e
 
-          log_exception(e, @prospect)
-        end
+        log_exception(e, @prospect)
+      end
 
       reset_session
       flash[:notice] = 'Submitted!'
@@ -100,7 +100,7 @@ class ProspectsController < ApplicationController # rubocop:disable Metrics/Clas
 
   private
 
-    def log_exception(exception, prospect = nil) # rubocop:disable Metrics/AbcSize
+    def log_exception(exception, prospect = nil)
       logger.error '~' * 100
       logger.error 'Application Submission Failure!'
       logger.error "Prospect: #{prospect.inspect} Errors: #{prospect.errors}" if prospect
@@ -128,7 +128,7 @@ class ProspectsController < ApplicationController # rubocop:disable Metrics/Clas
     def set_session # rubocop:disable Metrics/AbcSize
       session[:prospect_params] ||= {}.with_indifferent_access
       session[:prospect_params].deep_merge!(prospect_params)
-      session[:prospect_params].keys.select { |a| a =~ /_attributes$/ }.each do |attr|
+      session[:prospect_params].keys.grep(/_attributes$/).each do |attr|
         session[:prospect_params][attr] = params[:prospect][attr] if params[:prospect][attr].present?
       end
       session[:prospect_params].each do |k, v|

@@ -7,6 +7,8 @@ Rails:
 # Exclude auto-generated files
 AllCops:
   NewCops: enable
+  SuggestExtensions:
+    rubocop-minitest: false # May want to consider using in the future
   Exclude:
     - 'config.ru'
     - 'Rakefile'
@@ -14,6 +16,7 @@ AllCops:
     - 'config/**/*'
     - 'db/**/*'
     - 'lib/**/*'
+    - 'Guardfile'
   TargetRubyVersion: 2.7
   TargetRailsVersion: 6.1
 
@@ -70,6 +73,11 @@ Style/FrozenStringLiteralComment:
   Exclude:
     - Gemfile
 
+# For this project, we typically use snake_case for variables/methods with
+# numbers (i.e., street_address_1)
+Naming/VariableNumber:
+  EnforcedStyle: snake_case
+
 # May want to reconsider these exclusions in the future
 Rails/HasAndBelongsToMany:
   Exclude:
@@ -80,3 +88,8 @@ Rails/SkipsModelValidations:
   Exclude:
     - 'app/controllers/configuration_controller.rb'
     - 'app/controllers/prospects_controller.rb'
+
+# Other disabled cops, as we don't want to deal with them right now.
+# May want to reconsider these in the future
+Rails/I18nLocaleTexts:
+  Enabled: false

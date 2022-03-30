@@ -3,7 +3,7 @@
 require 'test_helper'
 
 class ProspectsControllerTest < ActionController::TestCase
-  # rubocop:disable Metrics/LineLength, Naming/VariableNumber
+  # rubocop:disable Layout/LineLength
   test 'should allow authed users to deactivate a submitted application' do
     prospect = prospects(:all_valid)
     assert_not prospect.suppressed?
@@ -14,9 +14,9 @@ class ProspectsControllerTest < ActionController::TestCase
     assert prospect.suppressed?
   end
 
-  test 'should log any problems' do
-    class InvalidShoeSize < ActiveRecord::ActiveRecordError; end
+  class InvalidShoeSize < ActiveRecord::ActiveRecordError; end
 
+  test 'should log any problems' do
     Rails.logger.expects(:error).with(anything).at_least_once
     Rails.logger.expects(:error).with('Uh-Oh!').at_least_once
     Prospect.any_instance.stubs(:save).raises(InvalidShoeSize, 'Uh-Oh!')
@@ -234,5 +234,5 @@ class ProspectsControllerTest < ActionController::TestCase
     assert_equal 'Anytown', result['1']['city']
     assert_not result['1'].key?('malicious_value')
   end
-  # rubocop:enable Metrics/LineLength, Naming/VariableNumber
+  # rubocop:enable Layout/LineLength
 end

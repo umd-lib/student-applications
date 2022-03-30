@@ -1,5 +1,8 @@
 # frozen_string_literal: true
 
+# rubocop:disable Rails/HelperInstanceVariable
+# May want to reconsifer this exclusion and fix this
+
 module ApplicationHelper
   def bootstrap_class_for(flash_type)
     { success: 'alert-success', error: 'alert-danger', alert: 'alert-warning',
@@ -84,7 +87,7 @@ module ApplicationHelper
   # this defines the sortable columsn
   # you pass in the column we will sort on and the title in the header.
   # columns should use the dot notation e.g. 'enumerations.graduation_year_values'
-  # rubocop:disable Metrics/AbcSize, Metrics/CyclomaticComplexity, Metrics/PerceivedComplexity
+  # rubocop:disable Metrics/AbcSize
   def sortable(column, title)
     css_class = column == sort_column ? "current #{sort_direction}" : nil
     direction = column == sort_column && sort_direction == 'asc' ? 'desc' : 'asc'
@@ -97,7 +100,7 @@ module ApplicationHelper
       safe_join([icon, ' ', title])
     end
   end
-  # rubocop:enable Metrics/AbcSize, Metrics/CyclomaticComplexity, Metrics/PerceivedComplexity
+  # rubocop:enable Metrics/AbcSize
 
   # Simple helper method to format the per_page pull down
   def per_page_select(current_count, all_count)
@@ -111,3 +114,5 @@ module ApplicationHelper
     select_tag :per_page, options_for_select(range.uniq.sort, current_count), class: 'per-page-select'
   end
 end
+
+# rubocop:enable Rails/HelperInstanceVariable

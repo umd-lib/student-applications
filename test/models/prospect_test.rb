@@ -99,7 +99,7 @@ class ProspectTest < ActiveSupport::TestCase
   end
 
   test 'it should be able to create available_times via the day_times shortcut' do
-    prospect = Prospect.new day_times: ['0-0', '4-20', '0-12']
+    prospect = Prospect.new day_times: %w[0-0 4-20 0-12]
     assert_equal prospect.available_times.length, prospect.day_times.length
     prospect.available_times.each do |a|
       assert_includes prospect.day_times, a.day_time
@@ -110,7 +110,7 @@ class ProspectTest < ActiveSupport::TestCase
     prospect = prospects(:all_valid)
     dts = prospect.day_times
     assert_equal prospect.available_times.length, dts.length
-    new_dts = ['0-13', '1-14', '2-15', '3-16', '4-17', '5-18', '6-19']
+    new_dts = %w[0-13 1-14 2-15 3-16 4-17 5-18 6-19]
     prospect.day_times = new_dts
     assert prospect.save!
     assert_equal prospect.day_times, new_dts
