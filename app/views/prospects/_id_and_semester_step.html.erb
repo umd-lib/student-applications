@@ -2,16 +2,16 @@
   <h4>Please enter your Student ID and Semester You are Applying For</h4>
   <p>
       <%= form.input :directory_id, required: true  %>
-      <% if form.object.new_record? %> 
-        <%= form.input :semester, 
+      <% if form.object.new_record? %>
+        <%= form.input :semester,
           collection: Enumeration.active_semesters.map { |e| [ e.value, e.value ] },
-          wrapper_html: { class: "prospect_semester #{ 'has-error' if form.object.errors.keys.include?(:semester) }" }, 
+          wrapper_html: { class: "prospect_semester #{ 'has-error' if form.object.errors.attribute_names.include?(:semester) }" },
           required: true, input_html: { multiple:false, name: "prospect[semester]" },
           label: 'Which semester are you applying for?', as: :radio_buttons %>
       <% else %>
-        <%= form.association :enumerations, 
+        <%= form.association :enumerations,
           collection: Enumeration.active_semesters.map { |e| [ e.value, e.id ] },
-          wrapper_html: { class: "prospect_semester #{ 'has-error' if form.object.errors.keys.include?(:semester) }" }, 
+          wrapper_html: { class: "prospect_semester #{ 'has-error' if form.object.errors.attribute_names.include?(:semester) }" },
           required: true, input_html: { multiple:false, id: "semester", name: "prospect[enumeration_ids][]" },
           label: 'Which semester are you applying for?' %>
       <% end %>
