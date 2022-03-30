@@ -46,7 +46,7 @@ class ResumeUploadTest < ApplicationSystemTestCase
 
       # and now for fools trying to get in the backdoor
       err = assert_raises OpenURI::HTTPError do
-        open(href) # rubocop:disable Security/Open
+        URI.open(href)
       end
       assert_match(/403 Forbidden/, err.message)
     end
