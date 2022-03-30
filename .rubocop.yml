@@ -1,9 +1,12 @@
+require: rubocop-rails
+
 # Enables Rails cops
 Rails:
   Enabled: true
 
 # Exclude auto-generated files
 AllCops:
+  NewCops: enable
   Exclude:
     - 'config.ru'
     - 'Rakefile'
@@ -11,11 +14,11 @@ AllCops:
     - 'config/**/*'
     - 'db/**/*'
     - 'lib/**/*'
-  TargetRubyVersion: 2.5
-  TargetRailsVersion: 5.2
+  TargetRubyVersion: 2.7
+  TargetRailsVersion: 6.1
 
 # Increase max allowed line length
-Metrics/LineLength:
+Layout/LineLength:
   Max: 120
   IgnoreCopDirectives: true
 
@@ -44,7 +47,7 @@ Style/ClassAndModuleChildren:
     - 'test/**/*'
 
 Layout/IndentationConsistency:
-  EnforcedStyle: rails
+  EnforcedStyle: indented_internal_methods
 
 # Disabling the following as they interfere with the Rails layout of the
 # Gemfile, making changes when doing upgrades less visible
@@ -77,4 +80,3 @@ Rails/SkipsModelValidations:
   Exclude:
     - 'app/controllers/configuration_controller.rb'
     - 'app/controllers/prospects_controller.rb'
-
