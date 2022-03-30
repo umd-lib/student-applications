@@ -26,7 +26,7 @@ class ResumeUploadTest < ApplicationSystemTestCase
       end
 
       assert page.has_content?('Resume')
-      page.attach_file('resume_file', File.absolute_path('test/fixtures/resume.pdf'), visible: false)
+      page.attach_file('resume_file', File.absolute_path('test/fixtures/files/resume.pdf'), visible: false)
 
       find("input[name='uploadResume']").click
 
@@ -72,7 +72,7 @@ class ResumeUploadTest < ApplicationSystemTestCase
       break if page.has_content?('Resume')
     end
     assert page.has_content?('Resume')
-    page.attach_file('resume_file', File.absolute_path('test/fixtures/resume.notpdf'), visible: false)
+    page.attach_file('resume_file', File.absolute_path('test/fixtures/files/resume.notpdf'), visible: false)
 
     find("input[name='uploadResume']").click
 

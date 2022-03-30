@@ -51,7 +51,7 @@ Skill.where(promoted: false).delete_all
   prospect.user_signature = Faker::Name.name
 
   if [true, false].sample
-    prospect.resume = Resume.new(file: File.new('test/fixtures/resume.pdf', 'r'))
+    prospect.resume = Resume.new(file: File.new('test/fixtures/files/resume.pdf', 'r'))
   end
 
   begin
