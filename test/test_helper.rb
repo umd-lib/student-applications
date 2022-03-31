@@ -34,8 +34,15 @@ require 'rack_session_access/capybara'
 Capybara.server = :puma, { Silent: true } # To clean up your test output
 
 class ActiveSupport::TestCase
+  # Run tests in parallel with specified workers
+  # Disabling parallelization, because it confuses SimpleCov
+  # See https://github.com/simplecov-ruby/simplecov/issues/718
+  # parallelize(workers: :number_of_processors)
+
   # Setup all fixtures in test/fixtures/*.yml for all tests in alphabetical order.
   fixtures :all
+
+  # Add more helper methods to be used by all tests here...
 
   # this returns a hash of a fixture with an existing fixture with a random
   # directory_id to pass validations

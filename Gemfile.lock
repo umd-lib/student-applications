@@ -70,8 +70,6 @@ GEM
       zeitwerk (~> 2.3)
     addressable (2.8.0)
       public_suffix (>= 2.0.2, < 5.0)
-    airbrussh (1.4.0)
-      sshkit (>= 1.6.1, != 1.7.0)
     ansi (1.5.0)
     ast (2.4.2)
     bindex (0.8.1)
@@ -80,16 +78,6 @@ GEM
     bootstrap-toggle-rails (2.2.1.0)
     builder (3.2.4)
     byebug (11.1.3)
-    capistrano (3.17.0)
-      airbrussh (>= 1.0.0)
-      i18n
-      rake (>= 10.0.0)
-      sshkit (>= 1.9.0)
-    capistrano-bundler (2.0.1)
-      capistrano (~> 3.1)
-    capistrano-rails (1.6.2)
-      capistrano (~> 3.1)
-      capistrano-bundler (>= 1.1, < 3)
     capybara (3.36.0)
       addressable
       matrix
@@ -164,10 +152,9 @@ GEM
       thor (>= 0.14, < 2.0)
     launchy (2.5.0)
       addressable (~> 2.7)
-    listen (3.1.5)
-      rb-fsevent (~> 0.9, >= 0.9.4)
-      rb-inotify (~> 0.9, >= 0.9.7)
-      ruby_dep (~> 1.2)
+    listen (3.7.1)
+      rb-fsevent (~> 0.10, >= 0.10.3)
+      rb-inotify (~> 0.9, >= 0.9.10)
     loofah (2.15.0)
       crass (~> 1.0.2)
       nokogiri (>= 1.5.9)
@@ -196,9 +183,6 @@ GEM
     mustermann (1.1.1)
       ruby2_keywords (~> 0.0.1)
     nenv (0.3.0)
-    net-scp (3.0.0)
-      net-ssh (>= 2.6.5, < 7.0.0)
-    net-ssh (6.1.0)
     nio4r (2.5.8)
     nokogiri (1.13.3)
       mini_portile2 (~> 2.8.0)
@@ -222,7 +206,7 @@ GEM
     pry-rails (0.3.9)
       pry (>= 0.10.4)
     public_suffix (4.0.6)
-    puma (4.3.12)
+    puma (5.6.4)
       nio4r (~> 2.0)
     racc (1.6.0)
     rack (2.2.3)
@@ -230,6 +214,8 @@ GEM
       addressable (~> 2.3)
       nokogiri (~> 1.5)
       rack (>= 1.3)
+    rack-mini-profiler (2.3.4)
+      rack (>= 1.2.0)
     rack-protection (2.2.0)
       rack
     rack-test (1.1.0)
@@ -295,17 +281,16 @@ GEM
     ruby2_keywords (0.0.5)
     ruby_dep (1.3.1)
     rubyzip (2.3.2)
-    sass (3.7.4)
-      sass-listen (~> 4.0.0)
-    sass-listen (4.0.0)
-      rb-fsevent (~> 0.9, >= 0.9.4)
-      rb-inotify (~> 0.9, >= 0.9.7)
-    sass-rails (5.1.0)
-      railties (>= 5.2.0)
-      sass (~> 3.1)
-      sprockets (>= 2.8, < 4.0)
-      sprockets-rails (>= 2.0, < 4.0)
-      tilt (>= 1.1, < 3)
+    sass-rails (6.0.0)
+      sassc-rails (~> 2.1, >= 2.1.1)
+    sassc (2.4.0)
+      ffi (~> 1.9)
+    sassc-rails (2.1.2)
+      railties (>= 4.0.0)
+      sassc (>= 2.0)
+      sprockets (> 3.0)
+      sprockets-rails
+      tilt
     selenium-webdriver (4.1.0)
       childprocess (>= 0.5, < 5.0)
       rexml (~> 3.2, >= 3.2.5)
@@ -346,9 +331,6 @@ GEM
       activesupport (>= 5.2)
       sprockets (>= 3.0.0)
     sqlite3 (1.4.2)
-    sshkit (1.21.2)
-      net-scp (>= 1.1.2)
-      net-ssh (>= 2.8.0)
     terminal-notifier-guard (1.7.0)
     terrapin (0.6.0)
       climate_control (>= 0.0.3, < 1.0)
@@ -386,11 +368,10 @@ PLATFORMS
   ruby
 
 DEPENDENCIES
-  bootsnap (>= 1.1.0)
+  bootsnap (>= 1.4.4)
   bootstrap-toggle-rails
   byebug
-  capistrano-rails
-  capybara
+  capybara (>= 3.26)
   cocoon
   connection_pool
   country_select
@@ -402,18 +383,19 @@ DEPENDENCIES
   figaro
   guard
   guard-minitest
-  jbuilder (~> 2.5)
+  jbuilder (~> 2.7)
   jquery-rails
   launchy
-  listen (>= 3.0.5, < 3.2)
+  listen (~> 3.3)
   minitest
   minitest-reporters
   mocha
   paperclip (~> 5.3.0)
   pg
   pry-rails
-  puma (~> 4.3)
+  puma (~> 5.0)
   rack-cas
+  rack-mini-profiler (~> 2.0)
   rack_session_access
   rails (~> 6.1.5)
   rails-controller-testing
@@ -422,7 +404,8 @@ DEPENDENCIES
   rubocop-checkstyle_formatter
   rubocop-rails (= 2.14.2)
   ruby_dep (~> 1.3.1)
-  sass-rails (~> 5.0)
+  sass-rails (>= 6)
+  selenium-webdriver (>= 4.0.0.rc1)
   shoulda-context
   shoulda-matchers (>= 3.0.1)
   simple_form (~> 5.1.0)
@@ -430,13 +413,13 @@ DEPENDENCIES
   simplecov-rcov
   spring
   spring-watcher-listen (~> 2.0.0)
-  sqlite3
+  sqlite3 (~> 1.4)
   terminal-notifier-guard
   turbolinks (~> 5)
   tzinfo-data
   uglifier (>= 1.3.0)
   umd_lib_style!
-  web-console (>= 3.3.0)
+  web-console (>= 4.1.0)
   webdrivers
   will_paginate (~> 3.1.0)
   will_paginate-bootstrap
