@@ -11,6 +11,9 @@ the process reaches that step.
 
 ## Development Setup
 
+**Note:** This application uses the Rails v4 "asset pipeline" for
+CSS and JavaScript. It does *not* use Webpack or Yarn.
+
 Requires:
 
 * Ruby 2.7.5
@@ -37,7 +40,7 @@ $ ./bin/rails db:seed
 3) (Optional) Populate database with sample data:
 
 ```bash
-> $ ./bin/rails db:seed:demo
+$ ./bin/rails db:seed:demo
 ```
 
 4) The application uses CAS authentication to only allow known users to log in.
