@@ -9,8 +9,8 @@ class WorkExperiencesTest < ApplicationSystemTestCase
     all_valid = fixture.attributes
     all_valid[:enumeration_ids] = fixture.enumerations.map(&:id)
 
-    page.set_rack_session("prospect_params": all_valid)
-    page.set_rack_session("prospect_step": 'work_experience')
+    page.set_rack_session(prospect_params: all_valid)
+    page.set_rack_session(prospect_step: 'work_experience')
     visit new_prospect_path
     assert page.has_content?('Work Experience')
 

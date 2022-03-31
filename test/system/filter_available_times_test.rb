@@ -13,11 +13,11 @@ class FilterAvailableTimesTest < ApplicationSystemTestCase
     click_button 'Login'
 
     # Our Students....
-    set_day_times(Prospect.find_by(first_name: 'Betty'), ['0-9', '0-10', '0-11'])
-    set_day_times(Prospect.find_by(first_name: 'Alvin'), ['0-8', '0-9'])
-    set_day_times(Prospect.find_by(first_name: 'Rolling'), ['1-8', '1-9', '1-10'])
+    set_day_times(Prospect.find_by(first_name: 'Betty'), %w[0-9 0-10 0-11])
+    set_day_times(Prospect.find_by(first_name: 'Alvin'), %w[0-8 0-9])
+    set_day_times(Prospect.find_by(first_name: 'Rolling'), %w[1-8 1-9 1-10])
 
-    students = Prospect.all.group_by(&:first_name).map { |k, v| [k, v.first] }.to_h
+    students = Prospect.all.group_by(&:first_name).to_h { |k, v| [k, v.first] } # rubocop:disable Style/HashTransformValues
 
     # We should have all of our students present
     page.assert_selector("#prospect_#{students['Betty'].id}")

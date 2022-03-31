@@ -13,6 +13,7 @@ module QueryingProspects # rubocop:disable Metrics/ModuleLength
     # do a case-insensitive sort if we are sort on last name
     col = "lower(#{col})" if col.include?('last_name')
     return Arel.sql("#{col} #{sort_direction}") unless col.include?('enumerations')
+
     klass, method = col.split('.')
     values = klass.singularize.capitalize.constantize.send(method.intern)
                   .order(Arel.sql("value #{sort_direction} ")).pluck('value')
@@ -36,8 +37,10 @@ module QueryingProspects # rubocop:disable Metrics/ModuleLength
     def join_table # rubocop:disable Metrics/AbcSize
       join_tables = []
       join_tables << sort_column.split('.').first.intern if Prospect.reflections.key?(sort_column.split('.').first)
+
       params[:search].each do |key, v|
         next if v.empty?
+
         join_tables << key if Prospect.reflections.key?(key)
       end
       join_tables.map(&:intern)
@@ -106,6 +109,7 @@ module QueryingProspects # rubocop:disable Metrics/ModuleLength
       ids_for_search = all_type_ids & params[:search][:enumerations]
 
       return if ids_for_search.empty?
+
       table_name = Prospect.reflect_on_association('enumerations').table_name
       table_class = table_name.classify.constantize
       arel = table_class.arel_table
@@ -119,6 +123,7 @@ module QueryingProspects # rubocop:disable Metrics/ModuleLength
 
       query = search_params.each_with_object([]) do |(k, val), memo|
         next if val.empty?
+
         # not sure we really need to reflect on associations but just in case we
         # make some weird data model change
         table_name = Prospect.reflect_on_association(k.intern).table_name

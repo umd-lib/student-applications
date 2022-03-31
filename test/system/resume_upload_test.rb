@@ -16,7 +16,7 @@ class ResumeUploadTest < ApplicationSystemTestCase
       all_valid['addresses_attributes'] = [addresses(:all_valid_springfield).attributes.reject { |a| a == 'id' }]
       all_valid['phone_numbers_attributes'] = [phone_numbers(:all_valid_dummy).attributes.reject { |a| a == 'id' }]
       all_valid['available_times_attributes'] = [available_times(:all_valid_sunday).attributes.reject { |a| a == 'id' }]
-      page.set_rack_session("prospect_params": all_valid)
+      page.set_rack_session(prospect_params: all_valid)
 
       visit new_prospect_path
 
@@ -26,7 +26,7 @@ class ResumeUploadTest < ApplicationSystemTestCase
       end
 
       assert page.has_content?('Resume')
-      page.attach_file('resume_file', File.absolute_path('test/fixtures/resume.pdf'), visible: false)
+      page.attach_file('resume_file', File.absolute_path('test/fixtures/files/resume.pdf'), visible: false)
 
       find("input[name='uploadResume']").click
 
@@ -41,12 +41,12 @@ class ResumeUploadTest < ApplicationSystemTestCase
       href = find('.download-resume')['href']
 
       page.evaluate_script("window.downloadCSVXHR = function(){ var url = '#{href}'\; return getFile(url)\; }")
-      page.evaluate_script("window.getFile = function(url) { var xhr = new XMLHttpRequest()\;  xhr.open('GET', url, false)\;  xhr.send(null)\; return xhr.status }") # rubocop:disable Metrics/LineLength
+      page.evaluate_script("window.getFile = function(url) { var xhr = new XMLHttpRequest()\;  xhr.open('GET', url, false)\;  xhr.send(null)\; return xhr.status }") # rubocop:disable Layout/LineLength
       assert_equal 200, page.evaluate_script('downloadCSVXHR()')
 
       # and now for fools trying to get in the backdoor
       err = assert_raises OpenURI::HTTPError do
-        open(href) # rubocop:disable Security/Open
+        URI.open(href) # rubocop:disable Security/Open
       end
       assert_match(/403 Forbidden/, err.message)
     end
@@ -63,7 +63,7 @@ class ResumeUploadTest < ApplicationSystemTestCase
     all_valid['addresses_attributes'] = [addresses(:all_valid_springfield).attributes.reject { |a| a == 'id' }]
     all_valid['phone_numbers_attributes'] = [phone_numbers(:all_valid_dummy).attributes.reject { |a| a == 'id' }]
     all_valid['available_times_attributes'] = [available_times(:all_valid_sunday).attributes.reject { |a| a == 'id' }]
-    page.set_rack_session("prospect_params": all_valid)
+    page.set_rack_session(prospect_params: all_valid)
 
     visit new_prospect_path
 
@@ -72,7 +72,7 @@ class ResumeUploadTest < ApplicationSystemTestCase
       break if page.has_content?('Resume')
     end
     assert page.has_content?('Resume')
-    page.attach_file('resume_file', File.absolute_path('test/fixtures/resume.notpdf'), visible: false)
+    page.attach_file('resume_file', File.absolute_path('test/fixtures/files/resume.notpdf'), visible: false)
 
     find("input[name='uploadResume']").click
 

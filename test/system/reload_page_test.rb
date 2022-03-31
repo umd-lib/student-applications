@@ -6,8 +6,8 @@ class ReloadPageTest < ApplicationSystemTestCase
   test 'Refresh during an application should cause any problems' do
     # we can fast-forward to the skills step
     all_valid = prospects(:all_valid).attributes
-    page.set_rack_session("prospect_params": all_valid)
-    page.set_rack_session("prospect_step": 'skills')
+    page.set_rack_session(prospect_params: all_valid)
+    page.set_rack_session(prospect_step: 'skills')
 
     visit new_prospect_path
     assert page.has_content?('Skills')

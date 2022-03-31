@@ -20,6 +20,7 @@ class ApplicationController < ActionController::Base
   # if not logged in
   def logged_in?
     return false if session[:cas].nil? || session[:cas][:user].nil?
+
     User.exists?(cas_directory_id: session[:cas][:user])
   end
 
@@ -54,6 +55,7 @@ class ApplicationController < ActionController::Base
   private
 
     attr_writer :current_user
+
     def update_current_user(user)
       @current_user = user
       @current_user.admin = false if session[:disable_admin]

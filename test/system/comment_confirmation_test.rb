@@ -17,8 +17,8 @@ class CommentConfirmationTest < ApplicationSystemTestCase
     all_valid['addresses_attributes'] = [addresses(:all_valid_springfield).attributes.reject { |a| a == 'id' }]
     all_valid['phone_numbers_attributes'] = [phone_numbers(:all_valid_dummy).attributes.reject { |a| a == 'id' }]
 
-    page.set_rack_session("prospect_params": all_valid)
-    page.set_rack_session("prospect_step": 'comments_confirmation')
+    page.set_rack_session(prospect_params: all_valid)
+    page.set_rack_session(prospect_step: 'comments_confirmation')
 
     visit new_prospect_path
     assert page.has_content?('Confirmation')

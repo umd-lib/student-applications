@@ -57,14 +57,14 @@ class ResumesControllerTest < ActionController::TestCase
   end
 
   test 'should NOT allow anyone not logged in to view an unsubmitted resume' do
-    resume = Resume.create(file: File.new('test/fixtures/resume.pdf', 'r'))
+    resume = Resume.create(file: File.new('test/fixtures/files/resume.pdf', 'r'))
     get :show, params: { id: resume.id }
     assert_response(403)
   end
 
   test 'should not allow anyone not logged in to view a submitted resume' do
     prospect = prospects(:all_valid)
-    prospect.build_resume(file: File.new('test/fixtures/resume.pdf', 'r'))
+    prospect.build_resume(file: File.new('test/fixtures/files/resume.pdf', 'r'))
     prospect.save
 
     get :show, params: { id: prospect.resume_id }
@@ -73,14 +73,14 @@ class ResumesControllerTest < ActionController::TestCase
 
   test 'should allow authed users to view any resume' do
     prospect = prospects(:all_valid)
-    prospect.build_resume(file: File.new('test/fixtures/resume.pdf', 'r'))
+    prospect.build_resume(file: File.new('test/fixtures/files/resume.pdf', 'r'))
     prospect.save
 
     session[:cas] = { user: 'admin' }
     get :show, params: { id: prospect.resume_id }
     assert_response :success
 
-    resume = Resume.create(file: File.new('test/fixtures/resume.pdf', 'r'))
+    resume = Resume.create(file: File.new('test/fixtures/files/resume.pdf', 'r'))
     get :show, params: { id: resume.id }
     assert_response :success
   end
