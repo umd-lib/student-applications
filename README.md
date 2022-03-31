@@ -40,7 +40,7 @@ $ ./bin/rails db:seed
 3) (Optional) Populate database with sample data:
 
 ```bash
-$ ./bin/rails db:seed:demo
+$ ./bin/rails db:reset_with_sample_data
 ```
 
 4) The application uses CAS authentication to only allow known users to log in.
