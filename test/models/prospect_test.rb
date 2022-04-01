@@ -146,4 +146,17 @@ class ProspectTest < ActiveSupport::TestCase
     assert_not_includes prospect.enumerations, values.first
     assert_includes prospect.enumerations, values.last
   end
+
+  test 'destroying a prospect should also destroy the associated resume' do
+    resume = Resume.new
+    resume.file = File.new('test/fixtures/files/resume.pdf', 'r')
+    resume.save!
+    @all_valid.resume = resume
+
+    @all_valid.save!
+
+    assert_difference ['Prospect.count', 'Resume.count'], -1 do
+      @all_valid.destroy!
+    end
+  end
 end

@@ -6,7 +6,7 @@
 class Prospect < ApplicationRecord # rubocop:disable Metrics/ClassLength
   include Walkable
 
-  belongs_to :resume, optional: true
+  belongs_to :resume, optional: true, dependent: :destroy
   after_initialize :after_initialize
 
   has_and_belongs_to_many :enumerations, join_table: 'prospects_enumerations'
