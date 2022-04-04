@@ -110,7 +110,7 @@ variables that are provided to Ruby. A sample "env_example" file has been
 provided to assist with this process. Simply copy the "env_example" file to
 ".env" and fill out the parameters as appropriate.
 
-The configured .env file should _not_ be checked into the Git repository, as it
+The configured .env file should *not* be checked into the Git repository, as it
 contains credential information.
 
 ### Delayed Jobs and Mailers
@@ -149,4 +149,23 @@ You can add users via a Rails task:
 $ ./bin/rails 'db:add_admin_cas_user[cas_directory_id,full_name]'  # Add an admin user
 $ ./bin/rails 'db:add_cas_user[cas_directory_id,full_name]'        # Add a non-admin user
 $ ./bin/rails db:bulk_add_users[csv_file]  # use csv file with full_name, directory_id rows
+```
+
+## Rails tasks
+
+## db:purge_suppressed_prospects
+
+Prospects that are deleted through the GUI are "soft-deleted", that is, they are
+not actually destroyed. Instead, the "suppressed" field is simply set to "true",
+and the prospects no longer appear in the GUI.
+
+The "db:purge_suppressed_prospects" actually deletes suppressed prospects, once
+they have not been updated for a week.
+
+It is anticipated this task will be run periodically in a "cron-link" process.
+
+To run the task manually:
+
+```bash
+$ ./bin/rails db:purge_suppressed_prospects
 ```
