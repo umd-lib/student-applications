@@ -169,3 +169,20 @@ To run the task manually:
 ```bash
 $ ./bin/rails db:purge_suppressed_prospects
 ```
+
+## verify_resume_attachments
+
+Examines the file attachments in the database, and in the attached file storage
+location to determine if any files are "missing" or "orphaned".
+
+A "missing" file is a file that is in a database record as an existing
+attachment, but which is not found in the attached file storage directory.
+
+An "orphaned" file is a file gounf in the attached file storage directory, but
+does not have an associated database record.
+
+To run the task:
+
+```bash
+$ ./bin/rails db:purge_suppressed_prospects
+```
