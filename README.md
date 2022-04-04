@@ -40,7 +40,7 @@ $ ./bin/rails db:seed
 3) (Optional) Populate database with sample data:
 
 ```bash
-$ ./bin/rails db:seed:demo
+$ ./bin/rails db:reset_with_sample_data
 ```
 
 4) The application uses CAS authentication to only allow known users to log in.
@@ -110,7 +110,7 @@ variables that are provided to Ruby. A sample "env_example" file has been
 provided to assist with this process. Simply copy the "env_example" file to
 ".env" and fill out the parameters as appropriate.
 
-The configured .env file should _not_ be checked into the Git repository, as it
+The configured .env file should *not* be checked into the Git repository, as it
 contains credential information.
 
 ### Delayed Jobs and Mailers
@@ -149,4 +149,67 @@ You can add users via a Rails task:
 $ ./bin/rails 'db:add_admin_cas_user[cas_directory_id,full_name]'  # Add an admin user
 $ ./bin/rails 'db:add_cas_user[cas_directory_id,full_name]'        # Add a non-admin user
 $ ./bin/rails db:bulk_add_users[csv_file]  # use csv file with full_name, directory_id rows
+```
+
+## Rails Tasks
+
+## db:purge_suppressed_prospects
+
+Prospects that are deleted through the GUI are "soft-deleted", that is, they are
+not actually destroyed. Instead, the "suppressed" field is simply set to "true",
+and the prospects no longer appear in the GUI.
+
+The "db:purge_suppressed_prospects" actually deletes suppressed prospects, once
+they have not been updated for a week.
+
+It is anticipated this task will be run periodically in a "cron-link" process.
+
+To run the task manually:
+
+```bash
+$ ./bin/rails db:purge_suppressed_prospects
+```
+
+## verify_resume_attachments
+
+Examines the file attachments in the database, and in the attached file storage
+location to determine if any files are "missing" or "orphaned".
+
+A "missing" file is a file that is in a database record as an existing
+attachment, but which is not found in the attached file storage directory.
+
+An "orphaned" file is a file gounf in the attached file storage directory, but
+does not have an associated database record.
+
+To run the task:
+
+```bash
+$ ./bin/rails db:purge_suppressed_prospects
+```
+
+## db:reset_with_sample_data/db:populate_sample_data
+
+Creates 700 sample propspects in the database. Typically used to create
+prospects in the development environment.
+
+The "db:reset_with_sample_data" resets the databases before creating 700
+new prospects using the "db:populate_sample_data" task.
+
+**Note:** The file attachment storage directory is not cleared in the reset,
+so there will likely be "orphaned" files (files without an associated database
+record) in that directory.
+
+To run the task:
+
+```bash
+$ ./bin/rails db:reset_with_sample_data
+```
+
+The "db:populate_sample_data" task simply adds 700 new prospects to the
+existing database (the database is *not* reset).
+
+To run the task:
+
+```bash
+$ ./bin/rails db:populate_sample_data
 ```

@@ -91,7 +91,7 @@ class ProspectsController < ApplicationController # rubocop:disable Metrics/Clas
   # accepts a hash of params
   def deactivate
     ids = params[:ids]
-    Prospect.where(id: ids).update_all(suppressed: true)
+    Prospect.where(id: ids).update_all(suppressed: true, updated_at: DateTime.now)
     respond_to do |format|
       format.html { redirect_to prospects_path, flash: { info: "Prospects ( #{ids.join(',')} ) deactivated." } }
       format.json { head :no_content }
