@@ -151,7 +151,7 @@ $ ./bin/rails 'db:add_cas_user[cas_directory_id,full_name]'        # Add a non-a
 $ ./bin/rails db:bulk_add_users[csv_file]  # use csv file with full_name, directory_id rows
 ```
 
-## Rails tasks
+## Rails Tasks
 
 ## db:purge_suppressed_prospects
 
@@ -185,4 +185,31 @@ To run the task:
 
 ```bash
 $ ./bin/rails db:purge_suppressed_prospects
+```
+
+## db:reset_with_sample_data/db:populate_sample_data
+
+Creates 700 sample propspects in the database. Typically used to create
+prospects in the development environment.
+
+The "db:reset_with_sample_data" resets the databases before creating 700
+new prospects using the "db:populate_sample_data" task.
+
+**Note:** The file attachment storage directory is not cleared in the reset,
+so there will likely be "orphaned" files (files without an associated database
+record) in that directory.
+
+To run the task:
+
+```bash
+$ ./bin/rails db:reset_with_sample_data
+```
+
+The "db:populate_sample_data" task simply adds 700 new prospects to the
+existing database (the database is *not* reset).
+
+To run the task:
+
+```bash
+$ ./bin/rails db:populate_sample_data
 ```
