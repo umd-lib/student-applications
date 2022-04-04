@@ -17,6 +17,6 @@ namespace :db do
     num_prospects_purged = starting_prospect_count - ending_prospect_count
 
     puts "Purged #{num_prospects_purged} prospects"
-    puts "Done."
+    puts "SUCCESS"
   end
 end
