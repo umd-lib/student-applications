@@ -59,8 +59,6 @@ gem 'cocoon'
 gem 'country_select'
 gem 'simple_form', '~> 5.1.0'
 
-gem 'paperclip', '~> 5.3.0'
-
 gem 'daemons'
 gem 'delayed_job_active_record'
 gem 'delayed_job_web'
