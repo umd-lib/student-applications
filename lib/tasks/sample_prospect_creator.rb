@@ -80,7 +80,7 @@ class SampleProspectCreator
         pdf.text "#{prospect.first_name} #{prospect.last_name}\n\n"
         pdf.text Faker::Lorem.sentences(number: rand(0..10)).join("\n")
         pdf.render_file tempfile.path
-        prospect.resume = Resume.new(file: File.new(tempfile.path))
+        prospect.resume = Resume.new(file: { io: File.open(tempfile.path), filename: File.basename(tempfile.path) } )
       ensure
         tempfile.close
         tempfile.unlink

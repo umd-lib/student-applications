@@ -149,7 +149,7 @@ class ProspectTest < ActiveSupport::TestCase
 
   test 'destroying a prospect should also destroy the associated resume' do
     resume = Resume.new
-    resume.file = File.new('test/fixtures/files/resume.pdf', 'r')
+    resume.file.attach(io: File.open('test/fixtures/files/resume.pdf'), filename: 'resume.pdf')
     resume.save!
     @all_valid.resume = resume
 

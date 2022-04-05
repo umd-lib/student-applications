@@ -6,7 +6,7 @@
   <% end %>
   <%= resume_form.file_field :file %>
   <%= resume_form.submit "Upload", name: "uploadResume", class: "btn btn-lg btn-warning upload" %>
-  <% if @resume.file? %>
-    <%= link_to "View #{@resume.file_file_name}", resume_path(@resume), class: "show-link", target: "_self" %>
+  <% if @resume.file.attached? %>
+    <%= link_to "View #{@resume.file.attachment.filename}", resume_path(@resume), class: "show-link", target: "_self" %>
   <% end %>
 <% end %>

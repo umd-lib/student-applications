@@ -1,12 +1,12 @@
 namespace :db do
   desc 'Verify that the file attachments for all known Resumes can be found'
   task verify_resume_attachments: :environment do
-    RESUME_STORAGE_DIR = 'resumes'
+    RESUME_STORAGE_DIR = ActiveStorage::Blob.service.root
 
     resumes_in_storage = Dir.glob("#{RESUME_STORAGE_DIR}/**/*").select { |e| File.file? e }.map(&File.method(:realpath))
     puts "Found #{resumes_in_storage.count} resume files in '#{RESUME_STORAGE_DIR}' storage directory"
 
-    resume_file_attachments = Resume.all.map(&:file).map(&:path)
+    resume_file_attachments = Resume.all.map(&:file).map { |file| ActiveStorage::Blob.service.path_for(file.key) }
     puts "Found #{resume_file_attachments.count} resume file attachments in database."
 
     missing_files = resume_file_attachments - resumes_in_storage
