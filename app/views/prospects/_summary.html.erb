@@ -49,13 +49,13 @@
   <% end %>
   <tr>
     <th>Phone Numbers:</th>
-    <td> 
+    <td>
       <ul>
         <% @prospect.phone_numbers.each do |p| %>
           <li><%= "#{p.number} ( #{p.phone_type} )"  %></li>
         <% end %>
-      </ul> 
-    </td> 
+      </ul>
+    </td>
   </tr>
   <tr>
     <th>Preferred Libraries</th>
@@ -133,8 +133,8 @@
     <%= link_to "Change Resume", new_prospect_path(step: "upload_resume"), class: 'btn btn-info pull-right' %>
   <% end %>
 </h3>
-<% if @resume && @resume.file? %>
-  <%= link_to( "View #{ @resume.file_file_name}",  resume_path(@resume), target: "_self", class: 'download-resume' ) %>
+<% if @resume && @resume.file.attached? %>
+  <%= link_to( "View #{ @resume.file.attachment.filename}",  resume_path(@resume), target: "_self", class: 'download-resume' ) %>
 <% else %>
   <p><i>(None)</i></p>
 <% end %>
@@ -146,6 +146,6 @@
     <abbr title='required'>*</abbr> I certify that all information on this application is accurate and recognize it is subject to verification.
   <% end %>
   <%= form.check_box( :user_confirmation, { class: 'user_confirmation', required: true } )  %> Yes.
-<% end %>  
+<% end %>
 <br/>
 <%= form.input( :user_signature, { class: 'user_signature', required: true , label: "Please type your name as it will serve as a digital signature:", disabled:  !@current_user.nil? } )  %>
