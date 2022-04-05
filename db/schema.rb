@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2022_03_30_144713) do
+ActiveRecord::Schema.define(version: 2022_04_05_183859) do
 
   create_table "active_storage_attachments", force: :cascade do |t|
     t.string "name", null: false
@@ -128,10 +128,6 @@ ActiveRecord::Schema.define(version: 2022_03_30_144713) do
   end
 
   create_table "resumes", force: :cascade do |t|
-    t.string "file_file_name"
-    t.string "file_content_type"
-    t.integer "file_file_size"
-    t.datetime "file_updated_at"
     t.string "upload_session_id"
   end
 
