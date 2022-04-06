@@ -59,18 +59,22 @@ gem 'cocoon'
 gem 'country_select'
 gem 'simple_form', '~> 5.1.0'
 
-gem 'paperclip', '~> 5.3.0'
-
 gem 'daemons'
 gem 'delayed_job_active_record'
 gem 'delayed_job_web'
+
+gem 'active_storage_validations', '0.9.7'
+
+# "prawn" gem is used by the auto-loaded "lib/sample_prospect_creator.rb",
+# and so needs to be part of the production gemset, in order to Rake tasks
+# to run in production.
+gem 'prawn', '>= 2.4.0', require: false
 
 group :development, :test do
   # Call 'byebug' anywhere in the code to stop execution and get a debugger console
   gem 'byebug', platforms: [:mri, :mingw, :x64_mingw]
   gem 'pry-rails'
   gem 'faker'
-  gem 'prawn', '>= 2.4.0', require: false
 end
 
 group :development do

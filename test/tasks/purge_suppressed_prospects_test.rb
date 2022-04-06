@@ -6,7 +6,7 @@ require './lib/tasks/sample_prospect_creator'
 
 class PurgeSuppressedProspectsTest < ActiveSupport::TestCase
   # Relative directory when prospect resumes are stored
-  RESUME_STORAGE_DIR = 'resumes'
+  RESUME_STORAGE_DIR = ActiveStorage::Blob.service.root
 
   def with_captured_stdout
     # capture previous value of $stdout
