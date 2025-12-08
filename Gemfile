@@ -110,7 +110,7 @@ group :test do
   gem 'launchy'
   gem 'minitest'
   gem 'minitest-reporters'
-  gem 'mocha'
+  gem 'mocha', '~> 2.0'
   gem 'rack_session_access'
   gem 'rails-controller-testing'
   gem 'shoulda-context'
