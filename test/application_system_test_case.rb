@@ -5,6 +5,8 @@ require 'test_helper'
 # Abstract base class for system tests
 class ApplicationSystemTestCase < ActionDispatch::SystemTestCase
   Capybara.register_driver :chrome_headless do |app|
+    Selenium::WebDriver::Chrome::Service.driver_path = 'chromedriver/chromedriver'
+
     options = ::Selenium::WebDriver::Chrome::Options.new
 
     options.add_argument('--headless')
