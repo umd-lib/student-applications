@@ -6,7 +6,7 @@
 #
 # where <VERSION> is the Docker image version to create.
 
-FROM ruby:2.7.5-slim
+FROM ruby:3.3.8-slim
 
 # Install apt based dependencies required to run Rails as
 # well as RubyGems. As the Ruby image itself is based on a

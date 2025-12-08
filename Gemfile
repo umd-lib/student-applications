@@ -2,10 +2,10 @@ source 'https://rubygems.org'
 git_source(:github) { |repo| "https://github.com/#{repo}.git" }
 
 # Use .ruby-version for the Ruby version to use with the application
-# ruby '2.7.5'
+# ruby '3.3.8'
 
 # Bundle edge Rails instead: gem 'rails', github: 'rails/rails', branch: 'main'
-gem 'rails', '~> 6.1.7', '>= 6.1.7.10'
+gem 'rails', '~> 7.0.10'
 # Use sqlite3 as the database for Active Record
 gem 'sqlite3', '~> 1.4'
 # Use Puma as the app server
@@ -91,7 +91,6 @@ group :development do
   gem 'guard', require: false
   gem 'guard-minitest', require: false
   gem 'rb-fsevent', require: false
-  gem 'ruby_dep', '~> 1.3.1'
   gem 'terminal-notifier-guard', require: false
 
   # Code analysis tools

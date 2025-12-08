@@ -21,8 +21,8 @@ CSS and JavaScript. It does *not* use Webpack or Yarn.
 
 Requires:
 
-* Ruby 2.7.5
-* Bundler v1.17.3
+* Ruby 3.3.8
+* Bundler v2.5.22
 * [Google Chrome](https://www.google.com/chrome/index.html) (for testing)
 
 ### Prerequisites
