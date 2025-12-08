@@ -5,9 +5,7 @@
 # the application. It should _not_ be used for creating Docker images for use
 # in production.
 
-FROM ruby:2.7.2-slim
-
-RUN echo "deb http://archive.debian.org/debian buster main" > /etc/apt/sources.list
+FROM ruby:2.7.5-slim
 
 RUN apt-get update && \
     apt-get install -y build-essential && \
