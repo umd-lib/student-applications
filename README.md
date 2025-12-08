@@ -20,6 +20,16 @@ Requires:
 * Bundler v1.17.3
 * [Google Chrome](https://www.google.com/chrome/index.html) (for testing)
 
+### Prerequisites
+
+* Update the /etc/hosts file to add:
+
+```text
+127.0.0.1       student-applications-local
+```
+
+### Application Setup
+
 To run the application:
 
 1) Checkout the code and install dependencies:
@@ -27,6 +37,11 @@ To run the application:
 ```bash
 $ git clone https://github.com/umd-lib/student-applications.git
 $ cd student-applications
+
+# The following two commands are required for Apple Silicon
+$ bundle config --local build.nio4r --with-cflags="-Wno-incompatible-pointer-types"
+$ bundle config --local build.sqlite3 --with-cflags="-Wno-incompatible-pointer-types -Wno-error=implicit-function-declaration -Wno-int-conversion"
+
 $ bundle install --without production
 ```
 
@@ -52,7 +67,7 @@ $ ./bin/rails 'db:add_admin_cas_user[<CAS DIRECTORY ID>,<FULL NAME>]'
 ```
 
 and replacing the "\<CAS DIRECTORY ID>" and "\<FULL NAME>" with valid user
-nformation. For example, to add "John Smith" with a CAS Directory ID of
+information. For example, to add "John Smith" with a CAS Directory ID of
 "jsmith":
 
 ```bash
@@ -79,14 +94,89 @@ Testing uses [Minitest](https://github.com/seattlerb/minitest),
 Google Chrome and the "webdriver" gem are used to provide a headless browser for
 testing.
 
-The [webdriver](https://github.com/titusfortner/webdrivers)
-gem should automatically download and install the latest chromedrivee executable
-into ~/.chromedriver.
-
 CSS animations and transitions cause visibility/timing issues when testing in
 a headless browser. When running the tests, they have turned off by the
 "lib/no_animations.rb" file, which is added as Rack middleware in the
 "config/environment/test.rb" file.
+
+**Note:** As of December 3, 2025, the
+[webdriver](https://github.com/titusfortner/webdrivers)
+gem no longer correctly downloads and installs the latest chromedriver
+executable.
+
+To set up the chromedriver:
+
+1) Determine the version of Chrome installed on the local workstation:
+
+```zsh
+$ /Applications/Google\ Chrome.app/Contents/MacOS/Google\ Chrome --version
+```
+
+This will print out a version such as:
+
+```text
+Google Chrome 143.0.7499.41
+```
+
+2) In a web browser, go to
+
+<https://googlechromelabs.github.io/chrome-for-testing/known-good-versions-with-downloads.json>
+
+This JSON page of all the available chromedriver versions (it looks best in
+Mozilla Firefox).
+
+Find the chromedriver version closest to the version on the local workstation
+(without going over), and note the "download" URL for the "mac-arm64" platform
+in the "chromedriver" section, i.e.:
+
+```json
+  "version": "143.0.7499.40",
+  "revision": "1536371",
+   "downloads": {
+    ...
+    "chromedriver": [
+          ...
+          {
+            "platform": "mac-arm64",
+            "url": "https://storage.googleapis.com/chrome-for-testing-public/143.0.7499.40/mac-arm64/chromedriver-mac-arm64.zip"
+          },
+          ...
+```
+
+3) Download the "chromedriver" using "wget" into th project directory. Using
+the example URL from the previous step:
+
+```zsh
+$ wget https://storage.googleapis.com/chrome-for-testing-public/143.0.7499.40/mac-arm64/chromedriver-mac-arm64.zip
+```
+
+4) Extract the Zip file:
+
+```zsh
+$ unzip chromedriver-mac-arm64.zip
+```
+
+5) Rename the "chromedriver-mac-arm64" subdirectory to "chromedriver" (this is
+done to provide consistency between the macOS environment and the Linux
+environment used in "Dockerfile.ci"):
+
+```zsh
+$ mv chromedriver-mac-arm64 chromedriver
+```
+
+This will create a "chromedriver-mac-arm64" directory.
+
+6) To run the unit tests:
+
+```zsh
+$ rake test
+```
+
+7) To run the system tests:
+
+```zsh
+$ rake test:system
+```
 
 ## Docker.ci and Jenkinsfile
 
@@ -178,7 +268,7 @@ location to determine if any files are "missing" or "orphaned".
 A "missing" file is a file that is in a database record as an existing
 attachment, but which is not found in the attached file storage directory.
 
-An "orphaned" file is a file gounf in the attached file storage directory, but
+An "orphaned" file is a file found in the attached file storage directory, but
 does not have an associated database record.
 
 To run the task:
@@ -189,7 +279,7 @@ $ ./bin/rails db:purge_suppressed_prospects
 
 ## db:reset_with_sample_data/db:populate_sample_data
 
-Creates 700 sample propspects in the database. Typically used to create
+Creates 700 sample prospects in the database. Typically used to create
 prospects in the development environment.
 
 The "db:reset_with_sample_data" resets the databases before creating 700

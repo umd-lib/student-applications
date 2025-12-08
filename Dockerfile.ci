@@ -7,6 +7,8 @@
 
 FROM ruby:2.7.2-slim
 
+RUN echo "deb http://archive.debian.org/debian buster main" > /etc/apt/sources.list
+
 RUN apt-get update && \
     apt-get install -y build-essential && \
     apt-get install -y git && \
@@ -15,6 +17,7 @@ RUN apt-get update && \
     apt-get install -y nodejs && \
     apt-get install -y libsqlite3-dev && \
     apt-get install -y wget && \
+    apt-get install -y zip && \
     apt-get clean
 
 # Install Google Chrome for system tests

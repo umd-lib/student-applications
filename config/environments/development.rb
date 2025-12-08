@@ -84,4 +84,6 @@ Rails.application.configure do
   }
   # Only keep non-nil values
   config.action_mailer.smtp_settings.select! { |_k, v| v }
+
+  config.hosts << "student-applications-local"
 end
