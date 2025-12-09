@@ -92,7 +92,7 @@ class SampleProspectCreator
       first_initial = first_name[0,1].downcase
       last_name = Faker::Name.last_name
       directory_id = "#{first_initial}#{last_name.downcase}"
-      email = Faker::Internet.safe_email(name: "#{first_initial}#{last_name.downcase}")
+      email = Faker::Internet.email(name: "#{first_initial}#{last_name.downcase}")
       semester = Enumeration.active_semesters.sample
       in_federal_study = Faker::Boolean.boolean
 
