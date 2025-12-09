@@ -10,14 +10,13 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[6.1].define(version: 2022_04_05_183859) do
-
+ActiveRecord::Schema[7.0].define(version: 2025_12_09_130706) do
   create_table "active_storage_attachments", force: :cascade do |t|
     t.string "name", null: false
     t.string "record_type", null: false
     t.integer "record_id", null: false
     t.integer "blob_id", null: false
-    t.datetime "created_at", null: false
+    t.datetime "created_at", precision: nil, null: false
     t.index ["blob_id"], name: "index_active_storage_attachments_on_blob_id"
     t.index ["record_type", "record_id", "name", "blob_id"], name: "index_active_storage_attachments_uniqueness", unique: true
   end
@@ -28,8 +27,8 @@ ActiveRecord::Schema[6.1].define(version: 2022_04_05_183859) do
     t.string "content_type"
     t.text "metadata"
     t.integer "byte_size", null: false
-    t.string "checksum", null: false
-    t.datetime "created_at", null: false
+    t.string "checksum"
+    t.datetime "created_at", precision: nil, null: false
     t.string "service_name", null: false
     t.index ["key"], name: "index_active_storage_blobs_on_key", unique: true
   end
@@ -64,13 +63,13 @@ ActiveRecord::Schema[6.1].define(version: 2022_04_05_183859) do
     t.integer "attempts", default: 0, null: false
     t.text "handler", null: false
     t.text "last_error"
-    t.datetime "run_at"
-    t.datetime "locked_at"
-    t.datetime "failed_at"
+    t.datetime "run_at", precision: nil
+    t.datetime "locked_at", precision: nil
+    t.datetime "failed_at", precision: nil
     t.string "locked_by"
     t.string "queue"
-    t.datetime "created_at"
-    t.datetime "updated_at"
+    t.datetime "created_at", precision: nil
+    t.datetime "updated_at", precision: nil
     t.index ["priority", "run_at"], name: "delayed_jobs_priority"
   end
 
@@ -102,8 +101,8 @@ ActiveRecord::Schema[6.1].define(version: 2022_04_05_183859) do
     t.boolean "suppress", default: false, null: false
     t.text "additional_comments"
     t.text "hr_comments"
-    t.datetime "created_at", null: false
-    t.datetime "updated_at", null: false
+    t.datetime "created_at", precision: nil, null: false
+    t.datetime "updated_at", precision: nil, null: false
     t.integer "available_hours_per_week", default: 0, null: false
     t.integer "available_times_count", default: 0, null: false
     t.integer "resume_id"
@@ -135,8 +134,8 @@ ActiveRecord::Schema[6.1].define(version: 2022_04_05_183859) do
     t.string "session_id", null: false
     t.string "cas_ticket"
     t.text "data"
-    t.datetime "created_at"
-    t.datetime "updated_at"
+    t.datetime "created_at", precision: nil
+    t.datetime "updated_at", precision: nil
     t.index ["cas_ticket"], name: "index_sessions_on_cas_ticket"
     t.index ["session_id"], name: "index_sessions_on_session_id"
     t.index ["updated_at"], name: "index_sessions_on_updated_at"
@@ -150,8 +149,8 @@ ActiveRecord::Schema[6.1].define(version: 2022_04_05_183859) do
   create_table "users", force: :cascade do |t|
     t.string "cas_directory_id"
     t.string "name"
-    t.datetime "created_at", null: false
-    t.datetime "updated_at", null: false
+    t.datetime "created_at", precision: nil, null: false
+    t.datetime "updated_at", precision: nil, null: false
     t.boolean "admin", default: false
   end
 
