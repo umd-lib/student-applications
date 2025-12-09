@@ -1,7 +1,10 @@
 require_relative "boot"
 
 require "rails/all"
+
+# UMD Customization
 require 'rack-cas/session_store/active_record'
+# End UMD Customization
 
 # Require the gems listed in Gemfile, including any gems
 # you've limited to :test, :development, or :production.
@@ -20,9 +23,11 @@ module OnlineStudentApplications
     # config.time_zone = "Central Time (US & Canada)"
     # config.eager_load_paths << Rails.root.join("extras")
 
+    # UMD Customization
     config.rack_cas.server_url = 'https://login.umd.edu/cas'
     config.rack_cas.session_store = RackCAS::ActiveRecordStore
 
     config.active_job.queue_adapter = :delayed_job
+    # End UMD Customization
   end
 end
