@@ -83,5 +83,10 @@ Rails.application.configure do
   config.action_mailer.smtp_settings.select! { |_k, v| v }
 
   config.hosts << "student-applications-local"
+
+  # Temporary workaround for SSL certificate error when connecting to CAS
+  # from the local development environment. This configuration change
+  # should be removed as soon as possible.
+  config.rack_cas.verify_ssl_cert = false
   # End UMD Customization
 end
