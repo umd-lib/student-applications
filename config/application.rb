@@ -18,7 +18,11 @@ module OnlineStudentApplications
     # Please, add to the `ignore` list any other `lib` subdirectories that do
     # not contain `.rb` files, or that should not be reloaded or eager loaded.
     # Common ones are `templates`, `generators`, or `middleware`, for example.
-    config.autoload_lib(ignore: %w(assets tasks))
+    # UMD Customization
+    # Ignore the "lib/no_animations.rb" file, because it confuses the Zeitwerk
+    # loader, which expects it to define a "NoAnimations" constant.
+    config.autoload_lib(ignore: %w(assets tasks no_animations.rb))
+    # End UMD Customization
 
     # Configuration for the application, engines, and railties goes here.
     #
