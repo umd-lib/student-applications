@@ -121,7 +121,7 @@ GEM
       countries (~> 5.0)
     crass (1.0.6)
     daemons (1.4.1)
-    date (3.5.0)
+    date (3.5.1)
     delayed_job (4.1.13)
       activesupport (>= 3.0, < 9.0)
     delayed_job_active_record (4.1.11)
@@ -402,7 +402,7 @@ GEM
       base64
       websocket-extensions (>= 0.1.0)
     websocket-extensions (0.1.5)
-    will_paginate (3.1.8)
+    will_paginate (4.0.1)
     will_paginate-bootstrap (1.0.2)
       will_paginate (>= 3.0.3)
     xpath (3.2.0)
@@ -466,7 +466,7 @@ DEPENDENCIES
   umd_lib_style!
   web-console (>= 4.1.0)
   webdrivers
-  will_paginate (~> 3.1.0)
+  will_paginate (~> 4.0.0)
   will_paginate-bootstrap
 
 BUNDLED WITH

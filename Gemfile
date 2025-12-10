@@ -43,7 +43,7 @@ gem 'jquery-rails'
 gem 'dotenv-rails', '~> 2.7.6'
 
 # Pagination
-gem 'will_paginate', '~> 3.1.0'
+gem 'will_paginate', '~> 4.0.0'
 gem 'will_paginate-bootstrap'
 
 # UMD Bootstrap style
