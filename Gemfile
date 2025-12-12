@@ -1,38 +1,32 @@
-source 'https://rubygems.org'
-git_source(:github) { |repo| "https://github.com/#{repo}.git" }
+source "https://rubygems.org"
 
-# Use .ruby-version for the Ruby version to use with the application
-# ruby '3.3.8'
-
-# Bundle edge Rails instead: gem 'rails', github: 'rails/rails', branch: 'main'
+# Bundle edge Rails instead: gem "rails", github: "rails/rails", branch: "main"
 gem "rails", "~> 7.2.3"
+# The original asset pipeline for Rails [https://github.com/rails/sprockets-rails]
+gem "sprockets-rails"
 # Use sqlite3 as the database for Active Record
-gem 'sqlite3', '~> 1.4'
-# Use Puma as the app server
+gem "sqlite3", ">= 1.4"
+# Use the Puma web server [https://github.com/puma/puma]
 gem "puma", ">= 5.0"
+
+# UMD Customization
 # Use SCSS for stylesheets
 gem 'sass-rails', '>= 6'
-# Transpile app-like JavaScript. Read more: https://github.com/rails/webpacker
-# gem 'webpacker', '~> 5.0'
+# End UMD Customization
 
-# Use Uglifier as compressor for JavaScript assets, instead of webpacker
-gem 'uglifier', '>= 1.3.0'
+# Use Kredis to get higher-level data types in Redis [https://github.com/rails/kredis]
+# gem "kredis"
 
-# Turbolinks makes navigating your web application faster. Read more: https://github.com/turbolinks/turbolinks
-gem 'turbolinks', '~> 5'
-# Build JSON APIs with ease. Read more: https://github.com/rails/jbuilder
-gem 'jbuilder', '~> 2.7'
-# Use Redis adapter to run Action Cable in production
-# gem 'redis', '~> 4.0'
-# Use Active Model has_secure_password
-# gem 'bcrypt', '~> 3.1.7'
+# Use Active Model has_secure_password [https://guides.rubyonrails.org/active_model_basics.html#securepassword]
+# gem "bcrypt", "~> 3.1.7"
 
-# Use Active Storage variant
-# gem 'image_processing', '~> 1.2'
+# Windows does not include zoneinfo files, so bundle the tzinfo-data gem
+gem "tzinfo-data", platforms: %i[ windows jruby ]
 
-# Reduces boot times through caching; required in config/boot.rb
-gem 'bootsnap', '>= 1.4.4', require: false
+# Use Active Storage variants [https://guides.rubyonrails.org/active_storage_overview.html#transforming-images]
+# gem "image_processing", "~> 1.2"
 
+# UMD Customization
 # Use Postgres in production
 gem 'pg', group: :production
 
@@ -51,8 +45,6 @@ gem 'umd_lib_style', github: 'umd-lib/umd_lib_style', ref: '2.0.0'
 
 # CAS authentication
 gem 'rack-cas'
-
-gem 'figaro'
 
 gem 'bootstrap-toggle-rails'
 gem 'cocoon'
@@ -73,44 +65,35 @@ gem 'active_storage_validations', '0.9.7'
 # and so needs to be part of the production gemset, in order to Rake tasks
 # to run in production.
 gem 'prawn', '>= 2.4.0', require: false
+# End UMD Customization
 
 group :development, :test do
-  # Call 'byebug' anywhere in the code to stop execution and get a debugger console
-  gem 'byebug', platforms: [:mri, :mingw, :x64_mingw]
-  gem 'pry-rails'
+  # See https://guides.rubyonrails.org/debugging_rails_applications.html#debugging-with-the-debug-gem
+  gem "debug", platforms: %i[ mri windows ], require: "debug/prelude"
+
+  # Omakase Ruby styling [https://github.com/rails/rubocop-rails-omakase/]
+  gem "rubocop-rails-omakase", require: false
+  
+  # UMD Customization
   gem 'faker'
+  # End UMD Customization
 end
 
 group :development do
-  # Access an interactive console on exception pages or by calling 'console' anywhere in the code.
-  gem 'web-console', '>= 4.1.0'
-  # Display performance information such as SQL time and flame graphs for each request in your browser.
-  # Can be configured to work on production as well see: https://github.com/MiniProfiler/rack-mini-profiler/blob/master/README.md
-  gem 'rack-mini-profiler', '~> 2.0'
-  gem 'listen', '~> 3.3'
-  # Spring speeds up development by keeping your application running in the background. Read more: https://github.com/rails/spring
-  gem 'spring'
-  gem 'spring-watcher-listen', '~> 2.0.0'
+  # Use console on exceptions pages [https://github.com/rails/web-console]
+  gem "web-console"
 
-  gem 'guard', require: false
-  gem 'guard-minitest', require: false
-  gem 'rb-fsevent', require: false
-  gem 'terminal-notifier-guard', require: false
-
-  # Code analysis tools
-  gem 'rubocop', '= 1.26.1', require: false
-  gem 'rubocop-rails', '= 2.14.2', require: false
+  # UMD Customization
   gem 'rubocop-checkstyle_formatter', require: false
+  # End UMD Customization
 end
 
 group :test do
-  # Adds support for Capybara system testing and selenium driver
-  gem 'capybara', '>= 3.26'
-  gem 'selenium-webdriver', '>= 4.0.0.rc1'
-  # Easy installation and use of web drivers to run system tests with browsers
-  gem 'webdrivers'
-  gem 'connection_pool'
-  gem 'launchy'
+  # Use system testing [https://guides.rubyonrails.org/testing.html#system-testing]
+  gem "capybara"
+  gem "selenium-webdriver"
+
+  # UMD Customization
   gem 'minitest'
   gem 'minitest-reporters'
   gem 'mocha', '~> 2.0'
@@ -121,7 +104,5 @@ group :test do
 
   gem 'simplecov', require: false
   gem 'simplecov-rcov', require: false
+  # End UMD Customization
 end
-
-# Windows does not include zoneinfo files, so bundle the tzinfo-data gem
-gem "tzinfo-data", platforms: %i[windows jruby]

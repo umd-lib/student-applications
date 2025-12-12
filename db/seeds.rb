@@ -1,11 +1,14 @@
-# This file should contain all the record creation needed to seed the database with its default values.
+# This file should ensure the existence of records required to run the application in every environment (production,
+# development, test). The code here should be idempotent so that it can be executed at any point in every environment.
 # The data can then be loaded with the bin/rails db:seed command (or created alongside the database with db:setup).
 #
-# Examples:
+# Example:
 #
-#   movies = Movie.create([{ name: 'Star Wars' }, { name: 'Lord of the Rings' }])
-#   Character.create(name: 'Luke', movie: movies.first)
+#   ["Action", "Comedy", "Drama", "Horror"].each do |genre_name|
+#     MovieGenre.find_or_create_by!(name: genre_name)
+#   end
 
+# UMD Customization
 Skill.find_or_create_by(name: 'Customer Service', promoted: true)
 Skill.find_or_create_by(name: 'Computer Experience', promoted: true)
 Skill.find_or_create_by(name: 'Use of Office Machinery (i.e. fax, copier )', promoted: true)
@@ -33,3 +36,4 @@ end
  'MS Performing Arts Library'].each do |lib|
   Enumeration.find_or_create_by(value: lib, list: Enumeration.lists['library'])
 end
+# End UMD Customization
