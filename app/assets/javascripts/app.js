@@ -5,12 +5,12 @@ window.App || (window.App = { plugins: [] });
 App.sendData = function(url, action, data ) {
   var processData = true;
   var contentType = 'multipart/form-data';
-  
+
   if ( data instanceof FormData ) {
-    processData = false; 
+    processData = false;
     contentType = false;
-  } 
-  
+  }
+
   return  $.ajax({
     url: url,
     type: action,
@@ -22,7 +22,7 @@ App.sendData = function(url, action, data ) {
 }
 
 
-App.postData =  function(url, data) { 
+App.postData =  function(url, data) {
   return App.sendData( url, 'post', data );
 }
 
@@ -30,7 +30,7 @@ App.putData = function(url,data) {
   return App.sendData( url, 'put', data );
 }
 
-
-$(document).on("turbolinks:load", function() {
+$(window).on("load", function() {
   App.plugins.forEach( function(func) { func(); } );
 })
+
