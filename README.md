@@ -9,6 +9,11 @@ which are marshalled at each step of the process.
 Each step has a view defined in the app/views/prospect which is rendered when
 the process reaches that step.
 
+## Test Plan
+
+A basic test plan for verifying application functionality is provided in
+[docs/TestPlan.md](docs/TestPlan.md).
+
 ## Development Setup
 
 **Note:** This application uses the Rails v4 "asset pipeline" for
