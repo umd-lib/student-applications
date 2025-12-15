@@ -32,7 +32,7 @@ class SubmitProspectApplicationTest < ApplicationSystemTestCase
     click_button 'Continue'
     assert page.has_content?('Contact Information')
     assert page.has_content?("can't be blank")
-    assert_equal Prospect.steps.first, page.get_rack_session_key('prospect_params')['current_step']
+    assert_equal Prospect.steps[1], page.get_rack_session_key('prospect_params')['current_step']
   end
 
   test 'that it can create contact information and proceed to next step' do

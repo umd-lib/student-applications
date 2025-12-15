@@ -19,7 +19,16 @@ class ProspectsController < ApplicationController # rubocop:disable Metrics/Clas
     else
       @prospect.current_step = session[:prospect_step] || Prospect.steps.first
       begin
-        choose_action if @prospect.valid? || params[:back_button]
+        if @prospect.valid? || params[:back_button]
+          choose_action
+          if @prospect&.new_record?
+            # Got here via POST, and still working on application, so do a GET
+            # request so that a browser will not re-POST (and switch pages)
+            # on a browser refresh (Post/Redirect/Get (PRG) pattern).
+            # This emulates old Rails 6.x TurboLinks behavior
+            redirect_to new_prospect_path and return
+          end
+        end
       rescue ActiveRecord::ActiveRecordError
         flash[:error] = "We're sorry, but something has gone wrong. Please try again."
         @prospect = nil
