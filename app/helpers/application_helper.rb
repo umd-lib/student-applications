@@ -94,9 +94,9 @@ module ApplicationHelper
     link_to request.query_parameters.merge(sort: column, direction: direction), class: css_class do
       icon = if column == sort_column && sort_direction
                content_tag :i, "", class: "glyphicon glyphicon-chevron-#{sort_direction == 'asc' ? 'up' : 'down'}"
-             else
+      else
                content_tag :i, "", class: "glyphicon"
-             end
+      end
       safe_join([ icon, " ", title ])
     end
   end

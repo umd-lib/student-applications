@@ -80,7 +80,7 @@ class SampleProspectCreator
         pdf.text "#{prospect.first_name} #{prospect.last_name}\n\n"
         pdf.text Faker::Lorem.sentences(number: rand(0..10)).join("\n")
         pdf.render_file tempfile.path
-        prospect.resume = Resume.new(file: { io: File.open(tempfile.path), filename: File.basename(tempfile.path) } )
+        prospect.resume = Resume.new(file: { io: File.open(tempfile.path), filename: File.basename(tempfile.path) })
       ensure
         tempfile.close
         tempfile.unlink
@@ -89,7 +89,7 @@ class SampleProspectCreator
 
     def create_initial_prospect
       first_name = Faker::Name.first_name
-      first_initial = first_name[0,1].downcase
+      first_initial = first_name[0, 1].downcase
       last_name = Faker::Name.last_name
       directory_id = "#{first_initial}#{last_name.downcase}"
       email = Faker::Internet.email(name: "#{first_initial}#{last_name.downcase}")
@@ -127,7 +127,7 @@ class SampleProspectCreator
       })
     end
 
-    def create_preferred_libraries()
+    def create_preferred_libraries
       return [] if rand < 0.25
       libraries = Enumeration.active_libraries
       libraries.sample(rand(libraries.size))
@@ -138,7 +138,7 @@ class SampleProspectCreator
       Enumeration.active_how_did_you_hear_about_us.sample
     end
 
-    def create_work_experience()
+    def create_work_experience
       date_formats = [ "%m/%d/%Y", "%F", "%b %d, %Y" ]
 
       date_format = date_formats.sample

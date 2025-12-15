@@ -24,10 +24,10 @@ use_sqlite = Rails.env.development? || Rails.env.test?
 
 get_blob_id = if use_sqlite
                 'LAST_INSERT_ROWID()'
-              else
+else
                 # Postgres
                 'LASTVAL()'
-              end
+end
 
 # rubocop:disable Rails/SquishedSQLHeredocs, Layout/LineLength
 if use_sqlite
