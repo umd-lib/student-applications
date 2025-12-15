@@ -105,19 +105,8 @@ pipeline {
     stage('test') {
       steps {
         sh '''
-          # Disable Spring, as it should not be needed, and may interfere with tests
-          export DISABLE_SPRING=true
-
           # Configure MiniTest to use JUnit-style reporter
           export MINITEST_REPORTER=JUnitReporter
-
-          # Download chromedriver
-          # See https://googlechromelabs.github.io/chrome-for-testing/known-good-versions-with-downloads.json
-          wget https://storage.googleapis.com/chrome-for-testing-public/143.0.7449.0/linux64/chromedriver-linux64.zip
-
-          # Extract and rename directory
-          unzip chromedriver-linux64.zip
-          mv chromedriver-linux64 chromedriver
 
           bundle exec rails db:reset
           bundle exec rails test:system test
