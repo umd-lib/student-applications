@@ -1,7 +1,7 @@
-require 'csv'
+require "csv"
 # lib/tasks/add_cas_user.rake
 namespace :db do
-  desc 'Add an admin user'
+  desc "Add an admin user"
   task :add_admin_cas_user, %i[cas_directory_id full_name] => :environment do |_t, args|
     cas_directory_id = args[:cas_directory_id]
 
@@ -13,7 +13,7 @@ namespace :db do
     end
   end
 
-  desc 'Add a non-admin user'
+  desc "Add a non-admin user"
   task :add_cas_user, %i[cas_directory_id full_name] => :environment do |_t, args|
     cas_directory_id = args[:cas_directory_id]
 
@@ -25,7 +25,7 @@ namespace :db do
     end
   end
 
-  desc 'Toggle user admin'
+  desc "Toggle user admin"
   task :toggle_admin, [:cas_directory_id] => :environment do |_t, args|
     cas_directory_id = args[:cas_directory_id]
 
@@ -39,7 +39,7 @@ namespace :db do
     end
   end
 
-  desc 'Bulk add users from CSV file'
+  desc "Bulk add users from CSV file"
   task :bulk_add_users, [:csv_file] => :environment do |_t, args|
     file = args[:csv_file]
     if !File.exist?(file)

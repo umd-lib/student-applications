@@ -1,8 +1,8 @@
 # frozen_string_literal: true
 
-require 'test_helper'
-require 'rake'
-require './lib/tasks/sample_prospect_creator'
+require "test_helper"
+require "rake"
+require "./lib/tasks/sample_prospect_creator"
 
 class PurgeSuppressedProspectsTest < ActiveSupport::TestCase
   # Relative directory when prospect resumes are stored
@@ -27,54 +27,54 @@ class PurgeSuppressedProspectsTest < ActiveSupport::TestCase
 
     # Need to reseed the database each time, because database is destroyed
     # between tests
-    Rake::Task['db:seed'].reenable
-    Rake::Task['db:seed'].invoke
-    Rake::Task['db:purge_suppressed_prospects'].reenable
+    Rake::Task["db:seed"].reenable
+    Rake::Task["db:seed"].invoke
+    Rake::Task["db:purge_suppressed_prospects"].reenable
   end
 
-  test 'old active prospect is not purged' do
+  test "old active prospect is not purged" do
     # Destroy all existing prospects (from fixtures)
     Prospect.destroy_all
 
     # Create an active (i.e., unsuppressed) prospect last updated 6 month ago
     create_active_prospect(last_update: 6.months.ago)
 
-    assert_no_difference ['Prospect.count', 'Resume.count', 'resume_file_count'] do
+    assert_no_difference ["Prospect.count", "Resume.count", "resume_file_count"] do
       with_captured_stdout do
-        Rake::Task['db:purge_suppressed_prospects'].invoke
+        Rake::Task["db:purge_suppressed_prospects"].invoke
       end
     end
   end
 
-  test 'old suppressed prospect is not purged' do
+  test "old suppressed prospect is not purged" do
     # Destroy all existing prospects (from fixtures)
     Prospect.destroy_all
 
     # Create a suppressed prospect last updated 6 month ago
     create_suppressed_prospect(last_update: 6.months.ago)
 
-    assert_difference ['Prospect.count', 'Resume.count', 'resume_file_count'], -1 do
+    assert_difference ["Prospect.count", "Resume.count", "resume_file_count"], -1 do
       with_captured_stdout do
-        Rake::Task['db:purge_suppressed_prospects'].invoke
+        Rake::Task["db:purge_suppressed_prospects"].invoke
       end
     end
   end
 
-  test 'newly suppressed prospect is not purged' do
+  test "newly suppressed prospect is not purged" do
     # Destroy all existing prospects (from fixtures)
     Prospect.destroy_all
 
     # Create a suppressed prospect that was just updated
     create_suppressed_prospect(last_update: 1.second.ago)
 
-    assert_no_difference ['Prospect.count', 'Resume.count', 'resume_file_count'] do
+    assert_no_difference ["Prospect.count", "Resume.count", "resume_file_count"] do
       with_captured_stdout do
-        Rake::Task['db:purge_suppressed_prospects'].invoke
+        Rake::Task["db:purge_suppressed_prospects"].invoke
       end
     end
   end
 
-  test 'mixture of suppressed and active records' do
+  test "mixture of suppressed and active records" do
     # Destroy all existing prospects (from fixtures)
     Prospect.destroy_all
 
@@ -88,9 +88,9 @@ class PurgeSuppressedProspectsTest < ActiveSupport::TestCase
     assert_equal 5, Prospect.count
     assert_equal 5, Resume.count
 
-    assert_difference ['Prospect.count', 'Resume.count', 'resume_file_count'], -2 do
+    assert_difference ["Prospect.count", "Resume.count", "resume_file_count"], -2 do
       with_captured_stdout do
-        Rake::Task['db:purge_suppressed_prospects'].invoke
+        Rake::Task["db:purge_suppressed_prospects"].invoke
       end
     end
 

@@ -1,6 +1,6 @@
 require "active_support/core_ext/integer/time"
 # UMD Customization
-require 'no_animations'
+require "no_animations"
 # End UMD Customization
 
 # The test environment is used exclusively to run your application's

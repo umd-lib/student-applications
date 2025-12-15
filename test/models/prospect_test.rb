@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-require 'test_helper'
+require "test_helper"
 
 # Unit test for the prospect (i.e., application form) model
 class ProspectTest < ActiveSupport::TestCase
@@ -9,21 +9,21 @@ class ProspectTest < ActiveSupport::TestCase
     @all_valid = prospects(:all_valid)
   end
 
-  test 'should be valid if the contact info is completed on the contact_info step' do
+  test "should be valid if the contact info is completed on the contact_info step" do
     assert @contact_info.current_step == Prospect.first_step
     @contact_info.next_step
-    assert @contact_info.current_step == 'contact_info'
+    assert @contact_info.current_step == "contact_info"
     assert @contact_info.valid?
   end
 
-  test 'should be invalid on the contact_info step if the contact info is not present' do
-    prospect = Prospect.new(directory_id: '123', semester: Enumeration.active_semesters.first.value)
+  test "should be invalid on the contact_info step if the contact info is not present" do
+    prospect = Prospect.new(directory_id: "123", semester: Enumeration.active_semesters.first.value)
     prospect.next_step
-    assert_equal prospect.current_step, 'contact_info'
+    assert_equal prospect.current_step, "contact_info"
     assert_not prospect.valid?
   end
 
-  test 'should be invalid the directory_id has already been used for a semester' do
+  test "should be invalid the directory_id has already been used for a semester" do
     assert @all_valid.all_valid?
     prospect = Prospect.new(directory_id: @all_valid.directory_id, semester: @all_valid.semester)
     assert_not prospect.valid?
@@ -38,32 +38,32 @@ class ProspectTest < ActiveSupport::TestCase
     assert prospect.valid?
   end
 
-  test 'should be valid on a non-contact_info step if the contact info is not present' do
+  test "should be valid on a non-contact_info step if the contact info is not present" do
     prospect = Prospect.new
     prospect.next_step
     prospect.next_step
-    assert_not_equal prospect.current_step, 'contact_info'
+    assert_not_equal prospect.current_step, "contact_info"
     assert prospect.valid?
     prospect.previous_step
     assert_not prospect.valid?
   end
 
-  test 'should be all valid if the information is all present' do
+  test "should be all valid if the information is all present" do
     assert @all_valid.all_valid?
   end
 
-  test 'should not be all valid if the information is not all present' do
+  test "should not be all valid if the information is not all present" do
     assert_not Prospect.new.all_valid?
   end
 
-  test 'should create a local_address on init' do
+  test "should create a local_address on init" do
     prospect = Prospect.new
     assert prospect.addresses.length == 1
     assert_includes prospect.addresses, prospect.local_address
   end
 
-  test 'should keep the local address if created with one' do
-    prospect = Prospect.new(addresses: [Address.new(address_type: 'local', street_address_1: '666 Lovers Ln')])
+  test "should keep the local address if created with one" do
+    prospect = Prospect.new(addresses: [Address.new(address_type: "local", street_address_1: "666 Lovers Ln")])
     assert_equal prospect.addresses.length, 1
     assert_equal prospect.addresses.first.street_address_1, prospect.local_address.street_address_1
   end
@@ -71,8 +71,8 @@ class ProspectTest < ActiveSupport::TestCase
   test "it should be invalid if it's on the contact_info step and it has no address" do
     homeless = prospects(:homeless)
     homeless.next_step
-    homeless.contact_phone.phone_type = 'local'
-    homeless.contact_phone.number = '301-555-0123'
+    homeless.contact_phone.phone_type = "local"
+    homeless.contact_phone.number = "301-555-0123"
     # not valid bc no address
     assert_not homeless.valid?
     # but if we ae on another step, it should be ok
@@ -86,19 +86,19 @@ class ProspectTest < ActiveSupport::TestCase
     assert homeless.valid?, homeless.errors
   end
 
-  test 'should create a contact_phone on init' do
+  test "should create a contact_phone on init" do
     prospect = Prospect.new
     assert prospect.phone_numbers.length == 1
     assert_includes prospect.phone_numbers, prospect.contact_phone
   end
 
-  test 'should keep the contact phone if created with one' do
-    prospect = Prospect.new(phone_numbers: [PhoneNumber.new(phone_type: 'local', number: '301-555-0123')])
+  test "should keep the contact phone if created with one" do
+    prospect = Prospect.new(phone_numbers: [PhoneNumber.new(phone_type: "local", number: "301-555-0123")])
     assert_equal prospect.phone_numbers.length, 1
     assert_equal prospect.phone_numbers.first.number, prospect.contact_phone.number
   end
 
-  test 'it should be able to create available_times via the day_times shortcut' do
+  test "it should be able to create available_times via the day_times shortcut" do
     prospect = Prospect.new day_times: %w[0-0 4-20 0-12]
     assert_equal prospect.available_times.length, prospect.day_times.length
     prospect.available_times.each do |a|
@@ -106,7 +106,7 @@ class ProspectTest < ActiveSupport::TestCase
     end
   end
 
-  test 'it should be able to modify available_times via the day_times shortcut' do
+  test "it should be able to modify available_times via the day_times shortcut" do
     prospect = prospects(:all_valid)
     dts = prospect.day_times
     assert_equal prospect.available_times.length, dts.length
@@ -116,7 +116,7 @@ class ProspectTest < ActiveSupport::TestCase
     assert_equal prospect.day_times, new_dts
   end
 
-  test 'it ensure the total available hours is not more than the available_times selected' do
+  test "it ensure the total available hours is not more than the available_times selected" do
     assert_equal @all_valid.available_hours_per_week, 1
     @all_valid.available_hours_per_week = 100
     assert_not @all_valid.valid?
@@ -124,16 +124,16 @@ class ProspectTest < ActiveSupport::TestCase
     assert @all_valid.valid?
   end
 
-  test 'it can get a prospected special / unpromoted skills' do
+  test "it can get a prospected special / unpromoted skills" do
     prospect = Prospect.new
-    prospect.skills << Skill.new(name: 'typin', promoted: true)
-    prospect.skills << Skill.new(name: 'fightin', promoted: false)
+    prospect.skills << Skill.new(name: "typin", promoted: true)
+    prospect.skills << Skill.new(name: "fightin", promoted: false)
     assert_equal prospect.skills.length, 2
     assert_equal prospect.special_skills.length, 1
-    assert_equal prospect.special_skills.first.name, 'fightin'
+    assert_equal prospect.special_skills.first.name, "fightin"
   end
 
-  test 'it can set the semester' do
+  test "it can set the semester" do
     prospect = Prospect.new
 
     values = Enumeration.active_semesters
@@ -147,15 +147,15 @@ class ProspectTest < ActiveSupport::TestCase
     assert_includes prospect.enumerations, values.last
   end
 
-  test 'destroying a prospect should also destroy the associated resume' do
+  test "destroying a prospect should also destroy the associated resume" do
     resume = Resume.new
-    resume.file.attach(io: File.open('test/fixtures/files/resume.pdf'), filename: 'resume.pdf')
+    resume.file.attach(io: File.open("test/fixtures/files/resume.pdf"), filename: "resume.pdf")
     resume.save!
     @all_valid.resume = resume
 
     @all_valid.save!
 
-    assert_difference ['Prospect.count', 'Resume.count'], -1 do
+    assert_difference ["Prospect.count", "Resume.count"], -1 do
       @all_valid.destroy!
     end
   end

@@ -10,9 +10,9 @@ class PingController < ApplicationController
     connected = ActiveRecord::Base.connection_pool.with_connection(&:active?)
 
     if connected
-      render plain: 'Application is OK'
+      render plain: "Application is OK"
     else
-      render plain: 'Cannot connect to database!', status: :service_unavailable
+      render plain: "Cannot connect to database!", status: :service_unavailable
     end
   end
 end

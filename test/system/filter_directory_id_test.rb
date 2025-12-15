@@ -1,34 +1,34 @@
 # frozen_string_literal: true
 
-require 'application_system_test_case'
+require "application_system_test_case"
 
 class FilterDirectoryIdTest < ApplicationSystemTestCase
-  test 'Should be able filter prospects on class status' do
+  test "Should be able filter prospects on class status" do
     page.current_window.resize_to(2048, 9999)
 
-    Enumeration.find_by(value: 'Undergraduate').id
-    User.create(cas_directory_id: 'filterer', name: 'filterer', admin: false)
+    Enumeration.find_by(value: "Undergraduate").id
+    User.create(cas_directory_id: "filterer", name: "filterer", admin: false)
 
     students = Prospect.all.group_by(&:first_name).to_h { |k, v| [k, v.first] } # rubocop:disable Style/HashTransformValues
 
     visit prospects_path
-    fill_in 'username', with: 'filterer'
-    fill_in 'password', with: 'any password'
-    click_button 'Login'
+    fill_in "username", with: "filterer"
+    fill_in "password", with: "any password"
+    click_button "Login"
 
     # We should have all of our students present
     page.assert_selector("#prospect_#{students['Betty'].id}")
     page.assert_selector("#prospect_#{students['Alvin'].id}")
     page.assert_selector("#prospect_#{students['Rolling'].id}")
 
-    find('#filter-prospects').click
-    assert page.find('#filter-modal').visible?
+    find("#filter-prospects").click
+    assert page.find("#filter-modal").visible?
 
     # we tweak the slider...
-    fill_in 'text_search_directory_id', with: students['Alvin'].directory_id
+    fill_in "text_search_directory_id", with: students["Alvin"].directory_id
 
-    find('#submit-filter').click
-    page.assert_selector('#filter-modal', visible: false)
+    find("#submit-filter").click
+    page.assert_selector("#filter-modal", visible: false)
 
     # only alvin is an undergrad
     page.assert_no_selector("#prospect_#{students['Betty'].id}")

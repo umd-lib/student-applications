@@ -37,7 +37,7 @@ class ProspectsController < ApplicationController # rubocop:disable Metrics/Clas
     end
 
     if @prospect&.new_record?
-      render 'new'
+      render "new"
     elsif @prospect
       begin
         SubmittedMailer.default_email(@prospect).deliver_later
@@ -58,8 +58,8 @@ class ProspectsController < ApplicationController # rubocop:disable Metrics/Clas
       end
 
       reset_session
-      flash[:notice] = 'Submitted!'
-      redirect_to action: 'thank_you', id: @prospect.id
+      flash[:notice] = "Submitted!"
+      redirect_to action: "thank_you", id: @prospect.id
 
     end
   end
@@ -110,11 +110,11 @@ class ProspectsController < ApplicationController # rubocop:disable Metrics/Clas
   private
 
     def log_exception(exception, prospect = nil)
-      logger.error '~' * 100
-      logger.error 'Application Submission Failure!'
+      logger.error "~" * 100
+      logger.error "Application Submission Failure!"
       logger.error "Prospect: #{prospect.inspect} Errors: #{prospect.errors}" if prospect
       logger.error exception.message.to_s
-      logger.error '~' * 100
+      logger.error "~" * 100
     end
 
     def start_new
@@ -255,7 +255,7 @@ class ProspectsController < ApplicationController # rubocop:disable Metrics/Clas
                              .where(*available_range_statement)
                              .where(prospects_by_available_time)
                              .active.order(sort_order)
-                             .pluck('prospects.id').uniq
+                             .pluck("prospects.id").uniq
 
       # In the following, we run additional queries for the fields that can
       # be filtered, then intersect the results with the results from the
@@ -268,7 +268,7 @@ class ProspectsController < ApplicationController # rubocop:disable Metrics/Clas
         type_results = Prospect.joins(join_table).select(select_statement)
                                .where(where_statement)
                                .active.order(sort_order)
-                               .pluck('prospects.id').uniq
+                               .pluck("prospects.id").uniq
         @all_results &= type_results
       end
 

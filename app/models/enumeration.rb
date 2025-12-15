@@ -2,7 +2,7 @@
 
 # Model for enumerated values
 class Enumeration < ApplicationRecord
-  has_and_belongs_to_many :prospects, join_table: 'prospects_enumerations'
+  has_and_belongs_to_many :prospects, join_table: "prospects_enumerations"
 
   ENUMERATION_LISTS = %w[class_status graduation_year library semester how_did_you_hear_about_us].map(&:intern).freeze
 

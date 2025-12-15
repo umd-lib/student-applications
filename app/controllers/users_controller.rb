@@ -43,8 +43,8 @@ class UsersController < ApplicationController
     respond_to do |format|
       format.html do
         redirect_to prospects_url,
-                    notice: 'You have temporarly disabled admin functionality. ' \
-                            'Sign out and log back in to restore admin role.'
+                    notice: "You have temporarly disabled admin functionality. " \
+                            "Sign out and log back in to restore admin role."
       end
     end
   end

@@ -15,7 +15,7 @@ require "action_view/railtie"
 require "rails/test_unit/railtie"
 
 # UMD Customization
-require 'rack-cas/session_store/active_record'
+require "rack-cas/session_store/active_record"
 # End UMD Customization
 
 # Require the gems listed in Gemfile, including any gems
@@ -45,7 +45,7 @@ module OnlineStudentApplications
     # config.eager_load_paths << Rails.root.join("extras")
 
     # UMD Customization
-    config.rack_cas.server_url = 'https://login.umd.edu/cas'
+    config.rack_cas.server_url = "https://login.umd.edu/cas"
     config.rack_cas.session_store = RackCAS::ActiveRecordStore
 
     config.active_job.queue_adapter = :delayed_job

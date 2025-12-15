@@ -13,7 +13,7 @@ Rails.application.config.assets.paths << Rails.root.join("node_modules/bootstrap
 # Rails.application.config.assets.precompile += %w[ admin.js admin.css ]
 # UMD Customization
 Rails.application.config.assets.precompile += [
-  'glyphicons-halflings.png',
-  'glyphicons-halflings-white.png'
+  "glyphicons-halflings.png",
+  "glyphicons-halflings-white.png"
 ]
 # End UMD Customization

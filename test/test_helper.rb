@@ -1,6 +1,6 @@
 # UMD Customization
-require 'simplecov'
-require 'simplecov-rcov'
+require "simplecov"
+require "simplecov-rcov"
 
 SimpleCov.formatters = [
   SimpleCov::Formatter::HTMLFormatter,
@@ -8,7 +8,7 @@ SimpleCov.formatters = [
 ]
 SimpleCov.start
 
-require 'securerandom'
+require "securerandom"
 # End UMD Customization
 
 ENV["RAILS_ENV"] ||= "test"
@@ -16,10 +16,10 @@ require_relative "../config/environment"
 require "rails/test_help"
 
 # UMD Customization
-require 'mocha/minitest'
+require "mocha/minitest"
 
 # Improved Minitest output (color and progress bar)
-require 'minitest/reporters'
+require "minitest/reporters"
 
 if ENV["CI"].present?
   # Minitest Reporters used Jenkins/CI
@@ -38,7 +38,7 @@ else
   )
 end
 
-require 'rack_session_access/capybara'
+require "rack_session_access/capybara"
 
 # Suppress puma start/version output when running tests
 Capybara.server = :puma, { Silent: true } # To clean up your test output
@@ -77,7 +77,7 @@ def drag_until(locator, options = {}, &block)
   page.driver.browser.action
       .click_and_hold(event_input)
       .move_by(options[:by], 0).release
-      .perform until block.call(slider['aria-valuenow'].to_i)
+      .perform until block.call(slider["aria-valuenow"].to_i)
   slider
 end
 # End UMD CUstomization

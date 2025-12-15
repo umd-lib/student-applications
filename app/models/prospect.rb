@@ -9,7 +9,7 @@ class Prospect < ApplicationRecord # rubocop:disable Metrics/ClassLength
   belongs_to :resume, optional: true, dependent: :destroy
   after_initialize :after_initialize
 
-  has_and_belongs_to_many :enumerations, join_table: 'prospects_enumerations'
+  has_and_belongs_to_many :enumerations, join_table: "prospects_enumerations"
 
   attr_reader :semester
   attr_writer :class_status, :graduation_year, :libraries, :how_did_you_hear_about_us
@@ -25,7 +25,7 @@ class Prospect < ApplicationRecord # rubocop:disable Metrics/ClassLength
     if semester
       enumerations << semester
     else
-      @semester = enumerations.find { |e| e['list'] == 'semester' }
+      @semester = enumerations.find { |e| e["list"] == "semester" }
     end
   end
 
@@ -35,7 +35,7 @@ class Prospect < ApplicationRecord # rubocop:disable Metrics/ClassLength
   # rubocop:disable Style/GuardClause
   # rubocop:disable Layout/LineLength, Style/SoleNestedConditional
   def only_one_id_per_semester
-    if current_step == 'id_and_semester' && !persisted? && semester
+    if current_step == "id_and_semester" && !persisted? && semester
       if Prospect.joins(:enumerations).exists?(suppressed: false, directory_id: directory_id, enumerations: { id: semester.id })
         errors.add(:semester, "Please note that this directory ID has already submitted an application. You are only allowed one application submission per semester. If you need to edit your submission please contact Lisa Warner at <a href='tel:3014059245'>301-405-9245</a> or <a href='mailto:lwarner@umd.edu'>lwarner@umd.edu</a> for assistance.".html_safe)
       end
@@ -44,38 +44,38 @@ class Prospect < ApplicationRecord # rubocop:disable Metrics/ClassLength
   # rubocop:enable Layout/LineLength, Style/SoleNestedConditional
 
   def must_have_class_status
-    if current_step == 'contact_info' && class_status.nil?
-      errors.add(:class_status, 'You must have one ( and only one ) Class Status selected.')
+    if current_step == "contact_info" && class_status.nil?
+      errors.add(:class_status, "You must have one ( and only one ) Class Status selected.")
     end
   end
 
   def must_have_graduation_year
-    if current_step == 'contact_info' && graduation_year.nil?
-      errors.add(:graduation_year, 'You must have one ( and only one ) Graduation Year selected.')
+    if current_step == "contact_info" && graduation_year.nil?
+      errors.add(:graduation_year, "You must have one ( and only one ) Graduation Year selected.")
     end
   end
 
   def must_have_semester
-    if current_step == 'id_and_semester' && semester.nil?
-      errors.add(:semester, 'Please indicate which semester you are applying for.')
+    if current_step == "id_and_semester" && semester.nil?
+      errors.add(:semester, "Please indicate which semester you are applying for.")
     end
   end
   # rubocop:enable Style/GuardClause
 
   def class_status
-    enumerations.find { |e| e['list'] == 'class_status' }
+    enumerations.find { |e| e["list"] == "class_status" }
   end
 
   def graduation_year
-    enumerations.find { |e| e['list'] == 'graduation_year' }
+    enumerations.find { |e| e["list"] == "graduation_year" }
   end
 
   def semester=(value) # rubocop:disable Metrics/AbcSize, Metrics/CyclomaticComplexity, Metrics/PerceivedComplexity
     return if value.nil? || value.blank?
 
-    current = @semester.nil? ? enumerations.find { |e| e['list'] == 'semester' } : @semester
+    current = @semester.nil? ? enumerations.find { |e| e["list"] == "semester" } : @semester
 
-    enum =  value.is_a?(Enumeration) ? value : Enumeration.active_semesters.find { |e| e['value'] == value }
+    enum =  value.is_a?(Enumeration) ? value : Enumeration.active_semesters.find { |e| e["value"] == value }
     raise ArgumentError, "#{value} is not a valid semester value ( #{Enumeration.active_semesters.map(&:value).join(',')} )" unless enum # rubocop:disable Layout/LineLength
 
     enumerations.delete(current) unless current.nil?
@@ -84,11 +84,11 @@ class Prospect < ApplicationRecord # rubocop:disable Metrics/ClassLength
   end
 
   def libraries
-    enumerations.select { |e| e['list'] == 'library' } || []
+    enumerations.select { |e| e["list"] == "library" } || []
   end
 
   def how_did_you_hear_about_us
-    enumerations.find { |e| e['list'] == 'how_did_you_hear_about_us' } || []
+    enumerations.find { |e| e["list"] == "how_did_you_hear_about_us" } || []
   end
 
   # this validates if the user has clicked "All information is correct" on last
@@ -98,13 +98,13 @@ class Prospect < ApplicationRecord # rubocop:disable Metrics/ClassLength
 
   # directory_id and semester
   %i[directory_id].each do |attr|
-    validates attr, presence: true, if: ->(p) { p.current_step == 'id_and_semester' }
+    validates attr, presence: true, if: ->(p) { p.current_step == "id_and_semester" }
   end
 
   # these are the validations for the contact_information step
-  validates :in_federal_study, inclusion: { in: [true, false], if: ->(p) { p.current_step == 'contact_info' } }
+  validates :in_federal_study, inclusion: { in: [true, false], if: ->(p) { p.current_step == "contact_info" } }
   %i[directory_id first_name last_name email].each do |attr|
-    validates attr, presence: true, if: ->(p) { p.current_step == 'contact_info' }
+    validates attr, presence: true, if: ->(p) { p.current_step == "contact_info" }
   end
 
   has_many :work_experiences, dependent: :destroy
@@ -124,7 +124,7 @@ class Prospect < ApplicationRecord # rubocop:disable Metrics/ClassLength
 
   def available_hours_per_week_less_than_max
     if available_hours_per_week.negative?
-      errors.add(:available_hours_per_week, 'must be greater than or equal to zero.')
+      errors.add(:available_hours_per_week, "must be greater than or equal to zero.")
     elsif available_hours_per_week > Prospect.max_available_hours_per_week
       errors.add(:available_hours_per_week,
                  "must be less than or equal to #{Prospect.max_available_hours_per_week} hours.")
@@ -153,7 +153,7 @@ class Prospect < ApplicationRecord # rubocop:disable Metrics/ClassLength
   def day_times=(dts)
     available_times.each(&:mark_for_destruction)
     dts.each do |dt|
-      day, time = dt.split('-').map(&:to_i)
+      day, time = dt.split("-").map(&:to_i)
       available_times.build(day: day, time: time)
     end
     @day_times = available_times.map { |at| at.day_time unless at.marked_for_destruction? }.compact
@@ -167,14 +167,14 @@ class Prospect < ApplicationRecord # rubocop:disable Metrics/ClassLength
   def contact_phone_with_default
     phone_numbers.first || phone_numbers.build
   end
-  has_one :contact_phone, class_name: 'PhoneNumber' # rubocop:disable Rails/HasManyOrHasOneDependent
+  has_one :contact_phone, class_name: "PhoneNumber" # rubocop:disable Rails/HasManyOrHasOneDependent
   accepts_nested_attributes_for :contact_phone, allow_destroy: true
 
   def contact_phone
     super || contact_phone_with_default
   end
-  validates :contact_phone, presence: true, if: ->(o) { o.current_step == 'contact_info' }
-  validates_associated :contact_phone, if: ->(o) { o.current_step == 'contact_info' }
+  validates :contact_phone, presence: true, if: ->(o) { o.current_step == "contact_info" }
+  validates_associated :contact_phone, if: ->(o) { o.current_step == "contact_info" }
 
   has_many :addresses, inverse_of: :prospect, dependent: :destroy
   accepts_nested_attributes_for :addresses, allow_destroy: true
@@ -183,19 +183,19 @@ class Prospect < ApplicationRecord # rubocop:disable Metrics/ClassLength
   # by default we want to have one local_address, either a new one we've built
   # or an address that has been provided
   def local_address_with_default
-    addresses.find(&:local?) || addresses.build(address_type: 'local')
+    addresses.find(&:local?) || addresses.build(address_type: "local")
   end
 
-  has_one :local_address, -> { where(address_type: 'local') }, class_name: 'Address', dependent: nil # rubocop:disable Rails/InverseOf
+  has_one :local_address, -> { where(address_type: "local") }, class_name: "Address", dependent: nil # rubocop:disable Rails/InverseOf
   accepts_nested_attributes_for :local_address, allow_destroy: true
 
   def local_address
     super || local_address_with_default
   end
-  validates :local_address, presence: true, if: ->(o) { o.current_step == 'contact_info' }
-  validates_associated :local_address, if: ->(o) { o.current_step == 'contact_info' }
+  validates :local_address, presence: true, if: ->(o) { o.current_step == "contact_info" }
+  validates_associated :local_address, if: ->(o) { o.current_step == "contact_info" }
 
-  has_one :permanent_address, -> { where(address_type: 'permanent') }, class_name: 'Address', dependent: nil # rubocop:disable Rails/InverseOf
+  has_one :permanent_address, -> { where(address_type: "permanent") }, class_name: "Address", dependent: nil # rubocop:disable Rails/InverseOf
   accepts_nested_attributes_for :permanent_address, allow_destroy: true
 
   has_and_belongs_to_many :skills, dependent: :nullify

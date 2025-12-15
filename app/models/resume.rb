@@ -5,7 +5,7 @@
 class Resume < ApplicationRecord
   has_one_attached :file
 
-  validates :file, attached: true, content_type: 'application/pdf'
+  validates :file, attached: true, content_type: "application/pdf"
 
   has_one :prospect # rubocop:disable Rails/HasManyOrHasOneDependent
 end

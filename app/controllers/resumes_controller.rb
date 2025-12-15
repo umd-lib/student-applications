@@ -2,7 +2,7 @@
 
 class ResumesController < ApplicationController
   def new
-    render plain: 'forbidden', status: :forbidden, layout: false unless logged_in?
+    render plain: "forbidden", status: :forbidden, layout: false unless logged_in?
     @prospect = Prospect.find(params[:prospect])
     @resume = Resume.new(prospect: @prospect)
   end
@@ -17,7 +17,7 @@ class ResumesController < ApplicationController
       render json: @resume.errors, status: :bad_request
     end
   rescue ActiveSupport::MessageVerifier::InvalidSignature
-    render json: 'file parameter must not be nil or empty', status: :bad_request
+    render json: "file parameter must not be nil or empty", status: :bad_request
   end
 
   def show
@@ -27,14 +27,14 @@ class ResumesController < ApplicationController
     # if a user if logged in, they can see if.
     if same_session? || logged_in?
       attachment_file_path = ActiveStorage::Blob.service.path_for(@resume.file.key)
-      send_file(attachment_file_path, disposition: 'attachment', filename: @resume.file.attachment.filename.to_s)
+      send_file(attachment_file_path, disposition: "attachment", filename: @resume.file.attachment.filename.to_s)
     else
-      render plain: 'forbidden', status: :forbidden, layout: false
+      render plain: "forbidden", status: :forbidden, layout: false
     end
   end
 
   def edit
-    render plain: 'forbidden', status: :forbidden, layout: false unless logged_in?
+    render plain: "forbidden", status: :forbidden, layout: false unless logged_in?
     @resume = Resume.includes(:prospect).find(params[:id])
     @prospect = Prospect.find_by(resume: @resume)
   end

@@ -5,14 +5,14 @@
 
 module ApplicationHelper
   def bootstrap_class_for(flash_type)
-    { success: 'alert-success', error: 'alert-danger', alert: 'alert-warning',
-      notice: 'alert-info' }[flash_type.intern] || flash_type.to_s
+    { success: "alert-success", error: "alert-danger", alert: "alert-warning",
+      notice: "alert-info" }[flash_type.intern] || flash_type.to_s
   end
 
   def flash_messages(_opts = {})
     flash.each do |msg_type, message|
       concat(content_tag(:div, message, class: "alert #{bootstrap_class_for(msg_type)} fade in") do
-               concat content_tag(:button, 'x', class: 'close', data: { dismiss: 'alert' })
+               concat content_tag(:button, "x", class: "close", data: { dismiss: "alert" })
                concat message
              end)
     end
@@ -31,35 +31,35 @@ module ApplicationHelper
   # takes an 24 hour integer and formats it into "HHam/pm".
   # like 13 => 1pm
   def hour_integer_to_humanized(time)
-    Time.strptime(time.to_s, '%H').strftime('%l%P')
+    Time.strptime(time.to_s, "%H").strftime("%l%P")
   end
 
   # take a time and returns string that
   # represents a one hour time range
   def hour_integer_to_range(time)
-    startt = Time.strptime(time.to_s, '%H').strftime('%l-')
-    endt = Time.strptime((time + 1).to_s, '%H').strftime('%l:%M %P')
+    startt = Time.strptime(time.to_s, "%H").strftime("%l-")
+    endt = Time.strptime((time + 1).to_s, "%H").strftime("%l:%M %P")
     "#{startt}#{endt}"
   end
 
   # this returns the css class used in the cell of the avail table
   def avail_table_cell_status(form, value)
-    form.object.day_times.include?(value) ? 'success' : 'warning'
+    form.object.day_times.include?(value) ? "success" : "warning"
   end
 
   # rubocop:disable Metrics/AbcSize, Metrics/MethodLength
   def availablity_table(form)
     thead = content_tag(:thead) do
       content_tag(:tr) do
-        concat content_tag(:th, '', class: 'time-label')
+        concat content_tag(:th, "", class: "time-label")
         AvailableTime.days.keys.collect { |d| concat content_tag(:th, d.capitalize) }
       end
     end
 
     tbody = content_tag :tbody do
       (0..23).collect do |hour|
-        concat(content_tag(:tr, class: 'table-active') do
-          concat(content_tag(:td, class: 'time-label') do
+        concat(content_tag(:tr, class: "table-active") do
+          concat(content_tag(:td, class: "time-label") do
             content_tag(:span) { hour_integer_to_humanized(hour) }
           end)
           AvailableTime.days.collect do |day|
@@ -80,7 +80,7 @@ module ApplicationHelper
     end
     content_tag(:table,
                 class: "table table-bordered #{form.object.current_step}-availability-table",
-                id: 'availability-table') { thead.concat(tbody) }
+                id: "availability-table") { thead.concat(tbody) }
   end
   # rubocop:enable Metrics/AbcSize, Metrics/MethodLength
 
@@ -90,14 +90,14 @@ module ApplicationHelper
   # rubocop:disable Metrics/AbcSize
   def sortable(column, title)
     css_class = column == sort_column ? "current #{sort_direction}" : nil
-    direction = column == sort_column && sort_direction == 'asc' ? 'desc' : 'asc'
+    direction = column == sort_column && sort_direction == "asc" ? "desc" : "asc"
     link_to request.query_parameters.merge(sort: column, direction: direction), class: css_class do
       icon = if column == sort_column && sort_direction
-               content_tag :i, '', class: "glyphicon glyphicon-chevron-#{sort_direction == 'asc' ? 'up' : 'down'}"
+               content_tag :i, "", class: "glyphicon glyphicon-chevron-#{sort_direction == 'asc' ? 'up' : 'down'}"
              else
-               content_tag :i, '', class: 'glyphicon'
+               content_tag :i, "", class: "glyphicon"
              end
-      safe_join([icon, ' ', title])
+      safe_join([icon, " ", title])
     end
   end
   # rubocop:enable Metrics/AbcSize
@@ -111,7 +111,7 @@ module ApplicationHelper
     end
     p = params.dup
     %w[per_page controller action].each { |k| p.delete k }
-    select_tag :per_page, options_for_select(range.uniq.sort, current_count), class: 'per-page-select'
+    select_tag :per_page, options_for_select(range.uniq.sort, current_count), class: "per-page-select"
   end
 end
 

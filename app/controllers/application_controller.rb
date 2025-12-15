@@ -8,7 +8,7 @@ class ApplicationController < ActionController::Base
 
   rescue_from ActionController::InvalidAuthenticityToken do |_e|
     reset_session
-    redirect_to root_url, flash: { notice: 'Application has been reset due to session inactivity.' }
+    redirect_to root_url, flash: { notice: "Application has been reset due to session inactivity." }
   end
 
   # rubocop:disable Style/GuardClause
@@ -32,13 +32,13 @@ class ApplicationController < ActionController::Base
     if session[:prospect_params]
       # we have an application going so we've probably just refreshed the
       # screen
-      redirect_to action: 'new', controller: 'prospects'
+      redirect_to action: "new", controller: "prospects"
     elsif session[:cas].nil? || session[:cas][:user].nil?
-      render status: :unauthorized, plain: 'Redirecting to SSO...'
+      render status: :unauthorized, plain: "Redirecting to SSO..."
     else
       user = User.find_by cas_directory_id: session[:cas][:user]
       if user.nil?
-        render status: :forbidden, plain: 'Unrecognized user'
+        render status: :forbidden, plain: "Unrecognized user"
       else
         update_current_user(user)
       end
@@ -49,7 +49,7 @@ class ApplicationController < ActionController::Base
   # rubocop:disable Style/GuardClause
   def ensure_admin
     unless @current_user.admin?
-      flash[:alert] = 'Access Denied'
+      flash[:alert] = "Access Denied"
       redirect_to root_url
     end
   end
