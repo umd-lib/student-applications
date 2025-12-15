@@ -41,4 +41,5 @@
 
 # UMD Customization
 coverage/
+test/reports/
 # End UMD Customization
