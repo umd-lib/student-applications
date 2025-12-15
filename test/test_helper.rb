@@ -25,7 +25,7 @@ if ENV["CI"].present?
   # Minitest Reporters used Jenkins/CI
   # Override JUnitReporter configuration to not empty the test/reports directory
   # between runs, so that unit and system tests reports can be combined.
-  Minitest::Reporters.use! [Minitest::Reporters::JUnitReporter.new("test/reports", false)]
+  Minitest::Reporters.use! [ Minitest::Reporters::JUnitReporter.new("test/reports", false) ]
 else
   # Minitest Reporters used for the local development environment
   # add  Minitest::Reporters::SpecReporter.new to first param if you want to see

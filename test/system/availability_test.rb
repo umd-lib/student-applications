@@ -10,10 +10,10 @@ class AvailabilityTest < ApplicationSystemTestCase
     all_valid[:enumeration_ids] = fixture.enumerations.map(&:id)
     all_valid.reject! { |a| %w[id created_at updated_at].include? a }
 
-    all_valid["addresses_attributes"] = [addresses(:all_valid_springfield).attributes.reject { |a| a == "id" }]
+    all_valid["addresses_attributes"] = [ addresses(:all_valid_springfield).attributes.reject { |a| a == "id" } ]
     all_valid["available_times_attributes"] = []
     all_valid["available_hours_per_week"] = 0
-    all_valid["phone_numbers_attributes"] = [phone_numbers(:all_valid_dummy).attributes.reject { |a| a == "id" }]
+    all_valid["phone_numbers_attributes"] = [ phone_numbers(:all_valid_dummy).attributes.reject { |a| a == "id" } ]
     page.set_rack_session(prospect_params: all_valid)
 
     visit new_prospect_path
@@ -27,7 +27,7 @@ class AvailabilityTest < ApplicationSystemTestCase
     # lets get 5 random date_times
     day_times = []
     5.times do
-      dt = [[*0..6].sample, [*0..23].sample]
+      dt = [ [ *0..6 ].sample, [ *0..23 ].sample ]
       redo if day_times.include?(dt)
       day_times << dt
     end
@@ -58,8 +58,8 @@ class AvailabilityTest < ApplicationSystemTestCase
 
     all_valid["available_times_attributes"] = []
     all_valid["available_hours_per_week"] = 0
-    all_valid["addresses_attributes"] = [addresses(:all_valid_springfield).attributes.reject { |a| a == "id" }]
-    all_valid["phone_numbers_attributes"] = [phone_numbers(:all_valid_dummy).attributes.reject { |a| a == "id" }]
+    all_valid["addresses_attributes"] = [ addresses(:all_valid_springfield).attributes.reject { |a| a == "id" } ]
+    all_valid["phone_numbers_attributes"] = [ phone_numbers(:all_valid_dummy).attributes.reject { |a| a == "id" } ]
     page.set_rack_session(prospect_params: all_valid)
 
     visit new_prospect_path
@@ -73,7 +73,7 @@ class AvailabilityTest < ApplicationSystemTestCase
     # like before,  lets get 5 random date_times
     day_times = []
     5.times do
-      dt = [[*0..6].sample, [*0..23].sample]
+      dt = [ [ *0..6 ].sample, [ *0..23 ].sample ]
       redo if day_times.include?(dt)
       day_times << dt
     end

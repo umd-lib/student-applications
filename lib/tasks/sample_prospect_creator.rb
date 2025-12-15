@@ -30,10 +30,10 @@ class SampleProspectCreator
     def create_prospect(require_resume)
       prospect = create_initial_prospect
 
-      prospect.addresses = [create_address("local")]
+      prospect.addresses = [ create_address("local") ]
       prospect.addresses << create_address("permanent") if rand > 0.50
 
-      prospect.phone_numbers = [create_phone_number("local")]
+      prospect.phone_numbers = [ create_phone_number("local") ]
       prospect.phone_numbers << create_phone_number("cell") if rand > 0.25
       prospect.phone_numbers << create_phone_number("other") if rand > 0.90
 
@@ -67,14 +67,14 @@ class SampleProspectCreator
       prospect.user_signature = "#{prospect.first_name} #{prospect.last_name}"
       prospect.user_confirmation = true
 
-      create_resume = require_resume ? true : [true, false].sample
+      create_resume = require_resume ? true : [ true, false ].sample
       create_resume(prospect) if create_resume
 
       prospect
     end
 
     def create_resume(prospect)
-      tempfile = Tempfile.new(["test", ".pdf"])
+      tempfile = Tempfile.new([ "test", ".pdf" ])
       begin
         pdf = Prawn::Document.new
         pdf.text "#{prospect.first_name} #{prospect.last_name}\n\n"
@@ -139,7 +139,7 @@ class SampleProspectCreator
     end
 
     def create_work_experience()
-      date_formats = ["%m/%d/%Y", "%F", "%b %d, %Y"]
+      date_formats = [ "%m/%d/%Y", "%F", "%b %d, %Y" ]
 
       date_format = date_formats.sample
       start_date = Faker::Date.between(from: "2014-01-01", to: Date.today)

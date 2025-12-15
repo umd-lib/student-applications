@@ -60,7 +60,7 @@ end
 # rubocop:enable Rails/SquishedSQLHeredocs, Layout/LineLength
 
 Rails.application.eager_load!
-models = [Resume]
+models = [ Resume ]
 ActiveRecord::Base.transaction do # rubocop:disable Metrics/BlockLength
   models.each do |model| # rubocop:disable Metrics/BlockLength
     attachments = model.column_names.map do |c|

@@ -26,7 +26,7 @@ class SortTest < ApplicationSystemTestCase
       sorted_names << td.text
     end
 
-    assert_equal(["Stone, Rolling", "Student, Betty", "Student, Alvin"], sorted_names)
+    assert_equal([ "Stone, Rolling", "Student, Betty", "Student, Alvin" ], sorted_names)
 
     # click a sort link
     click_link("Semester")
@@ -39,6 +39,6 @@ class SortTest < ApplicationSystemTestCase
     end
 
     # Sort is now in alphabetical order by semester name
-    assert_equal(["Student, Betty", "Student, Alvin", "Stone, Rolling"], sorted_names)
+    assert_equal([ "Student, Betty", "Student, Alvin", "Stone, Rolling" ], sorted_names)
   end
 end

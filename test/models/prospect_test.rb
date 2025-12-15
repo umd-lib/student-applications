@@ -63,7 +63,7 @@ class ProspectTest < ActiveSupport::TestCase
   end
 
   test "should keep the local address if created with one" do
-    prospect = Prospect.new(addresses: [Address.new(address_type: "local", street_address_1: "666 Lovers Ln")])
+    prospect = Prospect.new(addresses: [ Address.new(address_type: "local", street_address_1: "666 Lovers Ln") ])
     assert_equal prospect.addresses.length, 1
     assert_equal prospect.addresses.first.street_address_1, prospect.local_address.street_address_1
   end
@@ -93,7 +93,7 @@ class ProspectTest < ActiveSupport::TestCase
   end
 
   test "should keep the contact phone if created with one" do
-    prospect = Prospect.new(phone_numbers: [PhoneNumber.new(phone_type: "local", number: "301-555-0123")])
+    prospect = Prospect.new(phone_numbers: [ PhoneNumber.new(phone_type: "local", number: "301-555-0123") ])
     assert_equal prospect.phone_numbers.length, 1
     assert_equal prospect.phone_numbers.first.number, prospect.contact_phone.number
   end
@@ -155,7 +155,7 @@ class ProspectTest < ActiveSupport::TestCase
 
     @all_valid.save!
 
-    assert_difference ["Prospect.count", "Resume.count"], -1 do
+    assert_difference [ "Prospect.count", "Resume.count" ], -1 do
       @all_valid.destroy!
     end
   end

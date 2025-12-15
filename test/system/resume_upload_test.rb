@@ -13,9 +13,9 @@ class ResumeUploadTest < ApplicationSystemTestCase
       all_valid[:enumeration_ids] = fixture.enumerations.map(&:id)
       all_valid.reject! { |a| %w[id created_at updated_at].include? a }
 
-      all_valid["addresses_attributes"] = [addresses(:all_valid_springfield).attributes.reject { |a| a == "id" }]
-      all_valid["phone_numbers_attributes"] = [phone_numbers(:all_valid_dummy).attributes.reject { |a| a == "id" }]
-      all_valid["available_times_attributes"] = [available_times(:all_valid_sunday).attributes.reject { |a| a == "id" }]
+      all_valid["addresses_attributes"] = [ addresses(:all_valid_springfield).attributes.reject { |a| a == "id" } ]
+      all_valid["phone_numbers_attributes"] = [ phone_numbers(:all_valid_dummy).attributes.reject { |a| a == "id" } ]
+      all_valid["available_times_attributes"] = [ available_times(:all_valid_sunday).attributes.reject { |a| a == "id" } ]
       page.set_rack_session(prospect_params: all_valid)
 
       visit new_prospect_path
@@ -60,9 +60,9 @@ class ResumeUploadTest < ApplicationSystemTestCase
     all_valid[:enumeration_ids] = fixture.enumerations.map(&:id)
     all_valid.reject! { |a| %w[id created_at updated_at].include? a }
 
-    all_valid["addresses_attributes"] = [addresses(:all_valid_springfield).attributes.reject { |a| a == "id" }]
-    all_valid["phone_numbers_attributes"] = [phone_numbers(:all_valid_dummy).attributes.reject { |a| a == "id" }]
-    all_valid["available_times_attributes"] = [available_times(:all_valid_sunday).attributes.reject { |a| a == "id" }]
+    all_valid["addresses_attributes"] = [ addresses(:all_valid_springfield).attributes.reject { |a| a == "id" } ]
+    all_valid["phone_numbers_attributes"] = [ phone_numbers(:all_valid_dummy).attributes.reject { |a| a == "id" } ]
+    all_valid["available_times_attributes"] = [ available_times(:all_valid_sunday).attributes.reject { |a| a == "id" } ]
     page.set_rack_session(prospect_params: all_valid)
 
     visit new_prospect_path

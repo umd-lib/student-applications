@@ -9,7 +9,7 @@ class FilterDirectoryIdTest < ApplicationSystemTestCase
     Enumeration.find_by(value: "Undergraduate").id
     User.create(cas_directory_id: "filterer", name: "filterer", admin: false)
 
-    students = Prospect.all.group_by(&:first_name).to_h { |k, v| [k, v.first] } # rubocop:disable Style/HashTransformValues
+    students = Prospect.all.group_by(&:first_name).to_h { |k, v| [ k, v.first ] } # rubocop:disable Style/HashTransformValues
 
     visit prospects_path
     fill_in "username", with: "filterer"

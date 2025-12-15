@@ -14,8 +14,8 @@ class CommentConfirmationTest < ApplicationSystemTestCase
     all_valid[:semester] = Enumeration.active_semesters.first.value
     all_valid[:available_hours_per_week] = 0
 
-    all_valid["addresses_attributes"] = [addresses(:all_valid_springfield).attributes.reject { |a| a == "id" }]
-    all_valid["phone_numbers_attributes"] = [phone_numbers(:all_valid_dummy).attributes.reject { |a| a == "id" }]
+    all_valid["addresses_attributes"] = [ addresses(:all_valid_springfield).attributes.reject { |a| a == "id" } ]
+    all_valid["phone_numbers_attributes"] = [ phone_numbers(:all_valid_dummy).attributes.reject { |a| a == "id" } ]
 
     page.set_rack_session(prospect_params: all_valid)
     page.set_rack_session(prospect_step: "comments_confirmation")
@@ -24,7 +24,7 @@ class CommentConfirmationTest < ApplicationSystemTestCase
     assert page.has_content?("Confirmation")
     assert page.has_content?("Fall 2017")
 
-    ["Applicant Info", "Contact Info", "Work Experience", "Skills", "Availability", "Resume"].each do |step|
+    [ "Applicant Info", "Contact Info", "Work Experience", "Skills", "Availability", "Resume" ].each do |step|
       click_link("Change #{step}")
 
       # Applicant Info step does not have a specific H2 page header, so we need

@@ -65,7 +65,7 @@ module ApplicationHelper
           AvailableTime.days.collect do |day|
             concat(
               form.input(:day_times, include_hidden: false, label: false, wrapper: false) do
-                form.collection_check_boxes :day_times, ["#{day.last}-#{hour}"],
+                form.collection_check_boxes :day_times, [ "#{day.last}-#{hour}" ],
                                             :to_s, :to_s, include_hidden: false, multiple: true do |cb|
                   content_tag(:td, id: "avail-#{day.last}-#{hour}",
                                    class: "#{avail_table_cell_status(form, cb.object)} avail-cell") do
@@ -97,16 +97,16 @@ module ApplicationHelper
              else
                content_tag :i, "", class: "glyphicon"
              end
-      safe_join([icon, " ", title])
+      safe_join([ icon, " ", title ])
     end
   end
   # rubocop:enable Metrics/AbcSize
 
   # Simple helper method to format the per_page pull down
   def per_page_select(current_count, all_count)
-    range = [current_count]
+    range = [ current_count ]
     range << all_count if all_count < 500
-    [50, 100, 250, 500].each do |i|
+    [ 50, 100, 250, 500 ].each do |i|
       range << i if i <= all_count
     end
     p = params.dup

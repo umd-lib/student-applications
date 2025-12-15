@@ -39,7 +39,7 @@ class PurgeSuppressedProspectsTest < ActiveSupport::TestCase
     # Create an active (i.e., unsuppressed) prospect last updated 6 month ago
     create_active_prospect(last_update: 6.months.ago)
 
-    assert_no_difference ["Prospect.count", "Resume.count", "resume_file_count"] do
+    assert_no_difference [ "Prospect.count", "Resume.count", "resume_file_count" ] do
       with_captured_stdout do
         Rake::Task["db:purge_suppressed_prospects"].invoke
       end
@@ -53,7 +53,7 @@ class PurgeSuppressedProspectsTest < ActiveSupport::TestCase
     # Create a suppressed prospect last updated 6 month ago
     create_suppressed_prospect(last_update: 6.months.ago)
 
-    assert_difference ["Prospect.count", "Resume.count", "resume_file_count"], -1 do
+    assert_difference [ "Prospect.count", "Resume.count", "resume_file_count" ], -1 do
       with_captured_stdout do
         Rake::Task["db:purge_suppressed_prospects"].invoke
       end
@@ -67,7 +67,7 @@ class PurgeSuppressedProspectsTest < ActiveSupport::TestCase
     # Create a suppressed prospect that was just updated
     create_suppressed_prospect(last_update: 1.second.ago)
 
-    assert_no_difference ["Prospect.count", "Resume.count", "resume_file_count"] do
+    assert_no_difference [ "Prospect.count", "Resume.count", "resume_file_count" ] do
       with_captured_stdout do
         Rake::Task["db:purge_suppressed_prospects"].invoke
       end
@@ -88,7 +88,7 @@ class PurgeSuppressedProspectsTest < ActiveSupport::TestCase
     assert_equal 5, Prospect.count
     assert_equal 5, Resume.count
 
-    assert_difference ["Prospect.count", "Resume.count", "resume_file_count"], -2 do
+    assert_difference [ "Prospect.count", "Resume.count", "resume_file_count" ], -2 do
       with_captured_stdout do
         Rake::Task["db:purge_suppressed_prospects"].invoke
       end
@@ -96,7 +96,7 @@ class PurgeSuppressedProspectsTest < ActiveSupport::TestCase
 
     existing_prospect_ids = Prospect.all.map(&:id)
     assert_equal 3, existing_prospect_ids.count
-    assert_same_elements [new_active.id, old_active.id, new_suppressed.id], existing_prospect_ids
+    assert_same_elements [ new_active.id, old_active.id, new_suppressed.id ], existing_prospect_ids
   end
 
   def create_active_prospect(last_update: nil)

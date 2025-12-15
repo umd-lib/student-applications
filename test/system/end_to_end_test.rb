@@ -62,7 +62,7 @@ class EndToEndTest < ApplicationSystemTestCase
       el_id = find("input[id$='_name']")[:id]
       fill_in(el_id, with: "zzzyyyqqq")
     end
-    skills = [skill.name, "zzzyyyqqq"]
+    skills = [ skill.name, "zzzyyyqqq" ]
 
     click_button "Continue"
     assert page.has_content?("Availability")

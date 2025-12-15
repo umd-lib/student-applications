@@ -8,7 +8,7 @@ class ProspectsControllerTest < ActionController::TestCase
     prospect = prospects(:all_valid)
     assert_not prospect.suppressed?
     session[:cas] = { user: "admin" }
-    post :deactivate, params: { format: :json, ids: [prospect.id] }
+    post :deactivate, params: { format: :json, ids: [ prospect.id ] }
     assert_response :success
     prospect.reload
     assert prospect.suppressed?
@@ -28,10 +28,10 @@ class ProspectsControllerTest < ActionController::TestCase
     all_valid[:enumeration_ids] = fixture.enumerations.map(&:id)
     all_valid.reject! { |a| %w[id created_at updated_at].include? a }
 
-    all_valid["addresses_attributes"] = [JSON.parse(addresses(:all_valid_springfield).to_json).to_hash.reject { |a| a == "id" }]
+    all_valid["addresses_attributes"] = [ JSON.parse(addresses(:all_valid_springfield).to_json).to_hash.reject { |a| a == "id" } ]
     all_valid["available_times_attributes"] = []
     all_valid["available_hours_per_week"] = 0
-    all_valid["phone_numbers_attributes"] = [JSON.parse(phone_numbers(:all_valid_dummy).to_json).to_hash.reject { |a| a == "id" }]
+    all_valid["phone_numbers_attributes"] = [ JSON.parse(phone_numbers(:all_valid_dummy).to_json).to_hash.reject { |a| a == "id" } ]
 
     session[:cas] = { user: "admin" }
     session[:prospect_step] = fixture.current_step
@@ -46,7 +46,7 @@ class ProspectsControllerTest < ActionController::TestCase
   test "Semester field should be filterable" do
     session[:cas] = { user: "admin" }
     spring_2018 = enumerations(:spring_2018)
-    search_criteria = [spring_2018.id]
+    search_criteria = [ spring_2018.id ]
     get :index, params: { search: { enumerations: search_criteria } }
 
     all_request_ids = assigns(:all_results)
@@ -64,7 +64,7 @@ class ProspectsControllerTest < ActionController::TestCase
   test "Class Status field should be filterable" do
     session[:cas] = { user: "admin" }
     undergraduate = enumerations(:undergraduate)
-    search_criteria = [undergraduate.id]
+    search_criteria = [ undergraduate.id ]
     get :index, params: { search: { enumerations: search_criteria } }
 
     all_request_ids = assigns(:all_results)
@@ -82,7 +82,7 @@ class ProspectsControllerTest < ActionController::TestCase
   test "Preferred Library field should be filterable" do
     session[:cas] = { user: "admin" }
     art_library = enumerations(:art_library)
-    search_criteria = [art_library.id]
+    search_criteria = [ art_library.id ]
     get :index, params: { search: { enumerations: search_criteria } }
 
     all_request_ids = assigns(:all_results)
@@ -101,7 +101,7 @@ class ProspectsControllerTest < ActionController::TestCase
     session[:cas] = { user: "admin" }
     undergraduate = enumerations(:undergraduate)
     graduate = enumerations(:graduate)
-    search_criteria = [undergraduate.id, graduate.id]
+    search_criteria = [ undergraduate.id, graduate.id ]
     get :index, params: { search: { enumerations: search_criteria } }
 
     all_request_ids = assigns(:all_results)
@@ -115,7 +115,7 @@ class ProspectsControllerTest < ActionController::TestCase
     session[:cas] = { user: "admin" }
     art_library = enumerations(:art_library)
     engineering_library = enumerations(:engineering_library)
-    search_criteria = [art_library, engineering_library.id]
+    search_criteria = [ art_library, engineering_library.id ]
     get :index, params: { search: { enumerations: search_criteria } }
 
     all_request_ids = assigns(:all_results)
@@ -136,7 +136,7 @@ class ProspectsControllerTest < ActionController::TestCase
 
     undergraduate = enumerations(:undergraduate)
     spring_2018 = enumerations(:spring_2018)
-    search_criteria = [undergraduate.id, spring_2018.id]
+    search_criteria = [ undergraduate.id, spring_2018.id ]
 
     get :index, params: { search: { enumerations: search_criteria } }
 
@@ -161,7 +161,7 @@ class ProspectsControllerTest < ActionController::TestCase
     undergraduate = enumerations(:undergraduate)
     spring_2018 = enumerations(:spring_2018)
     engineering_library = enumerations(:engineering_library)
-    search_criteria = [undergraduate.id, spring_2018.id, engineering_library.id]
+    search_criteria = [ undergraduate.id, spring_2018.id, engineering_library.id ]
 
     get :index, params: { search: { enumerations: search_criteria } }
 

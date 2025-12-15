@@ -93,7 +93,7 @@ module QueryingProspects # rubocop:disable Metrics/ModuleLength
       sql = Array.new(dt_params.size)
                  .fill("SELECT prospect_id FROM available_times WHERE day = ? AND time = ?")
                  .join(" INTERSECT ")
-      [sql, *dt_values.flatten]
+      [ sql, *dt_values.flatten ]
     end
 
     def prospects_by_available_time

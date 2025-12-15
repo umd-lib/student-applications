@@ -26,7 +26,7 @@ namespace :db do
   end
 
   desc "Toggle user admin"
-  task :toggle_admin, [:cas_directory_id] => :environment do |_t, args|
+  task :toggle_admin, [ :cas_directory_id ] => :environment do |_t, args|
     cas_directory_id = args[:cas_directory_id]
 
     user = User.find_by(cas_directory_id: cas_directory_id)
@@ -40,7 +40,7 @@ namespace :db do
   end
 
   desc "Bulk add users from CSV file"
-  task :bulk_add_users, [:csv_file] => :environment do |_t, args|
+  task :bulk_add_users, [ :csv_file ] => :environment do |_t, args|
     file = args[:csv_file]
     if !File.exist?(file)
       puts "Cannot open file at #{file}"
