@@ -52,6 +52,27 @@ $ bundle config set without 'production'
 $ bundle install
 ```
 
+---
+
+**Note:** If after installing the gems and running a Rails task (or the server)
+you get multiple errors of the form:
+
+```text
+Ignoring cgi-0.5.1 because its extensions are not built. Try: gem pristine cgi --version 0.5.1
+Ignoring io-console-0.8.1 because its extensions are not built. Try: gem pristine io-console --version 0.8.1
+...
+```
+
+then run:
+
+```zsh
+gem pristine --all
+```
+
+to fix the gems.
+
+---
+
 3) Setup the database:
 
 ```zsh
