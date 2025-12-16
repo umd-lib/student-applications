@@ -65,6 +65,8 @@ gem "active_storage_validations", "0.9.7"
 # and so needs to be part of the production gemset, in order to Rake tasks
 # to run in production.
 gem "prawn", ">= 2.4.0", require: false
+
+gem "csv"
 # End UMD Customization
 
 group :development, :test do
