@@ -7,8 +7,8 @@ class CreateStructure < ActiveRecord::Migration[6.0]
       t.integer "record_id", null: false
       t.integer "blob_id", null: false
       t.datetime "created_at", null: false
-      t.index ["blob_id"], name: "index_active_storage_attachments_on_blob_id"
-      t.index ["record_type", "record_id", "name", "blob_id"], name: "index_active_storage_attachments_uniqueness", unique: true
+      t.index [ "blob_id" ], name: "index_active_storage_attachments_on_blob_id"
+      t.index [ "record_type", "record_id", "name", "blob_id" ], name: "index_active_storage_attachments_uniqueness", unique: true
     end
 
     create_table "active_storage_blobs" do |t|
@@ -20,13 +20,13 @@ class CreateStructure < ActiveRecord::Migration[6.0]
       t.string "checksum", null: false
       t.datetime "created_at", null: false
       t.string "service_name", null: false
-      t.index ["key"], name: "index_active_storage_blobs_on_key", unique: true
+      t.index [ "key" ], name: "index_active_storage_blobs_on_key", unique: true
     end
 
     create_table "active_storage_variant_records" do |t|
       t.integer "blob_id", null: false
       t.string "variation_digest", null: false
-      t.index ["blob_id", "variation_digest"], name: "index_active_storage_variant_records_uniqueness", unique: true
+      t.index [ "blob_id", "variation_digest" ], name: "index_active_storage_variant_records_uniqueness", unique: true
     end
 
     create_table "addresses" do |t|
@@ -38,14 +38,14 @@ class CreateStructure < ActiveRecord::Migration[6.0]
       t.string "country"
       t.integer "address_type", default: 1, null: false
       t.integer "prospect_id"
-      t.index ["prospect_id"], name: "index_addresses_on_prospect_id"
+      t.index [ "prospect_id" ], name: "index_addresses_on_prospect_id"
     end
 
     create_table "available_times" do |t|
       t.integer "prospect_id"
       t.integer "day", default: 0, null: false
       t.integer "time", default: 0, null: false
-      t.index ["prospect_id"], name: "index_available_times_on_prospect_id"
+      t.index [ "prospect_id" ], name: "index_available_times_on_prospect_id"
     end
 
     create_table "delayed_jobs" do |t|
@@ -60,7 +60,7 @@ class CreateStructure < ActiveRecord::Migration[6.0]
       t.string "queue"
       t.datetime "created_at"
       t.datetime "updated_at"
-      t.index ["priority", "run_at"], name: "delayed_jobs_priority"
+      t.index [ "priority", "run_at" ], name: "delayed_jobs_priority"
     end
 
     create_table "enumerations" do |t|
@@ -74,7 +74,7 @@ class CreateStructure < ActiveRecord::Migration[6.0]
       t.string "number"
       t.integer "phone_type", default: 0, null: false
       t.integer "prospect_id"
-      t.index ["prospect_id"], name: "index_phone_numbers_on_prospect_id"
+      t.index [ "prospect_id" ], name: "index_phone_numbers_on_prospect_id"
     end
 
     create_table "prospects" do |t|
@@ -99,21 +99,21 @@ class CreateStructure < ActiveRecord::Migration[6.0]
       t.string "user_signature"
       t.integer "semester"
       t.boolean "suppressed", default: false
-      t.index ["resume_id"], name: "index_prospects_on_resume_id"
+      t.index [ "resume_id" ], name: "index_prospects_on_resume_id"
     end
 
     create_table "prospects_enumerations", id: false do |t|
       t.integer "prospect_id"
       t.integer "enumeration_id"
-      t.index ["enumeration_id"], name: "index_prospects_enumerations_on_enumeration_id"
-      t.index ["prospect_id"], name: "index_prospects_enumerations_on_prospect_id"
+      t.index [ "enumeration_id" ], name: "index_prospects_enumerations_on_enumeration_id"
+      t.index [ "prospect_id" ], name: "index_prospects_enumerations_on_prospect_id"
     end
 
     create_table "prospects_skills" do |t|
       t.integer "prospect_id"
       t.integer "skill_id"
-      t.index ["prospect_id"], name: "index_prospects_skills_on_prospect_id"
-      t.index ["skill_id"], name: "index_prospects_skills_on_skill_id"
+      t.index [ "prospect_id" ], name: "index_prospects_skills_on_prospect_id"
+      t.index [ "skill_id" ], name: "index_prospects_skills_on_skill_id"
     end
 
     create_table "resumes" do |t|
@@ -130,9 +130,9 @@ class CreateStructure < ActiveRecord::Migration[6.0]
       t.text "data"
       t.datetime "created_at"
       t.datetime "updated_at"
-      t.index ["cas_ticket"], name: "index_sessions_on_cas_ticket"
-      t.index ["session_id"], name: "index_sessions_on_session_id"
-      t.index ["updated_at"], name: "index_sessions_on_updated_at"
+      t.index [ "cas_ticket" ], name: "index_sessions_on_cas_ticket"
+      t.index [ "session_id" ], name: "index_sessions_on_session_id"
+      t.index [ "updated_at" ], name: "index_sessions_on_updated_at"
     end
 
     create_table "skills" do |t|
@@ -156,7 +156,7 @@ class CreateStructure < ActiveRecord::Migration[6.0]
       t.text "duties"
       t.boolean "library_related"
       t.string "position_title"
-      t.index ["prospect_id"], name: "index_work_experiences_on_prospect_id"
+      t.index [ "prospect_id" ], name: "index_work_experiences_on_prospect_id"
     end
 
     add_foreign_key "active_storage_attachments", "active_storage_blobs", column: "blob_id"

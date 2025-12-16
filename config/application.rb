@@ -1,7 +1,22 @@
 require_relative "boot"
 
-require "rails/all"
-require 'rack-cas/session_store/active_record'
+require "rails"
+# Pick the frameworks you want:
+require "active_model/railtie"
+require "active_job/railtie"
+require "active_record/railtie"
+require "active_storage/engine"
+require "action_controller/railtie"
+require "action_mailer/railtie"
+# require "action_mailbox/engine"
+# require "action_text/engine"
+require "action_view/railtie"
+# require "action_cable/engine"
+require "rails/test_unit/railtie"
+
+# UMD Customization
+require "rack-cas/session_store/active_record"
+# End UMD Customization
 
 # Require the gems listed in Gemfile, including any gems
 # you've limited to :test, :development, or :production.
@@ -10,7 +25,16 @@ Bundler.require(*Rails.groups)
 module OnlineStudentApplications
   class Application < Rails::Application
     # Initialize configuration defaults for originally generated Rails version.
-    config.load_defaults 6.1
+    config.load_defaults 7.2
+
+    # Please, add to the `ignore` list any other `lib` subdirectories that do
+    # not contain `.rb` files, or that should not be reloaded or eager loaded.
+    # Common ones are `templates`, `generators`, or `middleware`, for example.
+    # UMD Customization
+    # Ignore the "lib/no_animations.rb" file, because it confuses the Zeitwerk
+    # loader, which expects it to define a "NoAnimations" constant.
+    config.autoload_lib(ignore: %w[assets tasks no_animations.rb])
+    # End UMD Customization
 
     # Configuration for the application, engines, and railties goes here.
     #
@@ -20,9 +44,11 @@ module OnlineStudentApplications
     # config.time_zone = "Central Time (US & Canada)"
     # config.eager_load_paths << Rails.root.join("extras")
 
-    config.rack_cas.server_url = 'https://login.umd.edu/cas'
+    # UMD Customization
+    config.rack_cas.server_url = "https://login.umd.edu/cas"
     config.rack_cas.session_store = RackCAS::ActiveRecordStore
 
     config.active_job.queue_adapter = :delayed_job
+    # End UMD Customization
   end
 end

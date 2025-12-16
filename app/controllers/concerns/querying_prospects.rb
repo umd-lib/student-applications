@@ -11,13 +11,13 @@ module QueryingProspects # rubocop:disable Metrics/ModuleLength
   def sort_order # rubocop:disable Metrics/AbcSize, Metrics/MethodLength
     col = sort_column
     # do a case-insensitive sort if we are sort on last name
-    col = "lower(#{col})" if col.include?('last_name')
-    return Arel.sql("#{col} #{sort_direction}") unless col.include?('enumerations')
+    col = "lower(#{col})" if col.include?("last_name")
+    return Arel.sql("#{col} #{sort_direction}") unless col.include?("enumerations")
 
-    klass, method = col.split('.')
+    klass, method = col.split(".")
     values = klass.singularize.capitalize.constantize.send(method.intern)
-                  .order(Arel.sql("value #{sort_direction} ")).pluck('value')
-    order_query = values.each_with_index.inject(+'CASE ') do |memo, (val, i)| # rubocop:disable Style/EachWithObject
+                  .order(Arel.sql("value #{sort_direction} ")).pluck("value")
+    order_query = values.each_with_index.inject(+"CASE ") do |memo, (val, i)| # rubocop:disable Style/EachWithObject
       memo << "WHEN( enumerations.value = '#{val}') THEN #{i} "
       memo
     end
@@ -36,7 +36,7 @@ module QueryingProspects # rubocop:disable Metrics/ModuleLength
 
     def join_table # rubocop:disable Metrics/AbcSize
       join_tables = []
-      join_tables << sort_column.split('.').first.intern if Prospect.reflections.key?(sort_column.split('.').first)
+      join_tables << sort_column.split(".").first.intern if Prospect.reflections.key?(sort_column.split(".").first)
 
       params[:search].each do |key, v|
         next if v.empty?
@@ -47,8 +47,8 @@ module QueryingProspects # rubocop:disable Metrics/ModuleLength
     end
 
     def select_statement
-      if sort_column.include?('enumerations')
-        'DISTINCT prospects.id, enumerations.value'
+      if sort_column.include?("enumerations")
+        "DISTINCT prospects.id, enumerations.value"
       else
         "DISTINCT prospects.id, #{sort_column}"
       end
@@ -60,16 +60,16 @@ module QueryingProspects # rubocop:disable Metrics/ModuleLength
         enumerations.class_status_values enumerations.semester_values prospects.hired
         enumerations.graduation_year_values prospects.available_hours_per_week
       ]
-      legal_sort_columns.include?(params[:sort]) ? params[:sort] : 'prospects.last_name'
+      legal_sort_columns.include?(params[:sort]) ? params[:sort] : "prospects.last_name"
     end
 
     def sort_direction
-      %w[asc desc].include?(params[:direction]) ? params[:direction] : 'asc'
+      %w[asc desc].include?(params[:direction]) ? params[:direction] : "asc"
     end
 
     def available_range_statement
       [
-        'available_hours_per_week >= ? AND available_hours_per_week <= ?',
+        "available_hours_per_week >= ? AND available_hours_per_week <= ?",
         params[:available_hours_per_week_min] || 0,
         params[:available_hours_per_week_max] || 999
       ]
@@ -86,18 +86,18 @@ module QueryingProspects # rubocop:disable Metrics/ModuleLength
     end
 
     def day_times_sql
-      dt_params = (params[:available_time] || []).select { |dt| dt.include? '-' }
+      dt_params = (params[:available_time] || []).select { |dt| dt.include? "-" }
       dt_values = dt_params.map do |dt|
-        dt.split('-').map(&:to_i)
+        dt.split("-").map(&:to_i)
       end
       sql = Array.new(dt_params.size)
-                 .fill('SELECT prospect_id FROM available_times WHERE day = ? AND time = ?')
-                 .join(' INTERSECT ')
-      [sql, *dt_values.flatten]
+                 .fill("SELECT prospect_id FROM available_times WHERE day = ? AND time = ?")
+                 .join(" INTERSECT ")
+      [ sql, *dt_values.flatten ]
     end
 
     def prospects_by_available_time
-      params[:available_time] ? { 'prospects.id' => AvailableTime.find_by_sql(day_times_sql).map(&:prospect_id) } : {}
+      params[:available_time] ? { "prospects.id" => AvailableTime.find_by_sql(day_times_sql).map(&:prospect_id) } : {}
     end
 
     # Returns a query for the given enumeration type (as represented by the
@@ -110,7 +110,7 @@ module QueryingProspects # rubocop:disable Metrics/ModuleLength
 
       return if ids_for_search.empty?
 
-      table_name = Prospect.reflect_on_association('enumerations').table_name
+      table_name = Prospect.reflect_on_association("enumerations").table_name
       table_class = table_name.classify.constantize
       arel = table_class.arel_table
 

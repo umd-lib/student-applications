@@ -1,11 +1,14 @@
-# This file should contain all the record creation needed to seed the database with its default values.
+# This file should ensure the existence of records required to run the application in every environment (production,
+# development, test). The code here should be idempotent so that it can be executed at any point in every environment.
 # The data can then be loaded with the bin/rails db:seed command (or created alongside the database with db:setup).
 #
-# Examples:
+# Example:
 #
-#   movies = Movie.create([{ name: 'Star Wars' }, { name: 'Lord of the Rings' }])
-#   Character.create(name: 'Luke', movie: movies.first)
+#   ["Action", "Comedy", "Drama", "Horror"].each do |genre_name|
+#     MovieGenre.find_or_create_by!(name: genre_name)
+#   end
 
+# UMD Customization
 Skill.find_or_create_by(name: 'Customer Service', promoted: true)
 Skill.find_or_create_by(name: 'Computer Experience', promoted: true)
 Skill.find_or_create_by(name: 'Use of Office Machinery (i.e. fax, copier )', promoted: true)
@@ -17,7 +20,7 @@ Skill.find_or_create_by(name: 'Creative', promoted: true)
 Skill.find_or_create_by(name: 'Social Media', promoted: true)
 Skill.find_or_create_by(name: 'Communication', promoted: true)
 
-['A Friend/Referral', 'Library Website', 'HR Job Board', 'Careers4Terps', 'Walk-in', 'Other'].each do |term|
+[ 'A Friend/Referral', 'Library Website', 'HR Job Board', 'Careers4Terps', 'Walk-in', 'Other' ].each do |term|
   Enumeration.find_or_create_by(value: term, list: Enumeration.lists['how_did_you_hear_about_us'])
 end
 
@@ -28,8 +31,9 @@ Enumeration.find_or_create_by(value: 'Graduate', list: Enumeration.lists['class_
   %w[Spring Fall].each_with_index { |s, _ii| Enumeration.find_or_create_by(value: "#{s} #{yr}", list: Enumeration.lists['semester']) }
 end
 
-['No preference', 'Art', 'Architecture', 'Chemistry', 'Engineering and Physical Sciences Library',
+[ 'No preference', 'Art', 'Architecture', 'Chemistry', 'Engineering and Physical Sciences Library',
  'Hornbake: Special Collections/University Archives', 'Hornbake: Library Media Services', 'McKeldin',
- 'MS Performing Arts Library'].each do |lib|
+ 'MS Performing Arts Library' ].each do |lib|
   Enumeration.find_or_create_by(value: lib, list: Enumeration.lists['library'])
 end
+# End UMD Customization

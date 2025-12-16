@@ -35,6 +35,9 @@ The Student Applications home page will be displayed.
 * The appropriate SSDR environment banner is displayed.
 * The page contains an "Apply!" button.
 
+**Note:** In the local development environment, the UMD favicon will *not* be
+displayed.
+
 1.3) At the bottom of the page, verify that the footer has a "Web Accessibility"
 link.
 
@@ -182,7 +185,7 @@ is displayed.
 
 2.4.1) On the "Skills" page, do the following:
 
-* Skills - Left-click `Attention to detail`
+* Skills - Left-click `Computer Experience`
 * List Additional Skills - Left-click the "Add Skill" link, and in the resulting
   textbox, enter `Testing Skills`
 
@@ -272,7 +275,7 @@ present in each section:
 
 * **Skills**
 
-  * `Attention to detail`
+  * `Computer Experience`
   * `Testing Skills`
 
 * **Availability**
@@ -401,7 +404,7 @@ all applicants.
 dialog:
 
 * Last Name: `St%`
-* Skills: <Left-click "Attention to detail" to select it>
+* Skills: <Left-click "Computer Experience" to select it>
 * Available Time: <Left-click the Sunday 12am checkbox to select it>
 
 and then left-click the "Filter" button.
@@ -414,7 +417,7 @@ Assuming that there is more than one entry in the table, left-click one of the
 *other* entries and in the detail page verify that:
 
 * the last name begins with "St"
-* "Attention to detail" is one of the listed skills
+* "Computer Experience" is one of the listed skills
 * the "Availability" table has the Sunday, 12am checkbox selected.
 
 3.11) Left-click the "Review Applications" link in the navigation bar to
@@ -460,7 +463,13 @@ panels:
 3.5.2) Left-click the "Semesters" panel to expand it.
 
 3.5.3) In the expanded "Semesters" panel, left-click the toggle for the
-"Summer 2017" entry to set it to "On".
+one of the semesters listed as "Off" to change it to "On".
+
+**Note:** In the local development environment, all the semesters may be "On".
+In this case, add a `Test Semester` in the textbox at the bottom of the list
+and type the "Enter" key to add a new semester. This should only be done in the
+local development environment, because there is currently no way to delete a
+semester.
 
 3.5.4) Open a second web browser window, go to
 
@@ -470,13 +479,13 @@ The Student applications home page will be displayed.
 
 3.5.5) On the Student applications home page in the second browser window,
 left-click the "Apply!" button. Verify on the "New Student Application" page
-that "Summer 2017" is now listed as one of the semesters.
+that semester that as toggled is now listed as one of the semesters.
 
 3.5.6) In the expanded "Semesters" panel in the first browser window, left-click
-the toggle for the "Summer 2017" entry to set it to "Off".
+the toggle for the semester again to it to "Off".
 
 3.5.7) On the Student applications home page in the second browser window,
-refresh the page, and verify that "Summer 2017" is *not* listed as one of the
+refresh the page, and verify that the semester is *not* listed as one of the
 semesters.
 
 Close the second browser window.

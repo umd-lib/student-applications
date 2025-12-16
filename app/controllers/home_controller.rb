@@ -10,12 +10,12 @@ class HomeController < ApplicationController
 
   def reset
     reset_session
-    redirect_to root_url, flash: { notice: 'Application has been reset.' }
+    redirect_to root_url, flash: { notice: "Application has been reset." }
   end
 
   def sign_out
     reset_session if @current_user # just a sanity check..
     redirect_to root_url,
-                flash: { notice: 'Signed out of the application. For security reasons, exit your web browser.' }
+                flash: { notice: "Signed out of the application. For security reasons, exit your web browser." }
   end
 end

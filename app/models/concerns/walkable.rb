@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-require 'active_support/concern'
+require "active_support/concern"
 
 # this allows for the step functionality of the multiple part form
 module Walkable

@@ -6,8 +6,8 @@ A student application ( called "Prospect" to avoid confusion ) is submitted via
 a multi-page form. This is managed by serializing the parameters in a session,
 which are marshalled at each step of the process.
 
-Each step has a view defined in the app/views/prospect which is rendered when
-the process reaches that step.
+Each step has a view defined in the "app/views/prospects" directory which is
+rendered when the process reaches that step.
 
 ## Test Plan
 
@@ -16,13 +16,14 @@ A basic test plan for verifying application functionality is provided in
 
 ## Development Setup
 
-**Note:** This application uses the Rails v4 "asset pipeline" for
-CSS and JavaScript. It does *not* use Webpack or Yarn.
+**Note:** This application uses the "sprockets" asset pipeline for
+CSS and JavaScript. It does *not* use "importmaps", and does *not*
+require Node, Webpack, or Yarn.
 
 Requires:
 
-* Ruby 2.7.5
-* Bundler v1.17.3
+* Ruby 3.4.7
+* Bundler v2.5.22
 * [Google Chrome](https://www.google.com/chrome/index.html) (for testing)
 
 ### Prerequisites
@@ -37,150 +38,106 @@ Requires:
 
 To run the application:
 
-1) Checkout the code and install dependencies:
+1) Clone the Git repository and switch into the directory:
 
-```bash
+```zsh
 $ git clone https://github.com/umd-lib/student-applications.git
 $ cd student-applications
-
-# The following two commands are required for Apple Silicon
-$ bundle config --local build.nio4r --with-cflags="-Wno-incompatible-pointer-types"
-$ bundle config --local build.sqlite3 --with-cflags="-Wno-incompatible-pointer-types -Wno-error=implicit-function-declaration -Wno-int-conversion"
-
-$ bundle install --without production
 ```
 
-2) Setup the database:
+2) Install the dependencies:
 
-```bash
-$ ./bin/rails db:migrate
-$ ./bin/rails db:seed
+```zsh
+$ bundle config set without 'production'
+$ bundle install
 ```
 
-3) (Optional) Populate database with sample data:
+---
 
-```bash
-$ ./bin/rails db:reset_with_sample_data
+**Note:** If after installing the gems and running a Rails task (or the server)
+you get multiple errors of the form:
+
+```text
+Ignoring cgi-0.5.1 because its extensions are not built. Try: gem pristine cgi --version 0.5.1
+Ignoring io-console-0.8.1 because its extensions are not built. Try: gem pristine io-console --version 0.8.1
+...
 ```
 
-4) The application uses CAS authentication to only allow known users to log in.
+then run:
+
+```zsh
+gem pristine --all
+```
+
+to fix the gems.
+
+---
+
+3) Setup the database:
+
+```zsh
+$ rails db:migrate
+$ rails db:seed
+```
+
+4) (Optional) Populate database with sample data:
+
+```zsh
+$ rails db:reset_with_sample_data
+```
+
+5) The application uses CAS authentication to only allow known users to log in.
 The seed data for the database does not contain any users. Run the following
 Rake task to add a user:
 
-```bash
-$ ./bin/rails 'db:add_admin_cas_user[<CAS DIRECTORY ID>,<FULL NAME>]'
+```zsh
+$ rails 'db:add_admin_cas_user[<CAS DIRECTORY ID>,<FULL NAME>]'
 ```
 
 and replacing the "\<CAS DIRECTORY ID>" and "\<FULL NAME>" with valid user
 information. For example, to add "John Smith" with a CAS Directory ID of
 "jsmith":
 
-```bash
-$ ./bin/rails 'db:add_admin_cas_user[jsmith, John Smith]'
+```zsh
+$ rails 'db:add_admin_cas_user[jsmith, John Smith]'
 ```
 
 5) Run the web application:
 
-```bash
-$ ./bin/rails server
+```zsh
+$ rails server
 ```
 
-To develop, you can run [Guard](https://github.com/guard/guard) by issuing:
+To create an application, go to:
 
-```bash
-$ ./bin/bundle exec guard
-```
+<http://student-applications-local:3000/>
 
-## Testing Setup
+To access the administrative interface, go to:
 
-Testing uses [Minitest](https://github.com/seattlerb/minitest),
-[Capybara](https://github.com/jnicklas/capybara) and the Selenium web driver.
+<http://student-applications-local:3000/prospects>
 
-Google Chrome and the "webdriver" gem are used to provide a headless browser for
-testing.
+### Running the tests
 
-CSS animations and transitions cause visibility/timing issues when testing in
-a headless browser. When running the tests, they have turned off by the
-"lib/no_animations.rb" file, which is added as Rack middleware in the
-"config/environment/test.rb" file.
-
-**Note:** As of December 3, 2025, the
-[webdriver](https://github.com/titusfortner/webdrivers)
-gem no longer correctly downloads and installs the latest chromedriver
-executable.
-
-To set up the chromedriver:
-
-1) Determine the version of Chrome installed on the local workstation:
+To run the unit tests:
 
 ```zsh
-$ /Applications/Google\ Chrome.app/Contents/MacOS/Google\ Chrome --version
+$ rails test
 ```
 
-This will print out a version such as:
-
-```text
-Google Chrome 143.0.7499.41
-```
-
-2) In a web browser, go to
-
-<https://googlechromelabs.github.io/chrome-for-testing/known-good-versions-with-downloads.json>
-
-This JSON page of all the available chromedriver versions (it looks best in
-Mozilla Firefox).
-
-Find the chromedriver version closest to the version on the local workstation
-(without going over), and note the "download" URL for the "mac-arm64" platform
-in the "chromedriver" section, i.e.:
-
-```json
-  "version": "143.0.7499.40",
-  "revision": "1536371",
-   "downloads": {
-    ...
-    "chromedriver": [
-          ...
-          {
-            "platform": "mac-arm64",
-            "url": "https://storage.googleapis.com/chrome-for-testing-public/143.0.7499.40/mac-arm64/chromedriver-mac-arm64.zip"
-          },
-          ...
-```
-
-3) Download the "chromedriver" using "wget" into th project directory. Using
-the example URL from the previous step:
+To run the system tests:
 
 ```zsh
-$ wget https://storage.googleapis.com/chrome-for-testing-public/143.0.7499.40/mac-arm64/chromedriver-mac-arm64.zip
+$ rails test:system
 ```
 
-4) Extract the Zip file:
+### Code Style
+
+This application uses the Rails Rubocop configuration
+[rubocop-rails-omakase](https://github.com/rails/rubocop-rails-omakase) to
+enforce a consistent coding style. To run:
 
 ```zsh
-$ unzip chromedriver-mac-arm64.zip
-```
-
-5) Rename the "chromedriver-mac-arm64" subdirectory to "chromedriver" (this is
-done to provide consistency between the macOS environment and the Linux
-environment used in "Dockerfile.ci"):
-
-```zsh
-$ mv chromedriver-mac-arm64 chromedriver
-```
-
-This will create a "chromedriver-mac-arm64" directory.
-
-6) To run the unit tests:
-
-```zsh
-$ rake test
-```
-
-7) To run the system tests:
-
-```zsh
-$ rake test:system
+$ rubocop -D
 ```
 
 ## Docker.ci and Jenkinsfile
@@ -214,7 +171,7 @@ An application submission sends an email to applicants. This email is handled
 by ActionMailer, using a [delayed_job](https://github.com/collectiveidea/delayed_job)
 queue. To run a delayed_job worker, you can start/stop the daemon process using:
 
-```bash
+```zsh
 $ cd ./student-applications; RAILS_ENV=production ./bin/delayed_job start
 $ cd ./student-applications; RAILS_ENV=production ./bin/delayed_job stop
 ```
@@ -222,7 +179,7 @@ $ cd ./student-applications; RAILS_ENV=production ./bin/delayed_job stop
 There are also a number of Job-related rake tasks that can be invoked
 These include:
 
-```bash
+```zsh
 $ ./bin/rails jobs:clear          # Clear the delayed_job queue
 $ ./bin/rails jobs:check[max_age] # Exit with error status if any jobs older than max_age seconds haven't been attempted yet
 $ ./bin/rails jobs:work           # Start a delayed_job worker
@@ -240,7 +197,7 @@ application. This requires an admin user to be logged in ( first visit
 
 You can add users via a Rails task:
 
-```bash
+```zsh
 $ ./bin/rails 'db:add_admin_cas_user[cas_directory_id,full_name]'  # Add an admin user
 $ ./bin/rails 'db:add_cas_user[cas_directory_id,full_name]'        # Add a non-admin user
 $ ./bin/rails db:bulk_add_users[csv_file]  # use csv file with full_name, directory_id rows
@@ -261,7 +218,7 @@ It is anticipated this task will be run periodically in a "cron-link" process.
 
 To run the task manually:
 
-```bash
+```zsh
 $ ./bin/rails db:purge_suppressed_prospects
 ```
 
@@ -278,7 +235,7 @@ does not have an associated database record.
 
 To run the task:
 
-```bash
+```zsh
 $ ./bin/rails db:purge_suppressed_prospects
 ```
 
@@ -296,7 +253,7 @@ record) in that directory.
 
 To run the task:
 
-```bash
+```zsh
 $ ./bin/rails db:reset_with_sample_data
 ```
 
@@ -305,6 +262,6 @@ existing database (the database is *not* reset).
 
 To run the task:
 
-```bash
+```zsh
 $ ./bin/rails db:populate_sample_data
 ```

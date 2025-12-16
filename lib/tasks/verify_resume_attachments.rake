@@ -1,5 +1,5 @@
 namespace :db do
-  desc 'Verify that the file attachments for all known Resumes can be found'
+  desc "Verify that the file attachments for all known Resumes can be found"
   task verify_resume_attachments: :environment do
     RESUME_STORAGE_DIR = ActiveStorage::Blob.service.root
 

@@ -60,6 +60,8 @@ pipeline {
            |
            |Check console output at $BUILD_URL to view the results.
            |
+           |There were ${TEST_COUNTS,var="fail"} failed tests.
+           |
            |There are ${ANALYSIS_ISSUES_COUNT} static analysis issues in this build.
            |
            |There were ${TEST_COUNTS,var="skip"} skipped tests.'''.stripMargin()
@@ -105,22 +107,16 @@ pipeline {
     stage('test') {
       steps {
         sh '''
-          # Disable Spring, as it should not be needed, and may interfere with tests
-          export DISABLE_SPRING=true
-
           # Configure MiniTest to use JUnit-style reporter
-          export MINITEST_REPORTER=JUnitReporter
+          export CI=true
 
-          # Download chromedriver
-          # See https://googlechromelabs.github.io/chrome-for-testing/known-good-versions-with-downloads.json
-          wget https://storage.googleapis.com/chrome-for-testing-public/143.0.7449.0/linux64/chromedriver-linux64.zip
+          # Make directory to hold reports
+          mkdir test/reports/
 
-          # Extract and rename directory
-          unzip chromedriver-linux64.zip
-          mv chromedriver-linux64 chromedriver
-
+          # Run the tests
           bundle exec rails db:reset
-          bundle exec rails test:system test
+          bundle exec rails test:system
+          bundle exec rails test
         '''
       }
       post {

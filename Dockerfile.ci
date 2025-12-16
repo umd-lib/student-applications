@@ -5,27 +5,26 @@
 # the application. It should _not_ be used for creating Docker images for use
 # in production.
 
-FROM ruby:2.7.2-slim
-
-RUN echo "deb http://archive.debian.org/debian buster main" > /etc/apt/sources.list
+FROM ruby:3.4.7-slim
 
 RUN apt-get update && \
     apt-get install -y build-essential && \
     apt-get install -y git && \
     apt-get install -y curl && \
-    curl -sL https://deb.nodesource.com/setup_10.x | bash - && \
+    curl -sL https://deb.nodesource.com/setup_18.x | bash - && \
     apt-get install -y nodejs && \
     apt-get install -y libsqlite3-dev && \
+    apt-get install -y libyaml-dev && \
     apt-get install -y wget && \
     apt-get install -y zip && \
     apt-get clean
 
 # Install Google Chrome for system tests
-RUN echo "deb http://dl.google.com/linux/chrome/deb/ stable main" >> /etc/apt/sources.list && \
-    wget -q -O - https://dl.google.com/linux/linux_signing_key.pub | apt-key add - && \
+RUN curl -sSL https://dl.google.com/linux/linux_signing_key.pub | gpg --dearmor -o /usr/share/keyrings/google-chrome.gpg && \
+    echo "deb [arch=amd64 signed-by=/usr/share/keyrings/google-chrome.gpg] https://dl.google.com/linux/chrome/deb/ stable main" > /etc/apt/sources.list.d/google-chrome.list && \
     apt-get update && \
-    apt-get install -y google-chrome-stable && \
-    apt-get clean
+    apt-get install -y google-chrome-stable --no-install-recommends && \
+    rm -rf /var/lib/apt/lists/*
 
 # Copy in the Gemfile and Gemfile.lock, and install the gems
 # This makes builds where the Gemfile/Gemfile.lock file hasn't
@@ -35,7 +34,7 @@ COPY Gemfile* /tmp/
 
 # Run bundler to install the gems
 WORKDIR /tmp
-RUN gem install bundler:1.17.3
+RUN gem install bundler:2.5.22
 RUN bundle install --without production
 
 WORKDIR /
