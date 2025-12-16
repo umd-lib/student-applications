@@ -34,7 +34,7 @@ gem "pg", group: :production
 gem "jquery-rails"
 
 # dotenv - For storing production configuration parameters
-gem "dotenv-rails", "~> 2.7.6"
+gem "dotenv"
 
 # Pagination
 gem "will_paginate", "~> 4.0.0"
