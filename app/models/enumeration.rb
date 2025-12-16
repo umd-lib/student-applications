@@ -9,7 +9,7 @@ class Enumeration < ApplicationRecord
   validates :value, presence: true
   validates :list, presence: true
 
-  enum list: ENUMERATION_LISTS
+  enum :list, ENUMERATION_LISTS
 
   class << self
     ENUMERATION_LISTS.map(&:to_s).each do |list|
