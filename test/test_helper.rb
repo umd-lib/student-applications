@@ -80,4 +80,4 @@ def drag_until(locator, options = {}, &block)
       .perform until block.call(slider["aria-valuenow"].to_i)
   slider
 end
-# End UMD CUstomization
+# End UMD Customization
