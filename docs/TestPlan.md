@@ -35,6 +35,9 @@ The Student Applications home page will be displayed.
 * The appropriate SSDR environment banner is displayed.
 * The page contains an "Apply!" button.
 
+**Note:** In the local development environment, the UMD favicon will *not* be
+displayed.
+
 1.3) At the bottom of the page, verify that the footer has a "Web Accessibility"
 link.
 
@@ -461,6 +464,12 @@ panels:
 
 3.5.3) In the expanded "Semesters" panel, left-click the toggle for the
 one of the semesters listed as "Off" to change it to "On".
+
+**Note:** In the local development environment, all the semesters may be "On".
+In this case, add a `Test Semester` in the textbox at the bottom of the list
+and type the "Enter" key to add a new semester. This should only be done in the
+local development environment, because there is currently no way to delete a
+semester.
 
 3.5.4) Open a second web browser window, go to
 
