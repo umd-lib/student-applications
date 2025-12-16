@@ -49,11 +49,8 @@ gem "rack-cas"
 gem "bootstrap-toggle-rails"
 gem "cocoon"
 
-# Pin "country_select" to v8.0.3, as it currently causes system tests to fail
-# when using a later version. This pinned version should be re-evaluated when
-# upgrading to later Rails and Ruby versions.
-gem "country_select", "~> 8.0.3"
-gem "simple_form", "~> 5.1.0"
+gem "country_select"
+gem "simple_form"
 
 gem "daemons"
 gem "delayed_job_active_record"
