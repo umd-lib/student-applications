@@ -92,9 +92,10 @@ Rails.application.configure do
 
   config.hosts << "student-applications-local"
 
-  # Temporary workaround for SSL certificate error when connecting to CAS
+  # Temporary workaround for SSL error retrieving CRL certificates
+  # on macOS with OpenSSL 3.6 and Ruby 3.4 that is seen when connecting to CAS
   # from the local development environment. This configuration change
-  # should be removed as soon as possible.
+  # can likely be removed when updating to Ruby 3.5 or later.
   config.rack_cas.verify_ssl_cert = false
   # End UMD Customization
 end
