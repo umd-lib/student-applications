@@ -1,78 +1,101 @@
-# Dockerfile for the generating searchumd Rails application Docker image
+# syntax = docker/dockerfile:1
+
+# UMD Customization
+# This Dockerfile is designed for production, not development.
 #
-# To build:
-#
-# docker build -t docker.lib.umd.edu/student-applications:<VERSION> -f Dockerfile .
-#
-# where <VERSION> is the Docker image version to create.
+# Dockerfile for the generating student-applications Rails application Docker
+# image for use with Kubernetes.
+# End UMD Customization
 
-FROM ruby:3.4.7-slim
+# Make sure RUBY_VERSION matches the Ruby version in .ruby-version
+# UMD Customization
+ARG RUBY_VERSION=3.4.7
+# End UMD Customization
+FROM docker.io/library/ruby:$RUBY_VERSION-slim AS base
 
-# Install apt based dependencies required to run Rails as
-# well as RubyGems. As the Ruby image itself is based on a
-# Debian image, we use apt-get to install those.
-#
-# "file" and "imagemagick" are needed by the "paperclip" gem
-RUN apt-get update && \
-    apt-get install -y build-essential \
-                       git \
-                       libpq-dev \
-                       libsqlite3-dev \
-                       nodejs \
-                       file \
-                       imagemagick && \
-    apt-get clean
+# Rails app lives here
+WORKDIR /rails
 
-# Create a user for the web app.
-RUN addgroup --gid 9999 app && \
-    adduser --uid 9999 --gid 9999 --disabled-password --gecos "Application" app && \
-    usermod -L app
+# Install base packages
+RUN apt-get update -qq && \
+    apt-get install --no-install-recommends -y curl libjemalloc2 libvips sqlite3 && \
+    rm -rf /var/lib/apt/lists /var/cache/apt/archives
 
-# Configure the main working directory. This is the base
-# directory used in any further RUN, COPY, and ENTRYPOINT
-# commands.
+# Set production environment
+ENV RAILS_ENV="production" \
+    BUNDLE_DEPLOYMENT="1" \
+    BUNDLE_PATH="/usr/local/bundle" \
+    BUNDLE_WITHOUT="development"
 
-USER app
-WORKDIR /home/app
+# Throw-away build stage to reduce size of final image
+FROM base AS build
 
-ENV RAILS_ENV=production
+# Install packages needed to build gems and node modules
+RUN apt-get update -qq && \
+    apt-get install --no-install-recommends -y build-essential git libyaml-dev node-gyp pkg-config python-is-python3 && \
+    rm -rf /var/lib/apt/lists /var/cache/apt/archives
 
-# Copy the Gemfile as well as the Gemfile.lock and install
-# the RubyGems. This is a separate step so the dependencies
-# will be cached unless changes to one of those two files
-# are made.
-COPY --chown=app:app Gemfile Gemfile.lock /home/app/webapp/
-RUN cd /home/app/webapp && \
-    gem install bundler --version 1.17.3 && \
-    bundle install --jobs 20 --retry 5 --without development test && \
-    cd ..
+# UMD Customization
+# Student Applications still uses the "Sprockets" asset pipeline, so Node and
+# Yarn are not needed.
+# Install JavaScript dependencies
+#ARG NODE_VERSION=18.20.5
+#ARG YARN_VERSION=1.22.22
+#ENV PATH=/usr/local/node/bin:$PATH
+#RUN curl -sL https://github.com/nodenv/node-build/archive/master.tar.gz | tar xz -C /tmp/ && \
+#    /tmp/node-build-master/bin/node-build "${NODE_VERSION}" /usr/local/node && \
+#    npm install -g yarn@$YARN_VERSION && \
+#    rm -rf /tmp/node-build-master
+# End UMD Customization
 
-# Copy the main application.
-COPY  --chown=app:app . /home/app/webapp/
+# Install application gems
+COPY Gemfile Gemfile.lock ./
+RUN bundle install && \
+    rm -rf ~/.bundle/ "${BUNDLE_PATH}"/ruby/*/cache "${BUNDLE_PATH}"/ruby/*/bundler/gems/*/.git
 
+# UMD Customization
+# Install node modules
+#COPY package.json yarn.lock ./
+#RUN yarn install --frozen-lockfile
+# End UMD Customization
+
+# Copy application code
+COPY . .
+
+# Precompiling assets for production without requiring secret RAILS_MASTER_KEY
+# UMD Customization
+RUN PROD_DATABASE_ADAPTER=postgresql SECRET_KEY_BASE_DUMMY=1 ./bin/rails assets:precompile
+# End UMD Customization
+
+
+RUN rm -rf node_modules
+
+
+# Final stage for app image
+FROM base
+
+# Copy built artifacts: gems, application
+COPY --from=build "${BUNDLE_PATH}" "${BUNDLE_PATH}"
+COPY --from=build /rails /rails
+
+# Run and own only the runtime files as a non-root user for security
+RUN groupadd --system --gid 1000 rails && \
+    useradd rails --uid 1000 --gid 1000 --create-home --shell /bin/bash && \
+    chown -R rails:rails db log storage tmp
+USER 1000:1000
+
+# UMD Customization
 # Copy Rails application start script
-COPY --chown=app:app docker_config/student-applications/rails_start.sh /home/app/webapp
+COPY --chown=rails:rails docker_config/student-applications/rails_start.sh .
+# End UMD Customization
 
-# RAILS_RELATIVE_URL_ROOT and SCRIPT_NAME are only needed if application is
-# running on a URL subpath
-# ENV RAILS_RELATIVE_URL_ROOT=/subpath
-# ENV SCRIPT_NAME=/subpath
+# Entrypoint prepares the database.
+ENTRYPOINT ["/rails/bin/docker-entrypoint"]
 
-# The following SECRET_KEY_BASE variable is used so that the
-# "assets:precompile" command will run run without throwing an error.
-# It will have no effect on the application when it is actually run.
-#
-# Similarly, the PROD_DATABASE_ADAPTER variable is needed for the
-# "assets:precompile" Rake task to complete, but will have no effect
-# on the application when it is actually run.
-ENV SECRET_KEY_BASE=IGNORE_ME
-RUN cd /home/app/webapp && \
-    PROD_DATABASE_ADAPTER=postgresql bundle exec rails assets:precompile && \
-    cd ..
-
-# Expose port 3000 to the Docker host, so we can access it
-# from the outside.
+# Start the server by default, this can be overwritten at runtime
 EXPOSE 3000
 
+# UMD Customization
 # The main command to run when the container starts.
-CMD ["/home/app/webapp/rails_start.sh"]
+CMD ["./rails_start.sh"]
+# End UMD Customization
