@@ -130,6 +130,12 @@ To run the system tests:
 $ rails test:system
 ```
 
+To run both unit and system tests:
+
+```zsh
+$ rails test:all
+```
+
 ### Code Style
 
 This application uses the Rails Rubocop configuration

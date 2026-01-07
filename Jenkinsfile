@@ -108,15 +108,11 @@ pipeline {
       steps {
         sh '''
           # Configure MiniTest to use JUnit-style reporter
-          export CI=true
-
-          # Make directory to hold reports
-          mkdir test/reports/
+          export MINITEST_REPORTER=JUnitReporter
 
           # Run the tests
           bundle exec rails db:reset
-          bundle exec rails test:system
-          bundle exec rails test
+          bundle exec rails test:all
         '''
       }
       post {
