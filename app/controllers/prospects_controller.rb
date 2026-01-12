@@ -7,7 +7,7 @@ class ProspectsController < ApplicationController # rubocop:disable Metrics/Clas
 
   before_action :set_session, only: %i[new create]
   before_action :set_prospect, only: %i[new create]
-  before_action :ensure_auth, only: %i[index update show deactivate]
+  before_action :ensure_auth, only: %i[index update show edit deactivate]
 
   def new
     choose_action if params[:step]
