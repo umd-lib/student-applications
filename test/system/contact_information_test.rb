@@ -50,7 +50,7 @@ class ContactInformationTest < ApplicationSystemTestCase
     select(Enumeration.active_class_statuses.first.value, from: "class_status")
 
     click_link "Add A Permanent Address"
-    assert_equal 2, find(:css, "#addresses").all(".nested-fields").length
+    assert_selector "#addresses .nested-fields", count: 2
     2.times do |i|
       within("#addresses .nested-fields:nth-child(#{i + 1})") do
         %w[_street_address_1 _city _state _postal_code].each do |attr|
@@ -61,7 +61,7 @@ class ContactInformationTest < ApplicationSystemTestCase
     end
 
     2.times { click_link "Add A Phone Number" }
-    assert_equal 3, find(:css, "#phone-numbers").all(".nested-fields").length
+    assert_selector "#phone-numbers .nested-fields", count: 3
     3.times do |i|
       within("#phone-numbers .nested-fields:nth-child(#{i + 1})") do
         %w[_number].each do |attr|
@@ -77,7 +77,7 @@ class ContactInformationTest < ApplicationSystemTestCase
     click_button "Continue"
     click_button "Back"
 
-    assert_equal 2, find(:css, "#addresses").all(".nested-fields").length
+    assert_selector "#addresses .nested-fields", count: 2
 
     2.times do |i|
       # and with all our content
