@@ -17,7 +17,7 @@ class ReloadPageTest < ApplicationSystemTestCase
 
     # add some skills to the prospect
     click_link "Add Skill"
-    assert_equal 1, find(:css, "#skills").all(".nested-fields").length
+    assert_selector "#skills .nested-fields", count: 1
 
     within("#skills .nested-fields:nth-child(1)") do
       el_id = find("input[id$='_name']")[:id]

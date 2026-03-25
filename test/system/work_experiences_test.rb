@@ -15,7 +15,7 @@ class WorkExperiencesTest < ApplicationSystemTestCase
     assert page.has_content?("Work Experience")
 
     click_link "Add Work Experience"
-    assert_equal 1, find(:css, "#work-experiences").all(".nested-fields").length
+    assert_selector "#work-experiences .nested-fields", count: 1
 
     within("#work-experiences .nested-fields:nth-child(1)") do
       %w[_name _dates_of_employment _location].each do |attr|
@@ -30,16 +30,16 @@ class WorkExperiencesTest < ApplicationSystemTestCase
 
     # we do a little dance...
     click_link "Add Work Experience"
-    assert_equal 2, find(:css, "#work-experiences").all(".nested-fields").length
+    assert_selector "#work-experiences .nested-fields", count: 2
 
     click_button "Continue"
     click_button "Back"
 
-    assert_equal 2, find(:css, "#work-experiences").all(".nested-fields").length
+    assert_selector "#work-experiences .nested-fields", count: 2
 
     click_button "Back"
     click_button "Continue"
-    assert_equal 2, find(:css, "#work-experiences").all(".nested-fields").length
+    assert_selector "#work-experiences .nested-fields", count: 2
 
     # ... and values are still in place
     within("#work-experiences .nested-fields:nth-child(1)") do
