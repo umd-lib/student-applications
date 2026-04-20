@@ -97,6 +97,9 @@ GEM
     bindex (0.8.1)
     bootstrap-toggle-rails (2.2.1.0)
     builder (3.3.0)
+    bundler-audit (0.9.3)
+      bundler (>= 1.2.0)
+      thor (~> 1.0)
     capybara (3.40.0)
       addressable
       matrix
@@ -395,6 +398,7 @@ PLATFORMS
 DEPENDENCIES
   active_storage_validations (= 0.9.7)
   bootstrap-toggle-rails
+  bundler-audit
   capybara
   cocoon
   country_select
@@ -426,7 +430,7 @@ DEPENDENCIES
   simplecov
   simplecov-rcov
   sprockets-rails
-  sqlite3 (>= 1.4)
+  sqlite3 (>= 2.1)
   tzinfo-data
   umd_lib_style!
   web-console
