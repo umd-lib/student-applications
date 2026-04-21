@@ -10,7 +10,9 @@ CI.run do
   step "Tests: Seeds", "env RAILS_ENV=test bin/rails db:seed:replant"
 
   # Optional: Run system tests
-  # step "Tests: System", "bin/rails test:system"
+  # UMD Customization
+  step "Tests: System", "bin/rails test:system"
+  # End UMD Customization
 
   # Optional: set a green GitHub commit status to unblock PR merge.
   # Requires the `gh` CLI and `gh extension install basecamp/gh-signoff`.
