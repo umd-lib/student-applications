@@ -146,10 +146,27 @@ enforce a consistent coding style. To run:
 $ rubocop -D
 ```
 
-## Docker.ci and Jenkinsfile
+## Continuous Integration
+
+### Local CI
+
+Rails 8.1 added a "local" continuous integration process that:
+
+* Run Rubocop
+* Runs "bundler-audit" to check gems for security issues
+* Runs the unit and system tests
+
+This process can be run using:
+
+```zsh
+$ bin/ci
+```
+
+### Docker.ci and Jenkinsfile
 
 The "Dockerfile.ci" file is used to encapsulate the environment needed by the
-continuous integration (ci) server for building and testing the application.
+continuous integration (ci) server for building and testing the application in
+Jenkins.
 
 The "Jenkinsfile" provides the Jenkins pipeline steps for building and
 testing the application.
@@ -160,7 +177,6 @@ Requires:
 
 * Postgres client to be installed (on RedHat, the "postgresql" and
   "postgresql-devel" packages)
-* The "imagemagick" package (required by the "paperclip" gem)
 
 The application uses the "dotenv" gem to configure the production environment.
 The gem expects a ".env" file in the root directory to contain the environment
