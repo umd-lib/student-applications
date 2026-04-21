@@ -160,7 +160,6 @@ Requires:
 
 * Postgres client to be installed (on RedHat, the "postgresql" and
   "postgresql-devel" packages)
-* The "imagemagick" package (required by the "paperclip" gem)
 
 The application uses the "dotenv" gem to configure the production environment.
 The gem expects a ".env" file in the root directory to contain the environment
