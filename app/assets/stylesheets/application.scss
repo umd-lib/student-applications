@@ -17,6 +17,7 @@
  *= require_self
  */
 
+$required_field_error_color: #a94442;
 
 body > #viewport > .content > .container { margin-top: 25px;  }
 .alert { margin-top: 15px; }
@@ -24,7 +25,7 @@ body > #viewport > .content > .container { margin-top: 25px;  }
 #home-jumbo, #upload-jumbo { margin-top: 50px }
 
 label.required abbr {
-  color: #a94442;
+  color: $required_field_error_color;
 }
 
 
@@ -39,7 +40,12 @@ label.required abbr {
 }
 
 
-.help-block.has-error { color: #a94442 }
+.help-block.has-error { color: $required_field_error_color; }
+
+.has-error input[type="checkbox"] {
+  outline: 2px solid $required_field_error_color;
+  outline-offset: 2px;
+}
 
 .radio-question { padding-left: 50px; padding-right: 20px; vertical-align: middle; }
 .help-block.radio-question-help { vertical-align: middle; margin-bottom: 2px; display: inline-block; padding-left: 10px }
@@ -134,6 +140,10 @@ table.prospects th, table.prospects td  {
 
 .uploadForm {
   margin-bottom: 2em;
+}
+
+.prospect_user_confirmation label {
+  font-weight: bold;
 }
 
 /* configuration page */
