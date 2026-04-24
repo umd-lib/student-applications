@@ -114,7 +114,7 @@ To create an application, go to:
 
 To access the administrative interface, go to:
 
-<http://student-applications-local:3000/prospects>
+<http://student-applications-local:3000/admin>
 
 ### Running the tests
 

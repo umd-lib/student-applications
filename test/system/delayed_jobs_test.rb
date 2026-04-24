@@ -5,7 +5,7 @@ require "application_system_test_case"
 class DelayedJobsTest < ApplicationSystemTestCase
   test "admins can see the delayed job page" do
     User.create(cas_directory_id: "editor", name: "editor", admin: true)
-    visit prospects_path
+    visit admin_prospects_path
     fill_in "username", with: "editor"
     fill_in "password", with: "any password"
     click_button "Login"
@@ -17,7 +17,7 @@ class DelayedJobsTest < ApplicationSystemTestCase
 
   test "nonadmins cannot see the delayed job page" do
     User.create(cas_directory_id: "someone", name: "someone", admin: false)
-    visit prospects_path
+    visit admin_prospects_path
     fill_in "username", with: "someone"
     fill_in "password", with: "any password"
     click_button "Login"

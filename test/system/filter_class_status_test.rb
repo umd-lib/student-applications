@@ -11,7 +11,7 @@ class FilterClassStatusTest < ApplicationSystemTestCase
 
     students = Prospect.all.group_by(&:first_name).to_h { |k, v| [ k, v.first ] } # rubocop:disable Style/HashTransformValues
 
-    visit prospects_path
+    visit admin_prospects_path
     fill_in "username", with: "filterer"
     fill_in "password", with: "any password"
     click_button "Login"
