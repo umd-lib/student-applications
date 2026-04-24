@@ -2,7 +2,7 @@
 
 require "test_helper"
 
-class ConfigurationControllerTest < ActionController::TestCase
+class Admin::ConfigurationControllerTest < ActionController::TestCase
   test "should not create a new enumeration for non-users" do
     assert_no_difference("Enumeration.count") do
       post :update, params: { enumeration: { list_id: 0, value: "phd" } }

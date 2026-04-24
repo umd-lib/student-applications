@@ -14,18 +14,29 @@ Rails.application.routes.draw do
   # this is handled by rack case, but this just allows us to have a URL helper
   get "logout" => "home#sign_out", as: :logout
 
-  resources :users
-  get "disable_admin" => "users#disable_admin", as: :disable_admin
-
-  resources :prospects
-  get "prospects/:id/resume" => "prospects#resume", as: :prospect_resume
+  resources :prospects, only: [ :new, :create ]
   get "prospects/:id/thank_you" => "prospects#thank_you", as: :thank_you
-  post "prospects/deactivate" => "prospects#deactivate", as: :deactivate
 
   resources :resumes
 
-  get "configuration" => "configuration#show", as: :configuration
-  post "configuration" => "configuration#update", as: :update_configuration
+  namespace :admin do
+    root to: redirect("/admin/prospects")
+    resources :prospects, only: [ :index, :show, :edit, :update ] do
+      member do
+        get :resume
+      end
+
+      collection do
+        post :deactivate
+      end
+    end
+
+    resources :users
+    get "disable_admin" => "users#disable_admin", as: :disable_admin
+
+    get "configuration" => "configuration#show", as: :configuration
+    post "configuration" => "configuration#update", as: :update_configuration
+  end
 
   match "/delayed_jobs" => DelayedJobWeb, anchor: false, via: %i[get post]
   # End UMD Customization

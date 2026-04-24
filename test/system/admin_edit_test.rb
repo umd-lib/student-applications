@@ -7,7 +7,7 @@ class AdminEditTest < ApplicationSystemTestCase
     page.current_window.resize_to(2048, 8192)
 
     User.create(cas_directory_id: "editor", name: "editor", admin: true)
-    visit prospects_path
+    visit admin_prospects_path
     fill_in "username", with: "editor"
     fill_in "password", with: "any password"
     click_button "Login"

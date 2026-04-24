@@ -348,7 +348,7 @@ submission is allowed per semester, with contact information for assistance.
 
 3.1.1) In a web browser, go to
 
-<https://student-applications-test.lib.umd.edu/prospects/>
+<https://student-applications-test.lib.umd.edu/admin/>
 
 After logging in via CAS, verify that the Student Applications admin interface
 home page is displayed.

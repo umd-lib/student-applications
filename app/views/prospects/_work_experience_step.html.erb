@@ -5,14 +5,15 @@
     <span class='pull-right'>
       <%= link_to_add_association(form, :work_experiences,
                                   { "data-association-insertion-node": "#work-experiences",
-                                    "data-association-insertion-method": 'append'}) do  %>
-        <i class='glyphicon glyphicon-plus-sign'></i>Add Work Experience 
-      <% end %> 
+                                    "data-association-insertion-method": 'append',
+                                    partial: 'prospects/work_experience_fields'}) do  %>
+        <i class='glyphicon glyphicon-plus-sign'></i>Add Work Experience
+      <% end %>
     </span>
   </div>
   <div class="panel-body" id="work-experiences">
       <%= form.fields_for :work_experiences do |ws| %>
-        <%= render 'work_experience_fields', f: ws %>
+        <%= render 'prospects/work_experience_fields', f: ws %>
       <% end %>
   </div>
 </div>

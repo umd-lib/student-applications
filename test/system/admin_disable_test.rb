@@ -6,7 +6,7 @@ class AdminDisableTest < ApplicationSystemTestCase
   test "Should be able to login as admin and disable it temporarily" do
     page.current_window.resize_to(2048, 2048)
     User.create(cas_directory_id: "admin", name: "admin", admin: true)
-    visit prospects_path
+    visit admin_prospects_path
     # Visiting prospects_path should redirect to CAS
     fill_in "username", with: "admin"
     fill_in "password", with: "any password"
