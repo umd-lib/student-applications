@@ -112,4 +112,45 @@ class SubmitProspectApplicationTest < ApplicationSystemTestCase
     assert page.has_field?("prospect_phone_numbers_attributes_0_phone_type", with: "local")
     assert_equal Prospect.steps[1], page.get_rack_session_key("prospect_step")
   end
+
+  test "won't submit if confirmation checkbox and signature are not provided" do
+    # Fast-forward session to the final step, mirroring comment_confirmation_test.rb
+    fixture = prospects(:all_valid)
+    all_valid = fixture.attributes
+    all_valid[:enumeration_ids] = fixture.enumerations.map(&:id)
+    all_valid.reject! { |a| %w[id created_at updated_at].include? a }
+
+    all_valid[:directory_id] = SecureRandom.hex
+    all_valid[:semester] = Enumeration.active_semesters.first.value
+    all_valid[:available_hours_per_week] = 0
+
+    all_valid["addresses_attributes"] = [ addresses(:all_valid_springfield).attributes.reject { |a| a == "id" } ]
+    all_valid["phone_numbers_attributes"] = [ phone_numbers(:all_valid_dummy).attributes.reject { |a| a == "id" } ]
+
+    # Remove the "user_signature" key for this test
+    all_valid.reject! { |a| a == "user_signature" }
+
+    page.set_rack_session(prospect_params: all_valid)
+    page.set_rack_session(prospect_step: "comments_confirmation")
+
+    visit new_prospect_path
+    assert page.has_content?("Confirmation")
+
+    # Attempt to submit without checking the confirmation checkbox or providing a signature
+    click_button "Submit"
+
+    # Form should not have been submitted — still on the confirmation page
+    assert_not page.has_content?("Submitted")
+    assert page.has_content?("Confirmation")
+
+    # Both fields should show validation errors
+    assert page.has_css?(".prospect_user_confirmation.has-error"),
+      "Expected confirmation checkbox wrapper to have has-error class"
+    assert page.has_css?(".has-error input[type='checkbox']"),
+      "Expected confirmation checkbox to have error outline"
+    assert page.has_content?("must be accepted")
+    assert page.has_css?(".prospect_user_signature.has-error"),
+      "Expected signature field wrapper to have has-error class"
+    assert page.has_content?("can't be blank")
+  end
 end

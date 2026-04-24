@@ -142,10 +142,11 @@
 <%= form.input :additional_comments, label: "Enter below:", disabled: !@current_user.nil? %>
 <h2>Confirmation</h2>
 <% unless @current_user %>
-  <%= form.label(  :user_confirmation, { class: "required" } ) do %>
-    <abbr title='required'>*</abbr> I certify that all information on this application is accurate and recognize it is subject to verification.
-  <% end %>
-  <%= form.check_box( :user_confirmation, { class: 'user_confirmation', required: true } )  %> Yes.
+  <%= form.input :user_confirmation,
+                 as: :boolean,
+                 wrapper: :vertical_boolean,
+                 label: 'I certify that all information on this application is accurate and recognize it is subject to verification.',
+                 required: true %>
 <% end %>
-<br/>
+
 <%= form.input( :user_signature, { class: 'user_signature', required: true , label: "Please type your name as it will serve as a digital signature:", disabled:  !@current_user.nil? } )  %>
