@@ -10,7 +10,7 @@ class SortTest < ApplicationSystemTestCase
     Prospect.where(first_name: "Filter").destroy_all
 
     User.create(cas_directory_id: "sorter", name: "sorter", admin: false)
-    visit prospects_path
+    visit admin_prospects_path
     fill_in "username", with: "sorter"
     fill_in "password", with: "any password"
     click_button "Login"

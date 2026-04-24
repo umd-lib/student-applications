@@ -6,7 +6,7 @@ class ConfigurationTest < ApplicationSystemTestCase
   test "admin should be able to promote and unpromote skills" do
     page.current_window.resize_to(2048, 2048)
     User.create(cas_directory_id: "admin", name: "admin", admin: true)
-    visit configuration_path
+    visit admin_configuration_path
     # Visiting prospects_path should redirect to CAS
     fill_in "username", with: "admin"
     fill_in "password", with: "any password"
@@ -32,7 +32,7 @@ class ConfigurationTest < ApplicationSystemTestCase
   test "admin should be able to activate and unactivate enumeration" do
     page.current_window.resize_to(2048, 2048)
     User.create(cas_directory_id: "admin", name: "admin", admin: true)
-    visit configuration_path
+    visit admin_configuration_path
     # Visiting prospects_path should redirect to CAS
     fill_in "username", with: "admin"
     fill_in "password", with: "any password"
@@ -58,7 +58,7 @@ class ConfigurationTest < ApplicationSystemTestCase
   test "admin should be able to create enumeration" do
     page.current_window.resize_to(2048, 2048)
     User.create(cas_directory_id: "admin", name: "admin", admin: true)
-    visit configuration_path
+    visit admin_configuration_path
     # Visiting prospects_path should redirect to CAS
     fill_in "username", with: "admin"
     fill_in "password", with: "any password"
@@ -77,7 +77,7 @@ class ConfigurationTest < ApplicationSystemTestCase
   test "admin should be able to create skills enumeration" do
     page.current_window.resize_to(2048, 2048)
     User.create(cas_directory_id: "admin", name: "admin", admin: true)
-    visit configuration_path
+    visit admin_configuration_path
     # Visiting prospects_path should redirect to CAS
     fill_in "username", with: "admin"
     fill_in "password", with: "any password"

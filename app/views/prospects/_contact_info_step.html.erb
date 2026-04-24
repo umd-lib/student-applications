@@ -34,7 +34,8 @@
                                     { class: "add-permanent-address",
                                        force_non_association_create: true,
                                       "data-association-insertion-node": "#addresses",
-                                      "data-association-insertion-method": 'append'}) do  %>
+                                      "data-association-insertion-method": 'append',
+                                      partial: 'prospects/address_fields'}) do  %>
           <i class='glyphicon glyphicon-plus-sign'></i>Add A Permanent Address
         <% end %>
       <% end %>
@@ -42,7 +43,7 @@
   </div>
   <div class="panel-body" id="addresses">
       <%= form.fields_for :addresses do |addr| %>
-        <%= render 'address_fields', f: addr %>
+        <%= render 'prospects/address_fields', f: addr %>
       <% end %>
   </div>
 </div>
@@ -53,14 +54,15 @@
         <%= link_to_add_association(form, :phone_numbers,
                                     { class: "add-phone-number",
                                       "data-association-insertion-node": "#phone-numbers",
-                                      "data-association-insertion-method": 'append' } ) do  %>
+                                      "data-association-insertion-method": 'append',
+                                      partial: 'prospects/phone_number_fields'}) do  %>
           <i class='glyphicon glyphicon-plus-sign'></i>Add A Phone Number
         <% end %>
     </span>
   </div>
   <div class="panel-body" id="phone-numbers">
       <%= form.fields_for :phone_numbers, form.object.phone_numbers do |pn| %>
-          <%= render 'phone_number_fields', f: pn %>
+          <%= render 'prospects/phone_number_fields', f: pn %>
       <% end %>
   </div>
 </div>
