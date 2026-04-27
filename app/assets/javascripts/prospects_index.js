@@ -66,7 +66,7 @@ var init = function() {
     e.preventDefault();
     var vals = $("#available-hours-selector").bootstrapSlider('getValue');
     $("#availability-min").val( vals[0] );
-    $("#availability-max ").val( vals[1] );
+    $("#availability-max").val( vals[1] );
     $("#filter-prospects-form").submit();
   });
 
