@@ -20,12 +20,13 @@ Rails.application.routes.draw do
   resources :resumes
 
   namespace :admin do
-    root to: redirect("/admin/prospects")
     resources :prospects, only: [ :index, :show, :edit, :update ] do
       collection do
         post :deactivate
       end
     end
+
+    root to: "prospects#index"
 
     resources :users
     get "disable_admin" => "users#disable_admin", as: :disable_admin
