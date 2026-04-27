@@ -61,7 +61,7 @@
             <td><%= prospect.available_hours_per_week %></td>
             <td>
               <%= link_to( "javascript:", class: 'btn btn-success',  data: { toggle: "modal", target: "#availabilityModal", dayTimes:  prospect.available_times.map(&:day_time)  } ) do %>
-                <span class="glyphicon glyphicon-calendar" />
+                <span class="glyphicon glyphicon-calendar"></span>
               <% end %>
             </td>
             <td><%= prospect.libraries.map(&:value).join(" , ") %></td>
