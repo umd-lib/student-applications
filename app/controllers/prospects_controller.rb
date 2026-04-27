@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 
 class ProspectsController < ApplicationController # rubocop:disable Metrics/ClassLength
-  include ProspectParameterHandling, QueryingProspects
+  include ProspectParameterHandling
 
   @error_message = "We're sorry, but something has gone wrong. Please try again."
 
