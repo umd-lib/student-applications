@@ -86,7 +86,7 @@ class Admin::ProspectsControllerTest < ActionController::TestCase
     session[:cas] = { user: "admin" }
     art_library = enumerations(:art_library)
     engineering_library = enumerations(:engineering_library)
-    search_criteria = [ art_library, engineering_library.id ]
+    search_criteria = [ art_library.id, engineering_library.id ]
     get :index, params: { search: { enumerations: search_criteria } }
 
     all_request_ids = assigns(:all_results)
