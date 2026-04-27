@@ -3,6 +3,8 @@
 require "test_helper"
 
 class Admin::ProspectsControllerTest < ActionController::TestCase
+  tests Admin::ProspectsController
+
   # rubocop:disable Layout/LineLength
   test "should allow authed users to deactivate a submitted application" do
     prospect = prospects(:all_valid)
