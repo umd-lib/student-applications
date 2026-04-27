@@ -92,7 +92,7 @@ var init = function() {
         var value = param.split("=")[1];
 
         if ( /\[\]$/.test(key) ) {
-          key.replace(/\[\]$/, '');
+          key = key.replace(/\[\]$/, '');
           params[key] = params[key] || [];
           params[key].push( value ? decodeURIComponent(value.replace(/\+/g, ' ')) : '');
         }	else {
