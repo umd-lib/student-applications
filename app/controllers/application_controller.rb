@@ -32,7 +32,10 @@ class ApplicationController < ActionController::Base
     if session[:prospect_params]
       # we have an application going so we've probably just refreshed the
       # screen
-      redirect_to action: "new", controller: "prospects"
+      # Redirect to /prospects (instead of just "prospects") to ensure that
+      # user-facing ProspectsController (instead of Admin::ProspectsController)
+      # is used. This will show the in-progress application to the user.
+      redirect_to action: "new", controller: "/prospects"
     elsif session[:cas].nil? || session[:cas][:user].nil?
       render status: :unauthorized, plain: "Redirecting to SSO..."
     else

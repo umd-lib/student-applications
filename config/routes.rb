@@ -14,19 +14,22 @@ Rails.application.routes.draw do
   # this is handled by rack case, but this just allows us to have a URL helper
   get "logout" => "home#sign_out", as: :logout
 
+  get "prospects", to: redirect("/admin/prospects")
   resources :prospects, only: [ :new, :create ]
   get "prospects/:id/thank_you" => "prospects#thank_you", as: :thank_you
 
   resources :resumes
 
   namespace :admin do
+    # Using redirect of /admin to /admin/prospects, instead of direct path
+    # to "prospects#index" so that URL in the browser consistently shows
+    # /admin/prospects
+    root to: redirect("/admin/prospects")
     resources :prospects, only: [ :index, :show, :edit, :update ] do
       collection do
         post :deactivate
       end
     end
-
-    root to: "prospects#index"
 
     resources :users
     get "disable_admin" => "users#disable_admin", as: :disable_admin

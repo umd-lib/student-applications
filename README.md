@@ -9,6 +9,10 @@ which are marshalled at each step of the process.
 Each step has a view defined in the "app/views/prospects" directory which is
 rendered when the process reaches that step.
 
+## Documentation
+
+See [docs](docs/) for additional information about this application.
+
 ## Test Plan
 
 A basic test plan for verifying application functionality is provided in
