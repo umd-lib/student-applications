@@ -18,7 +18,7 @@ class AdminDisableTest < ApplicationSystemTestCase
     click_link "Disable Admin"
 
     assert page.has_content?(
-      "You have temporarly disabled admin functionality. Sign out and log back in to restore admin role."
+      "You have temporarily disabled admin functionality. Sign out and log back in to restore admin role."
     )
     assert_equal 10, page.find_all("th").length
     assert_not page.has_content?("User Management")
