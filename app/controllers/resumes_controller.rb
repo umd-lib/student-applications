@@ -41,10 +41,17 @@ class ResumesController < ApplicationController
 
   def update
     @resume = Resume.includes(:prospect).find(params[:id])
-    if @resume.update(resume_params)
-      render json: @resume.to_json(except: :upload_session_id)
+
+    # Applicant can update their own resume within the same session, while
+    # logged-in users can update any resume
+    if same_session? || logged_in?
+      if @resume.update(resume_params)
+        render json: @resume.to_json(except: :upload_session_id)
+      else
+        render json: @resume.errors, status: :bad_request
+      end
     else
-      render json: @resume.errors, status: :bad_request
+      render plain: "forbidden", status: :forbidden, layout: false
     end
   end
 
