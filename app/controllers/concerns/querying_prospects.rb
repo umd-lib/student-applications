@@ -76,7 +76,7 @@ module QueryingProspects # rubocop:disable Metrics/ModuleLength
     end
 
     def text_search_statement
-      params_as_hash = params.permit(whitelisted_attrs).to_h
+      params_as_hash = params.permit(admin_whitelisted_attrs).to_h
       text_search_params = params_as_hash[:text_search] || {}
 
       query = text_search_params.each_with_object([]) do |(k, val), memo|
@@ -118,7 +118,7 @@ module QueryingProspects # rubocop:disable Metrics/ModuleLength
     end
 
     def search_statement # rubocop:disable Metrics/AbcSize
-      params_as_hash = params.permit(whitelisted_attrs).to_h
+      params_as_hash = params.permit(admin_whitelisted_attrs).to_h
       search_params = params_as_hash[:search] || {}
 
       query = search_params.each_with_object([]) do |(k, val), memo|
@@ -133,5 +133,15 @@ module QueryingProspects # rubocop:disable Metrics/ModuleLength
         memo << arel[:id].in(Array.wrap(val))
       end
       query.present? ? query.inject(&:and) : {}
+    end
+
+    # Append additional admin search/filtering-related params to the list of
+    # allowed parameters
+    def admin_whitelisted_attrs
+      whitelisted_attrs + [
+        :available_hours_per_week_min,
+        :available_hours_per_week_max,
+        { available_time: [] }
+      ]
     end
 end

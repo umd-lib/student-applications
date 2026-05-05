@@ -115,20 +115,10 @@ class SubmitProspectApplicationTest < ApplicationSystemTestCase
 
   test "won't submit if confirmation checkbox and signature are not provided" do
     # Fast-forward session to the final step, mirroring comment_confirmation_test.rb
-    fixture = prospects(:all_valid)
-    all_valid = fixture.attributes
-    all_valid[:enumeration_ids] = fixture.enumerations.map(&:id)
-    all_valid.reject! { |a| %w[id created_at updated_at].include? a }
-
-    all_valid[:directory_id] = SecureRandom.hex
-    all_valid[:semester] = Enumeration.active_semesters.first.value
-    all_valid[:available_hours_per_week] = 0
-
-    all_valid["addresses_attributes"] = [ addresses(:all_valid_springfield).attributes.reject { |a| a == "id" } ]
-    all_valid["phone_numbers_attributes"] = [ phone_numbers(:all_valid_dummy).attributes.reject { |a| a == "id" } ]
+    all_valid = prospect_fixture_as_request_params(:all_valid)
 
     # Remove the "user_signature" key for this test
-    all_valid.reject! { |a| a == "user_signature" }
+    all_valid = all_valid.except("user_signature")
 
     page.set_rack_session(prospect_params: all_valid)
     page.set_rack_session(prospect_step: "comments_confirmation")

@@ -5,7 +5,8 @@ require "application_system_test_case"
 class SkillsTest < ApplicationSystemTestCase
   test "add some skills to the prospect" do
     # we can fast-forward to the skills step
-    all_valid = prospects(:all_valid).attributes
+    all_valid = prospect_fixture_as_request_params(:all_valid)
+
     page.set_rack_session(prospect_params: all_valid)
     page.set_rack_session(prospect_step: "skills")
 

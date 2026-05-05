@@ -5,9 +5,7 @@ require "application_system_test_case"
 class WorkExperiencesTest < ApplicationSystemTestCase
   test "Add some work experiences to the prospect" do
     # we can fast-forward to the work_experiences step
-    fixture = prospects(:all_valid)
-    all_valid = fixture.attributes
-    all_valid[:enumeration_ids] = fixture.enumerations.map(&:id)
+    all_valid = prospect_fixture_as_request_params(:all_valid)
 
     page.set_rack_session(prospect_params: all_valid)
     page.set_rack_session(prospect_step: "work_experience")

@@ -76,15 +76,6 @@ class ProspectsController < ApplicationController # rubocop:disable Metrics/Clas
       @prospect.current_step = Prospect.steps.first
     end
 
-    def prospect_from_session
-      Prospect.new(ActionController::Parameters.new(session[:prospect_params]).permit!)
-    rescue StandardError
-      # a nice place to debug..
-      # byebug
-      reset_session
-      redirect_to root_path, flash: { error: @error_message }
-    end
-
     # match the value stored in the session with the incoming values in the
     # param
     def set_session # rubocop:disable Metrics/AbcSize
@@ -101,7 +92,9 @@ class ProspectsController < ApplicationController # rubocop:disable Metrics/Clas
     end
 
     def set_prospect
-      @prospect = Prospect.new(ActionController::Parameters.new(session[:prospect_params]).permit!)
+      @prospect = Prospect.new(
+        ActionController::Parameters.new(session[:prospect_params]).permit(*whitelisted_attrs)
+      )
       if @prospect.nil? || !@prospect.is_a?(Prospect)
         reset_session
         redirect_to(root_path, flash: { error: @error_message }) && raise(false)
