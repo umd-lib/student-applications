@@ -86,6 +86,14 @@ module ProspectParameterHandling
 
     # This takes a model and pops out the prospect_id which is not needed
     def sanitize_model_attrs(model)
-      model.column_names.map(&:intern).reject { |k| k == :prospect_id }
+      model_attrs = model.column_names.map(&:intern).reject { |k| k == :prospect_id }
+
+      # Add "_destroy" attribute, if given model has an association with the
+      # Prospect model where "allow_destroy" is true
+      association_name = model.model_name.plural.to_sym
+      allow_destroy = Prospect.nested_attributes_options.dig(association_name, :allow_destroy)
+      model_attrs += [ :_destroy ] if allow_destroy
+
+      model_attrs
     end
 end
