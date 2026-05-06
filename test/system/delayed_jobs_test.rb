@@ -10,9 +10,12 @@ class DelayedJobsTest < ApplicationSystemTestCase
     fill_in "password", with: "any password"
     click_button "Login"
 
-    visit "/delayed_jobs"
+    # Verify that login process has completed by checking for expected
+    # text on the page shown after login.
+    assert_text "Review Applications"
 
-    assert page.has_content?("Overview")
+    visit "/delayed_jobs"
+    assert_text "Overview"
   end
 
   test "nonadmins cannot see the delayed job page" do
@@ -22,13 +25,17 @@ class DelayedJobsTest < ApplicationSystemTestCase
     fill_in "password", with: "any password"
     click_button "Login"
 
+    # Verify that login process has completed by checking for expected
+    # text on the page shown after login.
+    assert_text "Review Applications"
+
     visit "/delayed_jobs"
 
-    assert page.has_content?("Unauthorized")
+    assert_text "Unauthorized"
   end
 
   test "unauthed visitors cannot see the delayed job page" do
     visit "/delayed_jobs"
-    assert page.has_content?("Unauthorized")
+    assert_text "Unauthorized"
   end
 end
