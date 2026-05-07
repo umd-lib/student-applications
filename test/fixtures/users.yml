@@ -1,10 +1,13 @@
 # Read about fixtures at http://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
 
-one:
+# User will full admin privileges
+full_admin:
   cas_directory_id: admin
   name: admin
   admin: true
 
-two:
-  cas_directory_id: noone
-  name: noone
+# Authorized user, without full admin privileges
+logged_in_but_not_full_admin:
+  cas_directory_id: logged_in_but_not_full_admin
+  name: logged_in_but_not_full_admin
+  admin: false

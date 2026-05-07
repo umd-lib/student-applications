@@ -83,5 +83,33 @@ class ProspectsControllerTest < ActionController::TestCase
     assert_equal "Anytown", result["1"]["city"]
     assert_not result["1"].key?("malicious_value")
   end
-  # rubocop:enable Layout/LineLength
+
+  test "admin-only params are ignored if submitted by applicant" do
+    # Set up parameters for a complete valid submission
+    fixture = dup_fixture
+    all_valid_params = fixture.attributes.with_indifferent_access
+    all_valid_params[:enumeration_ids] = fixture.enumerations.map(&:id)
+    all_valid_params.reject! { |a| %w[id created_at updated_at].include? a }
+
+    all_valid_params[:semester] = Enumeration.active_semesters.first.value
+
+    all_valid_params[:addresses_attributes] = [ addresses(:all_valid_springfield).attributes.reject { |a| a == "id" } ]
+    all_valid_params[:phone_numbers_attributes] = [ phone_numbers(:all_valid_dummy).attributes.reject { |a| a == "id" } ]
+    all_valid_params[:available_times_attributes] = [ available_times(:all_valid_sunday).attributes.reject { |a| a == "id" } ]
+
+    # Attempt to set admin-only parameters
+    all_valid_params[:hired] = true
+    all_valid_params[:hr_comments] = "HR Comment submitted by user"
+    all_valid_params[:suppressed] = true
+
+    session[:prospect_step] = Prospect.steps.last
+    post :create, params: { prospect: all_valid_params }
+
+    prospect = Prospect.find_by(directory_id: all_valid_params[:directory_id])
+
+    # Admin-only parameters have not been changed
+    assert_equal false, prospect.hired, "'hired' should not be settable by applicant"
+    assert_nil prospect.hr_comments, "'hr_comments' should not be settable by applicant"
+    assert_equal false, prospect.suppressed, "'suppressed' should not be settable by applicant"
+  end
 end
