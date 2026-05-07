@@ -6,6 +6,38 @@ class Admin::ProspectsControllerTest < ActionController::TestCase
   tests Admin::ProspectsController
 
   # rubocop:disable Layout/LineLength
+  test "admin-only params are allowed when submitted by admin user" do
+    prospect = prospects(:all_valid)
+    all_valid_params = {}.with_indifferent_access
+    all_valid_params[:hired] = true
+    all_valid_params[:hr_comments] = "HR Comment submitted by admin"
+    all_valid_params[:suppressed] = true
+
+    session[:cas] = { user: "admin" }
+    patch :update, params: { id: prospect.id, prospect: all_valid_params }
+
+    prospect.reload
+    assert_equal true, prospect.hired, "'hired' should be settable by admin user"
+    assert_equal "HR Comment submitted by admin", prospect.hr_comments, "'hr_comments' should be settable by admin user"
+    assert_equal true, prospect.suppressed, "'suppressed' should be settable by admin user"
+  end
+
+  test "admin-only params are not settable by authed, but non-admin user" do
+    prospect = prospects(:all_valid)
+    all_valid_params = {}.with_indifferent_access
+    all_valid_params[:hired] = true
+    all_valid_params[:hr_comments] = "HR Comment submitted by admin"
+    all_valid_params[:suppressed] = true
+
+    session[:cas] = { user: "logged_in_but_not_full_admin" }
+    patch :update, params: { id: prospect.id, prospect: all_valid_params }
+
+    prospect.reload
+    assert_equal false, prospect.hired, "'hired' should not be settable by non-admin user"
+    assert_nil prospect.hr_comments, "'hr_comments' should not be settable by non-admin user"
+    assert_equal false, prospect.suppressed, "'suppressed' should not be settable by non-admin user"
+  end
+
   test "should allow authed users to deactivate a submitted application" do
     prospect = prospects(:all_valid)
     assert_not prospect.suppressed?
@@ -167,6 +199,7 @@ class Admin::ProspectsControllerTest < ActionController::TestCase
 
     address_attributes_param = ActionController::Parameters.new(address_attributes_hash)
     controller = Admin::ProspectsController.new
+    controller.instance_variable_set(:@current_user, users(:full_admin))
     result = controller.send(:convert_attributes_param_to_safe_hash, "addresses_attributes", address_attributes_param)
 
     assert result.key?("0")
@@ -197,6 +230,7 @@ class Admin::ProspectsControllerTest < ActionController::TestCase
 
     address_attributes_param = ActionController::Parameters.new(address_attributes_hash)
     controller = Admin::ProspectsController.new
+    controller.instance_variable_set(:@current_user, users(:full_admin))
     result = controller.send(:convert_attributes_param_to_safe_hash, "addresses_attributes", address_attributes_param)
 
     assert result.key?("0")

@@ -47,6 +47,16 @@ module Admin
 
     private
 
+      # Extend the base whitelist with admin-only attributes for full admin
+      # users
+      def whitelisted_attrs
+        if @current_user.admin?
+          super + ProspectParameterHandling::ADMIN_ONLY_ATTRS
+        else
+          super
+        end
+      end
+
       def find_prospects # rubocop:disable Metrics/AbcSize, Metrics/MethodLength
         @all_results = Prospect.joins(join_table).select(select_statement)
                               .where(text_search_statement)

@@ -81,6 +81,13 @@ class ProspectsController < ApplicationController # rubocop:disable Metrics/Clas
     def set_session # rubocop:disable Metrics/AbcSize
       session[:prospect_params] ||= {}.with_indifferent_access
       session[:prospect_params].deep_merge!(prospect_params)
+
+      # Explicitly strip admin-only parameters from this user-facing set session
+      # Should already be taken care of by strong parameter handling in the
+      # "prospect_params" method of the ProspectParameterHandling concern, so
+      # this is just defense in depth
+      ProspectParameterHandling::ADMIN_ONLY_ATTRS.each { |k| session[:prospect_params].delete(k.to_s) }
+
       session[:prospect_params].keys.grep(/_attributes$/).each do |attr|
         session[:prospect_params][attr] = params[:prospect][attr] if params[:prospect][attr].present?
       end
