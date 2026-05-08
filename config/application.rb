@@ -49,6 +49,10 @@ module OnlineStudentApplications
     config.rack_cas.session_store = RackCAS::ActiveRecordStore
 
     config.active_job.queue_adapter = :delayed_job
+
+    # Disable ActiveStorage thumbnail/image variant processing, because
+    # ActiveStorage is only used to upload resumes.
+    config.active_storage.variant_processor = :disabled
     # End UMD Customization
   end
 end
