@@ -187,6 +187,20 @@ class Admin::ProspectsControllerTest < ActionController::TestCase
     end
   end
 
+  test "Enumerated value with single quote should not break sorting" do
+    Enumeration.create!(value: "Summer '26", list: :semester, position: 99)
+
+    session[:cas] = { user: "admin" }
+
+    begin
+      get :index, params: { sort: "enumerations.semester_values", direction: "asc" }
+    rescue ActiveRecord::StatementInvalid => e
+      flunk "Sorting raised a SQL error for a semester value containing a single quote: #{e.message}"
+    end
+
+    assert_response :success
+  end
+
   test "convert_attributes_param_to_safe_hash should allow only whitelisted parameters" do
     address_attributes_hash = {
       "0" => {

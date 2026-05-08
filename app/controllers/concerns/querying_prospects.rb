@@ -17,8 +17,10 @@ module QueryingProspects # rubocop:disable Metrics/ModuleLength
     klass, method = col.split(".")
     values = klass.singularize.capitalize.constantize.send(method.intern)
                   .order(Arel.sql("value #{sort_direction} ")).pluck("value")
+    conn = ActiveRecord::Base.connection
     order_query = values.each_with_index.inject(+"CASE ") do |memo, (val, i)| # rubocop:disable Style/EachWithObject
-      memo << "WHEN( enumerations.value = '#{val}') THEN #{i} "
+      safe_val = conn.quote(val)
+      memo << "WHEN( enumerations.value = #{safe_val} ) THEN #{i} "
       memo
     end
     Arel.sql("#{order_query} ELSE #{values.length} END")
