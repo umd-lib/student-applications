@@ -1,12 +1,12 @@
 homeless:
-  in_federal_study: true
+  in_federal_study: false
   directory_id: hobo
   first_name: Rolling
   last_name: Stone
   email: hobo@umd.edu
   enumerations: graduate, may_2017, fall_2017
 all_valid:
-  in_federal_study: true
+  in_federal_study: false
   directory_id: bstudent
   first_name: Betty
   last_name: Student

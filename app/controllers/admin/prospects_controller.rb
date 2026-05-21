@@ -61,6 +61,7 @@ module Admin
         @all_results = Prospect.joins(join_table).select(select_statement)
                               .where(text_search_statement)
                               .where(search_statement)
+                              .where(prospects_in_federal_study)
                               .where(*available_range_statement)
                               .where(prospects_by_available_time)
                               .active.order(sort_order)
