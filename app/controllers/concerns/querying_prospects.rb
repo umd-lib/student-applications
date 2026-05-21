@@ -102,6 +102,13 @@ module QueryingProspects # rubocop:disable Metrics/ModuleLength
       params[:available_time] ? { "prospects.id" => AvailableTime.find_by_sql(day_times_sql).map(&:prospect_id) } : {}
     end
 
+    def prospects_in_federal_study
+      value = params[:in_federal_study].to_s.downcase
+      return {} if value.blank? || value == "any"
+
+      { "prospects.in_federal_study" => value == "yes" }
+    end
+
     # Returns a query for the given enumeration type (as represented by the
     # method name on the Enumeration object)
     def enumeration_type_search_statement(enumeration_type) # rubocop:disable Metrics/AbcSize
