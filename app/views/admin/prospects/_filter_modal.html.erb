@@ -37,22 +37,22 @@
             </div>
 
             <div class="row">
-              <h4>In Federal Work Study</h4>
+              <h4>Federal Work Study (FWS) Options</h4>
               <div class="row">
                 <div class="col-md-12">
                   <%= label_tag "in_federal_study_yes", class: "radio-inline" do %>
                     <%= radio_button_tag :in_federal_study, "yes", params[:in_federal_study] == 'yes', id: 'in_federal_study_yes' %>
-                    Yes
+                    Show only FWS students
                   <% end %>
 
                   <%= label_tag "in_federal_study_no", class: "radio-inline" do %>
                     <%= radio_button_tag :in_federal_study, "no", params[:in_federal_study] == 'no', id: 'in_federal_study_no' %>
-                    No
+                    Show only non-FWS students
                   <% end %>
 
                   <%= label_tag "in_federal_study_any", class: "radio-inline" do %>
                     <%= radio_button_tag :in_federal_study, "any", (params[:in_federal_study].blank? || params[:in_federal_study] == 'any'), id: 'in_federal_study_any' %>
-                    Any
+                    Show all students
                   <% end %>
                 </div>
               </div>
