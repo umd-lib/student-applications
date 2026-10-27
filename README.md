@@ -26,7 +26,7 @@ require Node, Webpack, or Yarn.
 
 Requires:
 
-* Ruby 3.4.9
+* Ruby 3.4.12
 * Bundler v2.5.22
 * [Google Chrome](https://www.google.com/chrome/index.html) (for testing)
 
